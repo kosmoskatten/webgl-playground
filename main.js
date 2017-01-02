@@ -11110,6 +11110,91 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _kosmoskatten$webgl_playground$Cube$top = {
+	ctor: '_Tuple3',
+	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0),
+	_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0),
+	_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0)
+};
+var _kosmoskatten$webgl_playground$Cube$bottom = {
+	ctor: '_Tuple3',
+	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, -1, 0),
+	_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, -1, 0),
+	_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, -1, 0)
+};
+var _kosmoskatten$webgl_playground$Cube$right = {
+	ctor: '_Tuple3',
+	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0),
+	_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0),
+	_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0)
+};
+var _kosmoskatten$webgl_playground$Cube$left = {
+	ctor: '_Tuple3',
+	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -1, 0, 0),
+	_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -1, 0, 0),
+	_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -1, 0, 0)
+};
+var _kosmoskatten$webgl_playground$Cube$front = {
+	ctor: '_Tuple3',
+	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1),
+	_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1),
+	_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1)
+};
+var _kosmoskatten$webgl_playground$Cube$back = {
+	ctor: '_Tuple3',
+	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1),
+	_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1),
+	_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1)
+};
+var _kosmoskatten$webgl_playground$Cube$normals = {
+	ctor: '::',
+	_0: _kosmoskatten$webgl_playground$Cube$back,
+	_1: {
+		ctor: '::',
+		_0: _kosmoskatten$webgl_playground$Cube$back,
+		_1: {
+			ctor: '::',
+			_0: _kosmoskatten$webgl_playground$Cube$front,
+			_1: {
+				ctor: '::',
+				_0: _kosmoskatten$webgl_playground$Cube$front,
+				_1: {
+					ctor: '::',
+					_0: _kosmoskatten$webgl_playground$Cube$left,
+					_1: {
+						ctor: '::',
+						_0: _kosmoskatten$webgl_playground$Cube$left,
+						_1: {
+							ctor: '::',
+							_0: _kosmoskatten$webgl_playground$Cube$right,
+							_1: {
+								ctor: '::',
+								_0: _kosmoskatten$webgl_playground$Cube$right,
+								_1: {
+									ctor: '::',
+									_0: _kosmoskatten$webgl_playground$Cube$bottom,
+									_1: {
+										ctor: '::',
+										_0: _kosmoskatten$webgl_playground$Cube$bottom,
+										_1: {
+											ctor: '::',
+											_0: _kosmoskatten$webgl_playground$Cube$top,
+											_1: {
+												ctor: '::',
+												_0: _kosmoskatten$webgl_playground$Cube$top,
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
 var _kosmoskatten$webgl_playground$Cube$triangles = {
 	ctor: '::',
 	_0: {
@@ -11221,12 +11306,18 @@ var _kosmoskatten$webgl_playground$Cube$triangles = {
 };
 
 var _kosmoskatten$webgl_playground$Lamp$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 lightColor;\n\nvoid main (void)\n{\n    gl_FragColor = vec4(lightColor, 1);\n}\n'};
-var _kosmoskatten$webgl_playground$Lamp$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 proj;\nuniform mat4 view;\nuniform mat4 model;\n\nvoid main (void)\n{\n    gl_Position = proj * view * model * vec4(position * 1);\n}\n'};
+var _kosmoskatten$webgl_playground$Lamp$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 proj;\nuniform mat4 view;\nuniform mat4 model;\n\nvoid main (void)\n{\n    gl_Position = proj * view * model * vec4(position, 1.0);\n}\n'};
 var _kosmoskatten$webgl_playground$Lamp$modelMatrix = function (lamp) {
 	var trans = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(lamp.position);
 	var scale = _elm_community$linear_algebra$Math_Matrix4$makeScale(
 		A3(_elm_community$linear_algebra$Math_Vector3$vec3, lamp.scaling, lamp.scaling, lamp.scaling));
 	return A2(_elm_community$linear_algebra$Math_Matrix4$mul, trans, scale);
+};
+var _kosmoskatten$webgl_playground$Lamp$position = function (lamp) {
+	return lamp.position;
+};
+var _kosmoskatten$webgl_playground$Lamp$color = function (lamp) {
+	return lamp.lightColor;
 };
 var _kosmoskatten$webgl_playground$Lamp$render = F3(
 	function (proj, view, lamp) {
@@ -11267,6 +11358,62 @@ var _kosmoskatten$webgl_playground$Lamp$make = F3(
 		return {mesh: _kosmoskatten$webgl_playground$Lamp$meshFromTriangles, lightColor: lightColor, position: position, scaling: scaling};
 	});
 
+var _kosmoskatten$webgl_playground$Object$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 objectColor;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\nuniform float ambientStrength;\n\nvoid main (void)\n{\n    gl_FragColor = vec4(objectColor, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Object$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\n\nuniform mat4 proj;\nuniform mat4 view;\nuniform mat4 model;\n\nvoid main (void)\n{\n    gl_Position = proj * view * model * vec4(position, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Object$modelMatrix = function (object) {
+	var trans = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(object.position);
+	var rotate = A2(
+		_elm_community$linear_algebra$Math_Matrix4$makeRotate,
+		object.rotation,
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
+	return A2(_elm_community$linear_algebra$Math_Matrix4$mul, trans, rotate);
+};
+var _kosmoskatten$webgl_playground$Object$render = F6(
+	function (proj, view, lightPosition, lightColor, ambientStrength, object) {
+		return A4(
+			_elm_community$webgl$WebGL$render,
+			_kosmoskatten$webgl_playground$Object$vertexShader,
+			_kosmoskatten$webgl_playground$Object$fragmentShader,
+			object.mesh,
+			{
+				proj: proj,
+				view: view,
+				model: _kosmoskatten$webgl_playground$Object$modelMatrix(object),
+				objectColor: object.objectColor,
+				lightPosition: lightPosition,
+				lightColor: lightColor,
+				ambientStrength: ambientStrength
+			});
+	});
+var _kosmoskatten$webgl_playground$Object$Object = F4(
+	function (a, b, c, d) {
+		return {mesh: a, objectColor: b, position: c, rotation: d};
+	});
+var _kosmoskatten$webgl_playground$Object$Vertex = F2(
+	function (a, b) {
+		return {position: a, normal: b};
+	});
+var _kosmoskatten$webgl_playground$Object$meshFromTriangles = _elm_community$webgl$WebGL$Triangle(
+	A3(
+		_elm_lang$core$List$map2,
+		F2(
+			function (_p1, _p0) {
+				var _p2 = _p1;
+				var _p3 = _p0;
+				return {
+					ctor: '_Tuple3',
+					_0: A2(_kosmoskatten$webgl_playground$Object$Vertex, _p2._0, _p3._0),
+					_1: A2(_kosmoskatten$webgl_playground$Object$Vertex, _p2._1, _p3._1),
+					_2: A2(_kosmoskatten$webgl_playground$Object$Vertex, _p2._2, _p3._2)
+				};
+			}),
+		_kosmoskatten$webgl_playground$Cube$triangles,
+		_kosmoskatten$webgl_playground$Cube$normals));
+var _kosmoskatten$webgl_playground$Object$make = F3(
+	function (objectColor, position, rotation) {
+		return {mesh: _kosmoskatten$webgl_playground$Object$meshFromTriangles, objectColor: objectColor, position: position, rotation: rotation};
+	});
+
 var _kosmoskatten$webgl_playground$Main$camera = function (model) {
 	return A3(
 		_elm_community$linear_algebra$Math_Matrix4$makeLookAt,
@@ -11276,7 +11423,8 @@ var _kosmoskatten$webgl_playground$Main$camera = function (model) {
 };
 var _kosmoskatten$webgl_playground$Main$height = 600;
 var _kosmoskatten$webgl_playground$Main$width = 800;
-var _kosmoskatten$webgl_playground$Main$red = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0);
+var _kosmoskatten$webgl_playground$Main$coral = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0.5, 0.31);
+var _kosmoskatten$webgl_playground$Main$lightYellow = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 0.5);
 var _kosmoskatten$webgl_playground$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -11285,6 +11433,8 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
 var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
+	var lamp = model.lamp;
+	var view = _kosmoskatten$webgl_playground$Main$camera(model);
 	return A2(
 		_elm_community$webgl$WebGL$toHtml,
 		{
@@ -11298,12 +11448,19 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: A3(
-				_kosmoskatten$webgl_playground$Lamp$render,
-				model.projection,
-				_kosmoskatten$webgl_playground$Main$camera(model),
-				model.lamp),
-			_1: {ctor: '[]'}
+			_0: A3(_kosmoskatten$webgl_playground$Lamp$render, model.projection, view, model.lamp),
+			_1: {
+				ctor: '::',
+				_0: A6(
+					_kosmoskatten$webgl_playground$Object$render,
+					model.projection,
+					view,
+					_kosmoskatten$webgl_playground$Lamp$position(lamp),
+					_kosmoskatten$webgl_playground$Lamp$color(lamp),
+					0.1,
+					model.object),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _kosmoskatten$webgl_playground$Main$view = function (model) {
@@ -11340,17 +11497,22 @@ var _kosmoskatten$webgl_playground$Main$init = {
 		eyeFocus: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0),
 		lamp: A3(
 			_kosmoskatten$webgl_playground$Lamp$make,
-			_kosmoskatten$webgl_playground$Main$red,
+			_kosmoskatten$webgl_playground$Main$lightYellow,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1.2, 0, 0),
+			0.5),
+		object: A3(
+			_kosmoskatten$webgl_playground$Object$make,
+			_kosmoskatten$webgl_playground$Main$coral,
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0),
-			1)
+			0)
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _kosmoskatten$webgl_playground$Main$main = _elm_lang$html$Html$program(
 	{init: _kosmoskatten$webgl_playground$Main$init, view: _kosmoskatten$webgl_playground$Main$view, update: _kosmoskatten$webgl_playground$Main$update, subscriptions: _kosmoskatten$webgl_playground$Main$subscriptions})();
-var _kosmoskatten$webgl_playground$Main$Model = F4(
-	function (a, b, c, d) {
-		return {projection: a, eyePosition: b, eyeFocus: c, lamp: d};
+var _kosmoskatten$webgl_playground$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {projection: a, eyePosition: b, eyeFocus: c, lamp: d, object: e};
 	});
 var _kosmoskatten$webgl_playground$Main$NoOp = {ctor: 'NoOp'};
 

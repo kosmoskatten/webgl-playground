@@ -1,6 +1,7 @@
 module Main exposing (main)
 
-import Lamp exposing (Lamp, make, render)
+import Lamp exposing (Lamp, make, render, color, position)
+import Object exposing (Object, make, render)
 import Math.Vector3 exposing (Vec3, vec3)
 import Math.Matrix4 exposing (Mat4, makePerspective, makeLookAt)
 import Html exposing (Html, div, p, text)
@@ -13,6 +14,7 @@ type alias Model =
     , eyePosition : Vec3
     , eyeFocus : Vec3
     , lamp : Lamp
+    , object : Object
     }
 
 
@@ -36,6 +38,7 @@ init =
       , eyePosition = vec3 0 0 5
       , eyeFocus = vec3 0 0 0
       , lamp = Lamp.make lightYellow (vec3 1.2 0 0) 0.5
+      , object = Object.make coral (vec3 0 0 0) 0
       }
     , Cmd.none
     )
@@ -51,9 +54,22 @@ view model =
 
 view3DScene : Model -> Html Msg
 view3DScene model =
-    WebGL.toHtml [ Attr.width width, Attr.height height ]
-        [ Lamp.render model.projection (camera model) model.lamp
-        ]
+    let
+        view =
+            camera model
+
+        lamp =
+            model.lamp
+    in
+        WebGL.toHtml [ Attr.width width, Attr.height height ]
+            [ Lamp.render model.projection view model.lamp
+            , Object.render model.projection
+                view
+                (position lamp)
+                (color lamp)
+                0.1
+                model.object
+            ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -69,6 +85,11 @@ subscriptions model =
 lightYellow : Vec3
 lightYellow =
     vec3 1 1 0.5
+
+
+coral : Vec3
+coral =
+    vec3 1 0.5 0.31
 
 
 width : Int

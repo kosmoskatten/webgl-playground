@@ -92,6 +92,10 @@ modelMatrix lamp =
         mul trans scale
 
 
+
+{- Lamp vertex shader. -}
+
+
 vertexShader :
     Shader { attr | position : Vec3 }
         { unif
@@ -113,6 +117,10 @@ void main (void)
     gl_Position = proj * view * model * vec4(position, 1.0);
 }
 |]
+
+
+
+{- Lamp fragment shader. -}
 
 
 fragmentShader : Shader {} { unif | lightColor : Vec3 } {}
