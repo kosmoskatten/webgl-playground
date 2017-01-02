@@ -106,7 +106,7 @@ vertexShader :
             , view : Mat4
             , model : Mat4
         }
-        {}
+        { vNormal : Vec3, vPosition : Vec3 }
 vertexShader =
     [glsl|
 attribute vec3 position;
@@ -116,9 +116,18 @@ uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 model;
 
+varying vec3 vNormal;
+varying vec3 vPosition;
+
 void main (void)
 {
     gl_Position = proj * view * model * vec4(position, 1.0);
+
+    // No normal matrix available atm!
+    vNormal = normalize(normal);
+
+    // For the purpos of lightning, make the vertex to model space.
+    vPosition = vec3(model * vec4(position, 1.0));
 }
 |]
 
@@ -135,7 +144,7 @@ fragmentShader :
             , lightColor : Vec3
             , ambientStrength : Float
         }
-        {}
+        { vNormal : Vec3, vPosition : Vec3 }
 fragmentShader =
     [glsl|
 precision mediump float;
@@ -145,8 +154,22 @@ uniform vec3 lightPosition;
 uniform vec3 lightColor;
 uniform float ambientStrength;
 
+varying vec3 vNormal;
+varying vec3 vPosition;
+
 void main (void)
 {
-    gl_FragColor = vec4(objectColor, 1.0);
+    // Calculate diffuse value.
+    vec3 lightDir = normalize(lightPosition - vPosition);
+    float diff = max(dot(vNormal, lightDir), 0.0);
+    vec3 diffuseColor = lightColor * diff;
+
+    // Calculate ambient color.
+    vec3 ambientColor = lightColor * ambientStrength;
+
+    // Add to final color.
+    vec3 finalColor = objectColor * (ambientColor + diffuseColor);
+
+    gl_FragColor = vec4(finalColor, 1.0);
 }
 |]

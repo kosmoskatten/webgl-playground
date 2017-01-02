@@ -13,6 +13,7 @@ type alias Model =
     { projection : Mat4
     , eyePosition : Vec3
     , eyeFocus : Vec3
+    , ambientStrength : Float
     , lamp : Lamp
     , object : Object
     }
@@ -35,9 +36,10 @@ main =
 init : ( Model, Cmd Msg )
 init =
     ( { projection = makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , eyePosition = vec3 0 0 5
+      , eyePosition = vec3 1.3 1.4 5
       , eyeFocus = vec3 0 0 0
-      , lamp = Lamp.make lightYellow (vec3 1.2 0 0) 0.5
+      , ambientStrength = 0.25
+      , lamp = Lamp.make lightYellow (vec3 1.2 0 0) 0.2
       , object = Object.make coral (vec3 0 0 0) 0
       }
     , Cmd.none
@@ -67,7 +69,7 @@ view3DScene model =
                 view
                 (position lamp)
                 (color lamp)
-                0.1
+                model.ambientStrength
                 model.object
             ]
 
