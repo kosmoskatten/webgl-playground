@@ -1,8 +1,9 @@
-module Lamp exposing (Lamp, make, render, color, position)
+module Lamp exposing (Lamp, make, render, animate, color, position)
 
 import Cube exposing (triangles)
 import Math.Vector3 exposing (Vec3, vec3)
 import Math.Matrix4 exposing (Mat4, mul, makeTranslate, makeScale)
+import Time exposing (Time, inSeconds)
 import WebGL exposing (Drawable(..), Renderable, Shader)
 
 
@@ -13,12 +14,18 @@ type alias Lamp =
     , lightColor :
         Vec3
         -- The color of the lamp (uniform to shader).
-    , position :
-        Vec3
-        -- The model space position of the lamp.
     , scaling :
         Float
         -- The scaling of the lamp.
+    , distance :
+        Float
+        -- Distance from origin. To calculate orbit position.
+    , theta :
+        Float
+        -- Angle to calculate orbit position.
+    , position :
+        Vec3
+        -- The model space position of the lamp.
     }
 
 
@@ -31,12 +38,14 @@ type alias Vertex =
 {- Make a new Lamp -}
 
 
-make : Vec3 -> Vec3 -> Float -> Lamp
-make lightColor position scaling =
+make : Vec3 -> Float -> Float -> Lamp
+make lightColor scaling distance =
     { mesh = meshFromTriangles
     , lightColor = lightColor
-    , position = position
     , scaling = scaling
+    , distance = distance
+    , theta = 0
+    , position = orbit 0 distance
     }
 
 
@@ -56,6 +65,25 @@ render proj view lamp =
         }
 
 
+animate : Time -> Lamp -> Lamp
+animate t lamp =
+    let
+        duration =
+            inSeconds t
+
+        -- 1 / 8 rotation per second
+        delta =
+            duration * (pi / 4)
+
+        theta =
+            lamp.theta + delta
+
+        position =
+            orbit theta lamp.distance
+    in
+        { lamp | theta = theta, position = position }
+
+
 color : Lamp -> Vec3
 color lamp =
     lamp.lightColor
@@ -64,6 +92,11 @@ color lamp =
 position : Lamp -> Vec3
 position lamp =
     lamp.position
+
+
+orbit : Float -> Float -> Vec3
+orbit theta distance =
+    vec3 (distance * sin theta) 0 (distance * cos theta)
 
 
 

@@ -1,12 +1,14 @@
 module Main exposing (main)
 
-import Lamp exposing (Lamp, make, render, color, position)
+import AnimationFrame exposing (diffs)
+import Lamp exposing (Lamp, make, render, animate, color, position)
 import Object exposing (Object, make, render)
 import Math.Vector3 exposing (Vec3, vec3)
 import Math.Matrix4 exposing (Mat4, makePerspective, makeLookAt)
 import Html exposing (Html, div, p, text)
 import Html.Attributes as Attr
 import WebGL exposing (..)
+import Time exposing (Time)
 
 
 type alias Model =
@@ -20,7 +22,7 @@ type alias Model =
 
 
 type Msg
-    = NoOp
+    = Animate Time
 
 
 main : Program Never Model Msg
@@ -39,7 +41,7 @@ init =
       , eyePosition = vec3 1.3 1.4 5
       , eyeFocus = vec3 0 0 0
       , ambientStrength = 0.25
-      , lamp = Lamp.make lightYellow (vec3 1.2 0 0) 0.2
+      , lamp = Lamp.make lightYellow 0.2 2.5
       , object = Object.make coral (vec3 0 0 0) 0
       }
     , Cmd.none
@@ -76,12 +78,14 @@ view3DScene model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        Animate t ->
+            ( { model | lamp = Lamp.animate t model.lamp }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    AnimationFrame.diffs Animate
 
 
 lightYellow : Vec3
