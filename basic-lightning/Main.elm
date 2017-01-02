@@ -35,7 +35,7 @@ init =
     ( { projection = makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , eyePosition = vec3 0 0 5
       , eyeFocus = vec3 0 0 0
-      , lamp = Lamp.make red (vec3 1.2 0 0) 0.5
+      , lamp = Lamp.make lightYellow (vec3 1.2 0 0) 0.5
       }
     , Cmd.none
     )
@@ -66,9 +66,9 @@ subscriptions model =
     Sub.none
 
 
-red : Vec3
-red =
-    vec3 1 0 0
+lightYellow : Vec3
+lightYellow =
+    vec3 1 1 0.5
 
 
 width : Int

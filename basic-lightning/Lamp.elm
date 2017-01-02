@@ -1,4 +1,4 @@
-module Lamp exposing (Lamp, make, render)
+module Lamp exposing (Lamp, make, render, color, position)
 
 import Cube exposing (triangles)
 import Math.Vector3 exposing (Vec3, vec3)
@@ -54,6 +54,16 @@ render proj view lamp =
         , model = modelMatrix lamp
         , lightColor = lamp.lightColor
         }
+
+
+color : Lamp -> Vec3
+color lamp =
+    lamp.lightColor
+
+
+position : Lamp -> Vec3
+position lamp =
+    lamp.position
 
 
 
