@@ -45,8 +45,8 @@ make objectColor position rotation =
 {- Render the Object. -}
 
 
-render : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Float -> Object -> Renderable
-render proj view lightPosition lightColor ambientStrength object =
+render : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Vec3 -> Float -> Object -> Renderable
+render proj view lightPosition lightColor viewPosition ambientStrength object =
     WebGL.render vertexShader
         fragmentShader
         object.mesh
@@ -56,6 +56,7 @@ render proj view lightPosition lightColor ambientStrength object =
         , objectColor = object.objectColor
         , lightPosition = lightPosition
         , lightColor = lightColor
+        , viewPosition = viewPosition
         , ambientStrength = ambientStrength
         }
 
@@ -142,6 +143,7 @@ fragmentShader :
             | objectColor : Vec3
             , lightPosition : Vec3
             , lightColor : Vec3
+            , viewPosition : Vec3
             , ambientStrength : Float
         }
         { vNormal : Vec3, vPosition : Vec3 }
@@ -152,6 +154,7 @@ precision mediump float;
 uniform vec3 objectColor;
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
+uniform vec3 viewPosition;
 uniform float ambientStrength;
 
 varying vec3 vNormal;
@@ -164,11 +167,18 @@ void main (void)
     float diff = max(dot(vNormal, lightDir), 0.0);
     vec3 diffuseColor = lightColor * diff;
 
+    // Calculate the specular value.
+    float specularStrength = 0.8;
+    vec3 viewDir = normalize(viewPosition - vPosition);
+    vec3 reflectDir = reflect(-lightDir, vNormal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    vec3 specular = specularStrength * spec * lightColor;
+
     // Calculate ambient color.
     vec3 ambientColor = lightColor * ambientStrength;
 
     // Add to final color.
-    vec3 finalColor = objectColor * (ambientColor + diffuseColor);
+    vec3 finalColor = objectColor * (ambientColor + diffuseColor + specular);
 
     gl_FragColor = vec4(finalColor, 1.0);
 }

@@ -91,6 +91,7 @@ view3DScene model =
                     view
                     (position lamp)
                     (color lamp)
+                    model.eyePosition
                     model.ambientStrength
                     model.object
                 ]

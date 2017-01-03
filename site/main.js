@@ -11888,7 +11888,7 @@ var _kosmoskatten$webgl_playground$Lamp$make = F3(
 		};
 	});
 
-var _kosmoskatten$webgl_playground$Object$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 objectColor;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\nuniform float ambientStrength;\n\nvarying vec3 vNormal;\nvarying vec3 vPosition;\n\nvoid main (void)\n{\n    // Calculate diffuse value.\n    vec3 lightDir = normalize(lightPosition - vPosition);\n    float diff = max(dot(vNormal, lightDir), 0.0);\n    vec3 diffuseColor = lightColor * diff;\n\n    // Calculate ambient color.\n    vec3 ambientColor = lightColor * ambientStrength;\n\n    // Add to final color.\n    vec3 finalColor = objectColor * (ambientColor + diffuseColor);\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Object$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 objectColor;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\nuniform vec3 viewPosition;\nuniform float ambientStrength;\n\nvarying vec3 vNormal;\nvarying vec3 vPosition;\n\nvoid main (void)\n{\n    // Calculate diffuse value.\n    vec3 lightDir = normalize(lightPosition - vPosition);\n    float diff = max(dot(vNormal, lightDir), 0.0);\n    vec3 diffuseColor = lightColor * diff;\n\n    // Calculate the specular value.\n    float specularStrength = 0.8;\n    vec3 viewDir = normalize(viewPosition - vPosition);\n    vec3 reflectDir = reflect(-lightDir, vNormal);\n    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);\n    vec3 specular = specularStrength * spec * lightColor;\n\n    // Calculate ambient color.\n    vec3 ambientColor = lightColor * ambientStrength;\n\n    // Add to final color.\n    vec3 finalColor = objectColor * (ambientColor + diffuseColor + specular);\n\n    gl_FragColor = vec4(finalColor, 1.0);\n}\n'};
 var _kosmoskatten$webgl_playground$Object$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\n\nuniform mat4 proj;\nuniform mat4 view;\nuniform mat4 model;\n\nvarying vec3 vNormal;\nvarying vec3 vPosition;\n\nvoid main (void)\n{\n    gl_Position = proj * view * model * vec4(position, 1.0);\n\n    // No normal matrix available atm!\n    vNormal = normalize(normal);\n\n    // For the purpos of lightning, make the vertex to model space.\n    vPosition = vec3(model * vec4(position, 1.0));\n}\n'};
 var _kosmoskatten$webgl_playground$Object$modelMatrix = function (object) {
 	var trans = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(object.position);
@@ -11898,8 +11898,8 @@ var _kosmoskatten$webgl_playground$Object$modelMatrix = function (object) {
 		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
 	return A2(_elm_community$linear_algebra$Math_Matrix4$mul, trans, rotate);
 };
-var _kosmoskatten$webgl_playground$Object$render = F6(
-	function (proj, view, lightPosition, lightColor, ambientStrength, object) {
+var _kosmoskatten$webgl_playground$Object$render = F7(
+	function (proj, view, lightPosition, lightColor, viewPosition, ambientStrength, object) {
 		return A4(
 			_elm_community$webgl$WebGL$render,
 			_kosmoskatten$webgl_playground$Object$vertexShader,
@@ -11912,6 +11912,7 @@ var _kosmoskatten$webgl_playground$Object$render = F6(
 				objectColor: object.objectColor,
 				lightPosition: lightPosition,
 				lightColor: lightColor,
+				viewPosition: viewPosition,
 				ambientStrength: ambientStrength
 			});
 	});
@@ -12072,12 +12073,13 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 					_0: A3(_kosmoskatten$webgl_playground$Lamp$render, model.projection, view, model.lamp),
 					_1: {
 						ctor: '::',
-						_0: A6(
+						_0: A7(
 							_kosmoskatten$webgl_playground$Object$render,
 							model.projection,
 							view,
 							_kosmoskatten$webgl_playground$Lamp$position(lamp),
 							_kosmoskatten$webgl_playground$Lamp$color(lamp),
+							model.eyePosition,
 							model.ambientStrength,
 							model.object),
 						_1: {ctor: '[]'}
