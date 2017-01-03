@@ -11494,6 +11494,121 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _kosmoskatten$webgl_playground$Cube$top = {
 	ctor: '_Tuple3',
 	_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0),
@@ -11708,13 +11823,19 @@ var _kosmoskatten$webgl_playground$Lamp$orbit = F2(
 var _kosmoskatten$webgl_playground$Lamp$position = function (lamp) {
 	return lamp.position;
 };
+var _kosmoskatten$webgl_playground$Lamp$setColor = F2(
+	function (color, lamp) {
+		return _elm_lang$core$Native_Utils.update(
+			lamp,
+			{lightColor: color});
+	});
 var _kosmoskatten$webgl_playground$Lamp$color = function (lamp) {
 	return lamp.lightColor;
 };
 var _kosmoskatten$webgl_playground$Lamp$animate = F2(
 	function (t, lamp) {
 		var duration = _elm_lang$core$Time$inSeconds(t);
-		var delta = duration * _elm_lang$core$Basics$pi;
+		var delta = duration * (_elm_lang$core$Basics$pi / 4);
 		var theta = lamp.theta + delta;
 		var position = A2(_kosmoskatten$webgl_playground$Lamp$orbit, theta, lamp.distance);
 		return _elm_lang$core$Native_Utils.update(
@@ -11833,70 +11954,164 @@ var _kosmoskatten$webgl_playground$Main$camera = function (model) {
 var _kosmoskatten$webgl_playground$Main$height = 600;
 var _kosmoskatten$webgl_playground$Main$width = 800;
 var _kosmoskatten$webgl_playground$Main$coral = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0.5, 0.31);
+var _kosmoskatten$webgl_playground$Main$white = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1);
+var _kosmoskatten$webgl_playground$Main$green = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0);
+var _kosmoskatten$webgl_playground$Main$blue = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1);
+var _kosmoskatten$webgl_playground$Main$red = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0);
 var _kosmoskatten$webgl_playground$Main$lightYellow = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 0.5);
+var _kosmoskatten$webgl_playground$Main$availableLampColors = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: 'Blue', _1: _kosmoskatten$webgl_playground$Main$blue},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'Green', _1: _kosmoskatten$webgl_playground$Main$green},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'Light Yellow', _1: _kosmoskatten$webgl_playground$Main$lightYellow},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'Red', _1: _kosmoskatten$webgl_playground$Main$red},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'White', _1: _kosmoskatten$webgl_playground$Main$white},
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	}
+};
+var _kosmoskatten$webgl_playground$Main$lampColorMapping = function (selected) {
+	var _p2 = A2(
+		_elm_lang$core$List$filter,
+		function (_p0) {
+			var _p1 = _p0;
+			return _elm_lang$core$Native_Utils.eq(_p1._0, selected);
+		},
+		_kosmoskatten$webgl_playground$Main$availableLampColors);
+	if (_p2.ctor === '::') {
+		return _p2._0._1;
+	} else {
+		return _kosmoskatten$webgl_playground$Main$white;
+	}
+};
 var _kosmoskatten$webgl_playground$Main$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Native_Utils.update(
-				model,
-				{
-					lamp: A2(_kosmoskatten$webgl_playground$Lamp$animate, _p0._0, model.lamp)
-				}),
-			_1: _elm_lang$core$Platform_Cmd$none
-		};
+		var _p3 = msg;
+		switch (_p3.ctor) {
+			case 'Animate':
+				var _p4 = _p3._0;
+				var deltaS = 1.0e-5 + _elm_lang$core$Time$inSeconds(_p4);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							lamp: model.rotateLamp ? A2(_kosmoskatten$webgl_playground$Lamp$animate, _p4, model.lamp) : model.lamp,
+							fps: _elm_lang$core$Basics$floor(1.0 / deltaS)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'StartLampRotation':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{rotateLamp: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'StopLampRotation':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{rotateLamp: false}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var _p5 = _p3._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							lamp: A2(
+								_kosmoskatten$webgl_playground$Lamp$setColor,
+								_kosmoskatten$webgl_playground$Main$lampColorMapping(_p5),
+								model.lamp),
+							selectedLampColor: _p5
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
 	});
 var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 	var lamp = model.lamp;
 	var view = _kosmoskatten$webgl_playground$Main$camera(model);
 	return A2(
-		_elm_community$webgl$WebGL$toHtml,
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$width(_kosmoskatten$webgl_playground$Main$width),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$height(_kosmoskatten$webgl_playground$Main$height),
-				_1: {ctor: '[]'}
-			}
+			_0: _elm_lang$html$Html_Attributes$class('w3-container w3-black'),
+			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
-			_0: A3(_kosmoskatten$webgl_playground$Lamp$render, model.projection, view, model.lamp),
-			_1: {
-				ctor: '::',
-				_0: A6(
-					_kosmoskatten$webgl_playground$Object$render,
-					model.projection,
-					view,
-					_kosmoskatten$webgl_playground$Lamp$position(lamp),
-					_kosmoskatten$webgl_playground$Lamp$color(lamp),
-					model.ambientStrength,
-					model.object),
-				_1: {ctor: '[]'}
-			}
+			_0: A2(
+				_elm_community$webgl$WebGL$toHtml,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$width(_kosmoskatten$webgl_playground$Main$width),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$height(_kosmoskatten$webgl_playground$Main$height),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A3(_kosmoskatten$webgl_playground$Lamp$render, model.projection, view, model.lamp),
+					_1: {
+						ctor: '::',
+						_0: A6(
+							_kosmoskatten$webgl_playground$Object$render,
+							model.projection,
+							view,
+							_kosmoskatten$webgl_playground$Lamp$position(lamp),
+							_kosmoskatten$webgl_playground$Lamp$color(lamp),
+							model.ambientStrength,
+							model.object),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
 		});
 };
-var _kosmoskatten$webgl_playground$Main$view = function (model) {
+var _kosmoskatten$webgl_playground$Main$viewHeader = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('w3-container w3-blue'),
+			_1: {ctor: '[]'}
+		},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$p,
+				_elm_lang$html$Html$h1,
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('WebGL'),
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Elm WebGL lightning (',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(model.fps),
+								' fps)'))),
 					_1: {ctor: '[]'}
 				}),
-			_1: {
-				ctor: '::',
-				_0: _kosmoskatten$webgl_playground$Main$view3DScene(model),
-				_1: {ctor: '[]'}
-			}
+			_1: {ctor: '[]'}
 		});
 };
 var _kosmoskatten$webgl_playground$Main$init = {
@@ -11911,19 +12126,174 @@ var _kosmoskatten$webgl_playground$Main$init = {
 		eyePosition: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1.3, 1.4, 5),
 		eyeFocus: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0),
 		ambientStrength: 0.25,
-		lamp: A3(_kosmoskatten$webgl_playground$Lamp$make, _kosmoskatten$webgl_playground$Main$lightYellow, 0.2, 1.2),
+		lamp: A3(
+			_kosmoskatten$webgl_playground$Lamp$make,
+			_kosmoskatten$webgl_playground$Main$lampColorMapping('White'),
+			0.1,
+			2.2),
 		object: A3(
 			_kosmoskatten$webgl_playground$Object$make,
 			_kosmoskatten$webgl_playground$Main$coral,
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0),
-			0)
+			0),
+		fps: 0,
+		rotateLamp: false,
+		selectedLampColor: 'White'
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _kosmoskatten$webgl_playground$Main$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {projection: a, eyePosition: b, eyeFocus: c, ambientStrength: d, lamp: e, object: f};
+var _kosmoskatten$webgl_playground$Main$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {projection: a, eyePosition: b, eyeFocus: c, ambientStrength: d, lamp: e, object: f, fps: g, rotateLamp: h, selectedLampColor: i};
 	});
+var _kosmoskatten$webgl_playground$Main$ChangeLampColor = function (a) {
+	return {ctor: 'ChangeLampColor', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$lampColorControl = function (model) {
+	return A2(
+		_elm_lang$html$Html$select,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Events$onInput(_kosmoskatten$webgl_playground$Main$ChangeLampColor),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			function (_p6) {
+				var _p7 = _p6;
+				var _p8 = _p7._0;
+				return A2(
+					_elm_lang$html$Html$option,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$value(_p8),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$selected(
+								_elm_lang$core$Native_Utils.eq(_p8, model.selectedLampColor)),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p8),
+						_1: {ctor: '[]'}
+					});
+			},
+			_kosmoskatten$webgl_playground$Main$availableLampColors));
+};
+var _kosmoskatten$webgl_playground$Main$StopLampRotation = {ctor: 'StopLampRotation'};
+var _kosmoskatten$webgl_playground$Main$StartLampRotation = {ctor: 'StartLampRotation'};
+var _kosmoskatten$webgl_playground$Main$lampRotationControl = function (model) {
+	var _p9 = model.rotateLamp;
+	if (_p9 === true) {
+		return A2(
+			_elm_lang$html$Html$button,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('w3-btn w3-red'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_kosmoskatten$webgl_playground$Main$StopLampRotation),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Stop lamp rotation'),
+				_1: {ctor: '[]'}
+			});
+	} else {
+		return A2(
+			_elm_lang$html$Html$button,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('w3-btn w3-green'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_kosmoskatten$webgl_playground$Main$StartLampRotation),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Start lamp rotation'),
+				_1: {ctor: '[]'}
+			});
+	}
+};
+var _kosmoskatten$webgl_playground$Main$viewControls = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('w3-container w3-blue'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Lightning controls'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('w3-panel w3-padding-16 w3-light-grey'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _kosmoskatten$webgl_playground$Main$lampRotationControl(model),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: _kosmoskatten$webgl_playground$Main$lampColorControl(model),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _kosmoskatten$webgl_playground$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _kosmoskatten$webgl_playground$Main$viewHeader(model),
+			_1: {
+				ctor: '::',
+				_0: _kosmoskatten$webgl_playground$Main$view3DScene(model),
+				_1: {
+					ctor: '::',
+					_0: _kosmoskatten$webgl_playground$Main$viewControls(model),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
 var _kosmoskatten$webgl_playground$Main$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};
 };

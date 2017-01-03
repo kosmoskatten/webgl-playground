@@ -1,4 +1,4 @@
-module Lamp exposing (Lamp, make, render, animate, color, position)
+module Lamp exposing (Lamp, make, render, animate, color, setColor, position)
 
 import Cube exposing (triangles)
 import Math.Vector3 exposing (Vec3, vec3)
@@ -87,6 +87,11 @@ animate t lamp =
 color : Lamp -> Vec3
 color lamp =
     lamp.lightColor
+
+
+setColor : Vec3 -> Lamp -> Lamp
+setColor color lamp =
+    { lamp | lightColor = color }
 
 
 position : Lamp -> Vec3
