@@ -4,7 +4,8 @@
     "repository": "https://github.com/kosmoskatten/webgl-playground.git",
     "license": "BSD3",
     "source-directories": [
-        "basic-lightning"
+        "basic-lightning",
+        "walkaround-maze"
     ],
     "exposed-modules": [],
     "native-modules": false,
