@@ -1,14 +1,19 @@
 module Main exposing (main)
 
-import Camera as Camera
-import Maze as Maze
+import Camera exposing (Camera)
+import Math.Matrix4 exposing (Mat4, makePerspective)
+import Math.Vector3 exposing (vec3)
+import Maze exposing (Maze)
 import Html exposing (Html, div, h3, p, text)
 import Html.Attributes as Attr
 import WebGL as WebGL
 
 
 type alias Model =
-    Int
+    { projection : Mat4
+    , camera : Camera
+    , maze : Maze
+    }
 
 
 type Msg
@@ -27,7 +32,13 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( 1, Cmd.none )
+    ( { projection =
+            makePerspective 45 (toFloat width / toFloat height) 0.01 100
+      , camera = Camera.init (vec3 0 1 5) (vec3 0 0 0)
+      , maze = Maze.init
+      }
+    , Cmd.none
+    )
 
 
 view : Model -> Html Msg
@@ -56,8 +67,8 @@ viewHeader model =
 view3DScene : Model -> Html Msg
 view3DScene model =
     div [ Attr.class "w3-container w3-black" ]
-        [ WebGL.toHtml [ Attr.width width, Attr.height height ]
-            []
+        [ WebGL.toHtml [ Attr.width width, Attr.height height ] <|
+            Maze.render model.projection (Camera.matrix model.camera) model.maze
         ]
 
 

@@ -11126,7 +11126,65 @@ var _kosmoskatten$webgl_playground$Camera$Camera = F3(
 		return {eye: a, focus: b, up: c};
 	});
 
-var _kosmoskatten$webgl_playground$Maze$init = 1;
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 mvp;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Square$Vertex = function (a) {
+	return {position: a};
+};
+var _kosmoskatten$webgl_playground$Square$floorAt = F3(
+	function (x, y, z) {
+		return {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: _kosmoskatten$webgl_playground$Square$Vertex(
+					A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5)),
+				_1: _kosmoskatten$webgl_playground$Square$Vertex(
+					A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5)),
+				_2: _kosmoskatten$webgl_playground$Square$Vertex(
+					A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5))
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: _kosmoskatten$webgl_playground$Square$Vertex(
+						A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5)),
+					_1: _kosmoskatten$webgl_playground$Square$Vertex(
+						A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5)),
+					_2: _kosmoskatten$webgl_playground$Square$Vertex(
+						A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5))
+				},
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+
+var _kosmoskatten$webgl_playground$Maze$render = F3(
+	function (proj, view, maze) {
+		var model = _elm_community$linear_algebra$Math_Matrix4$identity;
+		var mvp = A2(
+			_elm_community$linear_algebra$Math_Matrix4$mul,
+			proj,
+			A2(_elm_community$linear_algebra$Math_Matrix4$mul, view, model));
+		return {
+			ctor: '::',
+			_0: A4(
+				_elm_community$webgl$WebGL$render,
+				_kosmoskatten$webgl_playground$Square$vertexShader,
+				_kosmoskatten$webgl_playground$Square$fragmentShader,
+				maze.crossFloor,
+				{mvp: mvp}),
+			_1: {ctor: '[]'}
+		};
+	});
+var _kosmoskatten$webgl_playground$Maze$init = {
+	crossFloor: _elm_community$webgl$WebGL$Triangle(
+		A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 0))
+};
+var _kosmoskatten$webgl_playground$Maze$Maze = function (a) {
+	return {crossFloor: a};
+};
 
 var _kosmoskatten$webgl_playground$Main$height = 600;
 var _kosmoskatten$webgl_playground$Main$width = 800;
@@ -11158,7 +11216,11 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 						_1: {ctor: '[]'}
 					}
 				},
-				{ctor: '[]'}),
+				A3(
+					_kosmoskatten$webgl_playground$Maze$render,
+					model.projection,
+					_kosmoskatten$webgl_playground$Camera$matrix(model.camera),
+					model.maze)),
 			_1: {ctor: '[]'}
 		});
 };
@@ -11248,9 +11310,29 @@ var _kosmoskatten$webgl_playground$Main$view = function (model) {
 			}
 		});
 };
-var _kosmoskatten$webgl_playground$Main$init = {ctor: '_Tuple2', _0: 1, _1: _elm_lang$core$Platform_Cmd$none};
+var _kosmoskatten$webgl_playground$Main$init = {
+	ctor: '_Tuple2',
+	_0: {
+		projection: A4(
+			_elm_community$linear_algebra$Math_Matrix4$makePerspective,
+			45,
+			_elm_lang$core$Basics$toFloat(_kosmoskatten$webgl_playground$Main$width) / _elm_lang$core$Basics$toFloat(_kosmoskatten$webgl_playground$Main$height),
+			1.0e-2,
+			100),
+		camera: A2(
+			_kosmoskatten$webgl_playground$Camera$init,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 5),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0)),
+		maze: _kosmoskatten$webgl_playground$Maze$init
+	},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
 var _kosmoskatten$webgl_playground$Main$main = _elm_lang$html$Html$program(
 	{init: _kosmoskatten$webgl_playground$Main$init, view: _kosmoskatten$webgl_playground$Main$view, update: _kosmoskatten$webgl_playground$Main$update, subscriptions: _kosmoskatten$webgl_playground$Main$subscriptions})();
+var _kosmoskatten$webgl_playground$Main$Model = F3(
+	function (a, b, c) {
+		return {projection: a, camera: b, maze: c};
+	});
 var _kosmoskatten$webgl_playground$Main$NoOp = {ctor: 'NoOp'};
 
 var Elm = {};
