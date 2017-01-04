@@ -21,6 +21,7 @@ type Msg
     = LeftArrowDown
     | RightArrowDown
     | UpArrowDown
+    | DownArrowDown
     | NoOp
 
 
@@ -100,6 +101,13 @@ update msg model =
             , Cmd.none
             )
 
+        DownArrowDown ->
+            ( { model
+                | camera = Camera.downArrowDown model.camera
+              }
+            , Cmd.none
+            )
+
         NoOp ->
             ( model, Cmd.none )
 
@@ -130,6 +138,9 @@ keyDown code =
 
         38 ->
             UpArrowDown
+
+        40 ->
+            DownArrowDown
 
         _ ->
             NoOp

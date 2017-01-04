@@ -6,6 +6,7 @@ module Camera
         , leftArrowDown
         , rightArrowDown
         , upArrowDown
+        , downArrowDown
         )
 
 import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
@@ -18,6 +19,7 @@ type alias Camera =
     , leftArrowDown : Bool
     , rightArrowDown : Bool
     , upArrowDown : Bool
+    , downArrowDown : Bool
     }
 
 
@@ -32,6 +34,7 @@ init position angle =
     , leftArrowDown = False
     , rightArrowDown = False
     , upArrowDown = False
+    , downArrowDown = False
     }
 
 
@@ -43,7 +46,7 @@ matrix : Camera -> Mat4
 matrix camera =
     let
         focus =
-            oneStepAhead camera.angle camera.position
+            aheadOf camera.angle viewStride camera.position
     in
         makeLookAt camera.position focus up
 
@@ -73,20 +76,29 @@ rightArrowDown camera =
 upArrowDown : Camera -> Camera
 upArrowDown camera =
     { camera
-        | position = oneStepAhead camera.angle camera.position
+        | position = aheadOf camera.angle forwardStride camera.position
         , upArrowDown = True
     }
 
 
+downArrowDown : Camera -> Camera
+downArrowDown camera =
+    { camera
+        | position = aheadOf camera.angle backwardStride camera.position
+    }
 
-{- Take one step ahead in the given direction (in degrees). -}
 
 
-oneStepAhead : Float -> Vec3 -> Vec3
-oneStepAhead angle current =
+{- Give a new vector, which is ahead the current. Given the stride
+   and the angle.
+-}
+
+
+aheadOf : Float -> Float -> Vec3 -> Vec3
+aheadOf angle stride current =
     let
         oneAhead =
-            vec3 0 0 stepUnit
+            vec3 0 0 stride
 
         rotation =
             makeRotate (degrees angle) (vec3 0 1 0)
@@ -97,9 +109,19 @@ oneStepAhead angle current =
         add current direction
 
 
-stepUnit : Float
-stepUnit =
+viewStride : Float
+viewStride =
     -1.0
+
+
+forwardStride : Float
+forwardStride =
+    -0.1
+
+
+backwardStride : Float
+backwardStride =
+    0.1
 
 
 up : Vec3
