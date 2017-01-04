@@ -12,7 +12,7 @@ type alias Maze =
 
 init : Maze
 init =
-    { crossFloor = Triangle <| floorAt 0 0 0
+    { crossFloor = crossFloor
     }
 
 
@@ -33,3 +33,19 @@ render proj view maze =
             { mvp = mvp
             }
         ]
+
+
+crossFloor : Drawable Vertex
+crossFloor =
+    Triangle <|
+        List.concat
+            [ floorAt 0 0 -2
+            , floorAt 0 0 -1
+            , floorAt 0 0 0
+            , floorAt 0 0 1
+            , floorAt 0 0 2
+            , floorAt -2 0 0
+            , floorAt -1 0 0
+            , floorAt 1 0 0
+            , floorAt 2 0 0
+            ]

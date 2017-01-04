@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Camera exposing (Camera)
+import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
 import Math.Vector3 exposing (vec3)
 import Maze exposing (Maze)
@@ -17,7 +18,10 @@ type alias Model =
 
 
 type Msg
-    = NoOp
+    = LeftArrowDown
+    | RightArrowDown
+    | UpArrowDown
+    | NoOp
 
 
 main : Program Never Model Msg
@@ -34,7 +38,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , camera = Camera.init (vec3 0 1 5) (vec3 0 0 0)
+      , camera = Camera.init (vec3 0 1 5) 0
       , maze = Maze.init
       }
     , Cmd.none
@@ -74,12 +78,35 @@ view3DScene model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        LeftArrowDown ->
+            ( { model
+                | camera = Camera.leftArrowDown model.camera
+              }
+            , Cmd.none
+            )
+
+        RightArrowDown ->
+            ( { model
+                | camera = Camera.rightArrowDown model.camera
+              }
+            , Cmd.none
+            )
+
+        UpArrowDown ->
+            ( { model
+                | camera = Camera.upArrowDown model.camera
+              }
+            , Cmd.none
+            )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Keyboard.downs keyDown
 
 
 width : Int
@@ -90,3 +117,19 @@ width =
 height : Int
 height =
     600
+
+
+keyDown : KeyCode -> Msg
+keyDown code =
+    case code of
+        37 ->
+            LeftArrowDown
+
+        39 ->
+            RightArrowDown
+
+        38 ->
+            UpArrowDown
+
+        _ ->
+            NoOp
