@@ -3,6 +3,7 @@ module Camera
         ( Camera
         , init
         , matrix
+        , animate
         , keyDown
         , keyUp
         )
@@ -10,6 +11,7 @@ module Camera
 import Keyboard exposing (KeyCode)
 import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
 import Math.Matrix4 exposing (Mat4, makeLookAt, makeRotate, transform)
+import Time exposing (Time, inSeconds)
 
 
 type alias Camera =
@@ -57,6 +59,50 @@ matrix camera =
                 aheadOf camera.angle viewStride camera.position
     in
         makeLookAt camera.position focus up
+
+
+animate : Time -> Camera -> Camera
+animate time camera =
+    let
+        t =
+            inSeconds time
+    in
+        animateBackward t <|
+            animateForward t <|
+                animateRightRotate t <|
+                    animateLeftRotate t camera
+
+
+animateLeftRotate : Float -> Camera -> Camera
+animateLeftRotate t camera =
+    if camera.leftArrowDown then
+        { camera | angle = camera.angle + t * 180 }
+    else
+        camera
+
+
+animateRightRotate : Float -> Camera -> Camera
+animateRightRotate t camera =
+    if camera.rightArrowDown then
+        { camera | angle = camera.angle - t * 180 }
+    else
+        camera
+
+
+animateForward : Float -> Camera -> Camera
+animateForward t camera =
+    if camera.upArrowDown then
+        { camera | position = aheadOf camera.angle -t camera.position }
+    else
+        camera
+
+
+animateBackward : Float -> Camera -> Camera
+animateBackward t camera =
+    if camera.downArrowDown then
+        { camera | position = aheadOf camera.angle (t / 2) camera.position }
+    else
+        camera
 
 
 keyDown : KeyCode -> Camera -> Camera
@@ -108,10 +154,13 @@ keyUp code camera =
 
 leftArrowDown : Camera -> Camera
 leftArrowDown camera =
-    { camera
-        | angle = camera.angle + 5
-        , leftArrowDown = True
-    }
+    if not camera.leftArrowDown then
+        { camera
+            | angle = camera.angle + 5
+            , leftArrowDown = True
+        }
+    else
+        camera
 
 
 leftArrowUp : Camera -> Camera
@@ -121,10 +170,13 @@ leftArrowUp camera =
 
 rightArrowDown : Camera -> Camera
 rightArrowDown camera =
-    { camera
-        | angle = camera.angle - 5
-        , rightArrowDown = True
-    }
+    if not camera.rightArrowDown then
+        { camera
+            | angle = camera.angle - 5
+            , rightArrowDown = True
+        }
+    else
+        camera
 
 
 rightArrowUp : Camera -> Camera
@@ -134,10 +186,13 @@ rightArrowUp camera =
 
 upArrowDown : Camera -> Camera
 upArrowDown camera =
-    { camera
-        | position = aheadOf camera.angle forwardStride camera.position
-        , upArrowDown = True
-    }
+    if not camera.upArrowDown then
+        { camera
+            | position = aheadOf camera.angle forwardStride camera.position
+            , upArrowDown = True
+        }
+    else
+        camera
 
 
 upArrowUp : Camera -> Camera
@@ -147,9 +202,13 @@ upArrowUp camera =
 
 downArrowDown : Camera -> Camera
 downArrowDown camera =
-    { camera
-        | position = aheadOf camera.angle backwardStride camera.position
-    }
+    if not camera.downArrowDown then
+        { camera
+            | position = aheadOf camera.angle backwardStride camera.position
+            , downArrowDown = True
+        }
+    else
+        camera
 
 
 downArrowUp : Camera -> Camera

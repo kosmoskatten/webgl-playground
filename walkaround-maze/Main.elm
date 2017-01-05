@@ -81,7 +81,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Animate t ->
-            ( model
+            ( { model | camera = Camera.animate t model.camera }
             , Cmd.none
             )
 

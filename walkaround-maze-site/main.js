@@ -11884,11 +11884,12 @@ var _kosmoskatten$webgl_playground$Camera$downArrowUp = function (camera) {
 		{downArrowDown: false});
 };
 var _kosmoskatten$webgl_playground$Camera$downArrowDown = function (camera) {
-	return _elm_lang$core$Native_Utils.update(
+	return (!camera.downArrowDown) ? _elm_lang$core$Native_Utils.update(
 		camera,
 		{
-			position: A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, _kosmoskatten$webgl_playground$Camera$backwardStride, camera.position)
-		});
+			position: A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, _kosmoskatten$webgl_playground$Camera$backwardStride, camera.position),
+			downArrowDown: true
+		}) : camera;
 };
 var _kosmoskatten$webgl_playground$Camera$upArrowUp = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
@@ -11896,12 +11897,12 @@ var _kosmoskatten$webgl_playground$Camera$upArrowUp = function (camera) {
 		{upArrowDown: false});
 };
 var _kosmoskatten$webgl_playground$Camera$upArrowDown = function (camera) {
-	return _elm_lang$core$Native_Utils.update(
+	return (!camera.upArrowDown) ? _elm_lang$core$Native_Utils.update(
 		camera,
 		{
 			position: A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, _kosmoskatten$webgl_playground$Camera$forwardStride, camera.position),
 			upArrowDown: true
-		});
+		}) : camera;
 };
 var _kosmoskatten$webgl_playground$Camera$rightArrowUp = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
@@ -11909,9 +11910,9 @@ var _kosmoskatten$webgl_playground$Camera$rightArrowUp = function (camera) {
 		{rightArrowDown: false});
 };
 var _kosmoskatten$webgl_playground$Camera$rightArrowDown = function (camera) {
-	return _elm_lang$core$Native_Utils.update(
+	return (!camera.rightArrowDown) ? _elm_lang$core$Native_Utils.update(
 		camera,
-		{angle: camera.angle - 5, rightArrowDown: true});
+		{angle: camera.angle - 5, rightArrowDown: true}) : camera;
 };
 var _kosmoskatten$webgl_playground$Camera$leftArrowUp = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
@@ -11919,9 +11920,9 @@ var _kosmoskatten$webgl_playground$Camera$leftArrowUp = function (camera) {
 		{leftArrowDown: false});
 };
 var _kosmoskatten$webgl_playground$Camera$leftArrowDown = function (camera) {
-	return _elm_lang$core$Native_Utils.update(
+	return (!camera.leftArrowDown) ? _elm_lang$core$Native_Utils.update(
 		camera,
-		{angle: camera.angle + 5, leftArrowDown: true});
+		{angle: camera.angle + 5, leftArrowDown: true}) : camera;
 };
 var _kosmoskatten$webgl_playground$Camera$keyUp = F2(
 	function (code, camera) {
@@ -11938,6 +11939,48 @@ var _kosmoskatten$webgl_playground$Camera$keyUp = F2(
 			default:
 				return camera;
 		}
+	});
+var _kosmoskatten$webgl_playground$Camera$animateBackward = F2(
+	function (t, camera) {
+		return camera.downArrowDown ? _elm_lang$core$Native_Utils.update(
+			camera,
+			{
+				position: A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, t / 2, camera.position)
+			}) : camera;
+	});
+var _kosmoskatten$webgl_playground$Camera$animateForward = F2(
+	function (t, camera) {
+		return camera.upArrowDown ? _elm_lang$core$Native_Utils.update(
+			camera,
+			{
+				position: A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, 0 - t, camera.position)
+			}) : camera;
+	});
+var _kosmoskatten$webgl_playground$Camera$animateRightRotate = F2(
+	function (t, camera) {
+		return camera.rightArrowDown ? _elm_lang$core$Native_Utils.update(
+			camera,
+			{angle: camera.angle - (t * 180)}) : camera;
+	});
+var _kosmoskatten$webgl_playground$Camera$animateLeftRotate = F2(
+	function (t, camera) {
+		return camera.leftArrowDown ? _elm_lang$core$Native_Utils.update(
+			camera,
+			{angle: camera.angle + (t * 180)}) : camera;
+	});
+var _kosmoskatten$webgl_playground$Camera$animate = F2(
+	function (time, camera) {
+		var t = _elm_lang$core$Time$inSeconds(time);
+		return A2(
+			_kosmoskatten$webgl_playground$Camera$animateBackward,
+			t,
+			A2(
+				_kosmoskatten$webgl_playground$Camera$animateForward,
+				t,
+				A2(
+					_kosmoskatten$webgl_playground$Camera$animateRightRotate,
+					t,
+					A2(_kosmoskatten$webgl_playground$Camera$animateLeftRotate, t, camera))));
 	});
 var _kosmoskatten$webgl_playground$Camera$matrix = function (camera) {
 	var focus = A2(
@@ -12098,7 +12141,15 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Animate':
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							camera: A2(_kosmoskatten$webgl_playground$Camera$animate, _p0._0, model.camera)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'KeyDown':
 				return {
 					ctor: '_Tuple2',
