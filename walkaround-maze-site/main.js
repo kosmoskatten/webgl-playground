@@ -11685,6 +11685,21 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
 var _kosmoskatten$webgl_playground$Camera$up = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0);
+var _kosmoskatten$webgl_playground$Camera$headAdjustment = F2(
+	function (adjustment, vec) {
+		var z = _elm_community$linear_algebra$Math_Vector3$getZ(vec);
+		var y = _elm_community$linear_algebra$Math_Vector3$getY(vec);
+		var x = _elm_community$linear_algebra$Math_Vector3$getX(vec);
+		var _p0 = adjustment;
+		switch (_p0.ctor) {
+			case 'LookStraight':
+				return A3(_elm_community$linear_algebra$Math_Vector3$vec3, x, y, z);
+			case 'LookUp':
+				return A3(_elm_community$linear_algebra$Math_Vector3$vec3, x, y + 0.5, z);
+			default:
+				return A3(_elm_community$linear_algebra$Math_Vector3$vec3, x, y - 0.5, z);
+		}
+	});
 var _kosmoskatten$webgl_playground$Camera$backwardStride = 0.1;
 var _kosmoskatten$webgl_playground$Camera$forwardStride = -0.1;
 var _kosmoskatten$webgl_playground$Camera$viewStride = -1.0;
@@ -11724,17 +11739,38 @@ var _kosmoskatten$webgl_playground$Camera$leftArrowDown = function (camera) {
 		{angle: camera.angle + 5, leftArrowDown: true});
 };
 var _kosmoskatten$webgl_playground$Camera$matrix = function (camera) {
-	var focus = A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, _kosmoskatten$webgl_playground$Camera$viewStride, camera.position);
+	var focus = A2(
+		_kosmoskatten$webgl_playground$Camera$headAdjustment,
+		camera.headAdjustment,
+		A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, _kosmoskatten$webgl_playground$Camera$viewStride, camera.position));
 	return A3(_elm_community$linear_algebra$Math_Matrix4$makeLookAt, camera.position, focus, _kosmoskatten$webgl_playground$Camera$up);
 };
+var _kosmoskatten$webgl_playground$Camera$Camera = F7(
+	function (a, b, c, d, e, f, g) {
+		return {position: a, angle: b, headAdjustment: c, leftArrowDown: d, rightArrowDown: e, upArrowDown: f, downArrowDown: g};
+	});
+var _kosmoskatten$webgl_playground$Camera$LookDown = {ctor: 'LookDown'};
+var _kosmoskatten$webgl_playground$Camera$pageDownDown = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{headAdjustment: _kosmoskatten$webgl_playground$Camera$LookDown});
+};
+var _kosmoskatten$webgl_playground$Camera$LookStraight = {ctor: 'LookStraight'};
 var _kosmoskatten$webgl_playground$Camera$init = F2(
 	function (position, angle) {
-		return {position: position, angle: angle, leftArrowDown: false, rightArrowDown: false, upArrowDown: false, downArrowDown: false};
+		return {position: position, angle: angle, headAdjustment: _kosmoskatten$webgl_playground$Camera$LookStraight, leftArrowDown: false, rightArrowDown: false, upArrowDown: false, downArrowDown: false};
 	});
-var _kosmoskatten$webgl_playground$Camera$Camera = F6(
-	function (a, b, c, d, e, f) {
-		return {position: a, angle: b, leftArrowDown: c, rightArrowDown: d, upArrowDown: e, downArrowDown: f};
-	});
+var _kosmoskatten$webgl_playground$Camera$homeDown = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{headAdjustment: _kosmoskatten$webgl_playground$Camera$LookStraight});
+};
+var _kosmoskatten$webgl_playground$Camera$LookUp = {ctor: 'LookUp'};
+var _kosmoskatten$webgl_playground$Camera$pageUpDown = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{headAdjustment: _kosmoskatten$webgl_playground$Camera$LookUp});
+};
 
 var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n}\n'};
 var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 mvp;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n}\n'};
@@ -11875,6 +11911,36 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						model,
 						{
 							camera: _kosmoskatten$webgl_playground$Camera$downArrowDown(model.camera)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PageDownDown':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							camera: _kosmoskatten$webgl_playground$Camera$pageDownDown(model.camera)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PageUpDown':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							camera: _kosmoskatten$webgl_playground$Camera$pageUpDown(model.camera)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'HomeDown':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							camera: _kosmoskatten$webgl_playground$Camera$homeDown(model.camera)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -12019,6 +12085,9 @@ var _kosmoskatten$webgl_playground$Main$Model = F3(
 		return {projection: a, camera: b, maze: c};
 	});
 var _kosmoskatten$webgl_playground$Main$NoOp = {ctor: 'NoOp'};
+var _kosmoskatten$webgl_playground$Main$HomeDown = {ctor: 'HomeDown'};
+var _kosmoskatten$webgl_playground$Main$PageUpDown = {ctor: 'PageUpDown'};
+var _kosmoskatten$webgl_playground$Main$PageDownDown = {ctor: 'PageDownDown'};
 var _kosmoskatten$webgl_playground$Main$DownArrowDown = {ctor: 'DownArrowDown'};
 var _kosmoskatten$webgl_playground$Main$UpArrowDown = {ctor: 'UpArrowDown'};
 var _kosmoskatten$webgl_playground$Main$RightArrowDown = {ctor: 'RightArrowDown'};
@@ -12034,6 +12103,12 @@ var _kosmoskatten$webgl_playground$Main$keyDown = function (code) {
 			return _kosmoskatten$webgl_playground$Main$UpArrowDown;
 		case 40:
 			return _kosmoskatten$webgl_playground$Main$DownArrowDown;
+		case 34:
+			return _kosmoskatten$webgl_playground$Main$PageDownDown;
+		case 33:
+			return _kosmoskatten$webgl_playground$Main$PageUpDown;
+		case 36:
+			return _kosmoskatten$webgl_playground$Main$HomeDown;
 		default:
 			return _kosmoskatten$webgl_playground$Main$NoOp;
 	}

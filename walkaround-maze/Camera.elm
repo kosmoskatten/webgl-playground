@@ -7,6 +7,9 @@ module Camera
         , rightArrowDown
         , upArrowDown
         , downArrowDown
+        , pageDownDown
+        , pageUpDown
+        , homeDown
         )
 
 import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
@@ -16,11 +19,18 @@ import Math.Matrix4 exposing (Mat4, makeLookAt, makeRotate, transform)
 type alias Camera =
     { position : Vec3
     , angle : Float
+    , headAdjustment : HeadAdjustment
     , leftArrowDown : Bool
     , rightArrowDown : Bool
     , upArrowDown : Bool
     , downArrowDown : Bool
     }
+
+
+type HeadAdjustment
+    = LookUp
+    | LookStraight
+    | LookDown
 
 
 
@@ -31,6 +41,7 @@ init : Vec3 -> Float -> Camera
 init position angle =
     { position = position
     , angle = angle
+    , headAdjustment = LookStraight
     , leftArrowDown = False
     , rightArrowDown = False
     , upArrowDown = False
@@ -46,7 +57,8 @@ matrix : Camera -> Mat4
 matrix camera =
     let
         focus =
-            aheadOf camera.angle viewStride camera.position
+            headAdjustment camera.headAdjustment <|
+                aheadOf camera.angle viewStride camera.position
     in
         makeLookAt camera.position focus up
 
@@ -88,6 +100,27 @@ downArrowDown camera =
     }
 
 
+pageDownDown : Camera -> Camera
+pageDownDown camera =
+    { camera
+        | headAdjustment = LookDown
+    }
+
+
+pageUpDown : Camera -> Camera
+pageUpDown camera =
+    { camera
+        | headAdjustment = LookUp
+    }
+
+
+homeDown : Camera -> Camera
+homeDown camera =
+    { camera
+        | headAdjustment = LookStraight
+    }
+
+
 
 {- Give a new vector, which is ahead the current. Given the stride
    and the angle.
@@ -122,6 +155,29 @@ forwardStride =
 backwardStride : Float
 backwardStride =
     0.1
+
+
+headAdjustment : HeadAdjustment -> Vec3 -> Vec3
+headAdjustment adjustment vec =
+    let
+        x =
+            getX vec
+
+        y =
+            getY vec
+
+        z =
+            getZ vec
+    in
+        case adjustment of
+            LookStraight ->
+                vec3 x y z
+
+            LookUp ->
+                vec3 x (y + 0.5) z
+
+            LookDown ->
+                vec3 x (y - 0.5) z
 
 
 up : Vec3

@@ -22,6 +22,9 @@ type Msg
     | RightArrowDown
     | UpArrowDown
     | DownArrowDown
+    | PageDownDown
+    | PageUpDown
+    | HomeDown
     | NoOp
 
 
@@ -108,6 +111,23 @@ update msg model =
             , Cmd.none
             )
 
+        PageDownDown ->
+            ( { model
+                | camera = Camera.pageDownDown model.camera
+              }
+            , Cmd.none
+            )
+
+        PageUpDown ->
+            ( { model | camera = Camera.pageUpDown model.camera }
+            , Cmd.none
+            )
+
+        HomeDown ->
+            ( { model | camera = Camera.homeDown model.camera }
+            , Cmd.none
+            )
+
         NoOp ->
             ( model, Cmd.none )
 
@@ -141,6 +161,15 @@ keyDown code =
 
         40 ->
             DownArrowDown
+
+        34 ->
+            PageDownDown
+
+        33 ->
+            PageUpDown
+
+        36 ->
+            HomeDown
 
         _ ->
             NoOp
