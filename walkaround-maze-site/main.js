@@ -4997,6 +4997,208 @@ var _elm_community$linear_algebra$Math_Matrix4$identity = _elm_community$linear_
 var _elm_community$linear_algebra$Math_Matrix4$transform = _elm_community$linear_algebra$Native_MJS.v3mul4x4;
 var _elm_community$linear_algebra$Math_Matrix4$Mat4 = {ctor: 'Mat4'};
 
+
+/*
+ * Copyright (c) 2010 Mozilla Corporation
+ * Copyright (c) 2010 Vladimir Vukicevic
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
+ * File: mjs
+ *
+ * Vector and Matrix math utilities for JavaScript, optimized for WebGL.
+ * Edited to work with the Elm Programming Language
+ */
+
+var _elm_community$linear_algebra$Native_Math_Vector2 = function() {
+
+    var MJS_FLOAT_ARRAY_TYPE = Float32Array;
+
+    var V2 = { };
+
+    if (MJS_FLOAT_ARRAY_TYPE == Array) {
+        V2.$ = function V2_$(x, y) {
+            return [x, y];
+        };
+    } else {
+        V2.$ = function V2_$(x, y) {
+            return new MJS_FLOAT_ARRAY_TYPE([x, y]);
+        };
+    }
+
+    V2.getX = function V2_getX(a) {
+        return a[0];
+    }
+    V2.getY = function V2_getY(a) {
+        return a[1];
+    }
+    V2.setX = function V2_setX(x, a) {
+        return new MJS_FLOAT_ARRAY_TYPE([x, a[1]]);
+    }
+    V2.setY = function V2_setY(y, a) {
+        return new MJS_FLOAT_ARRAY_TYPE([a[0], y]);
+    }
+
+    V2.toTuple = function V2_toTuple(a) {
+        return {
+            ctor:"_Tuple2",
+            _0:a[0],
+            _1:a[1]
+        };
+    };
+    V2.fromTuple = function V2_fromTuple(t) {
+        return new MJS_FLOAT_ARRAY_TYPE([t._0, t._1]);
+    };
+
+    V2.toRecord = function V2_toRecord(a) {
+        return {
+            _:{},
+            x:a[0],
+            y:a[1]
+        };
+    };
+    V2.fromRecord = function V2_fromRecord(r) {
+        return new MJS_FLOAT_ARRAY_TYPE([r.x, r.y]);
+    };
+
+    V2.add = function V2_add(a, b) {
+        var r = new MJS_FLOAT_ARRAY_TYPE(2);
+        r[0] = a[0] + b[0];
+        r[1] = a[1] + b[1];
+        return r;
+    };
+
+    V2.sub = function V2_sub(a, b) {
+        var r = new MJS_FLOAT_ARRAY_TYPE(2);
+        r[0] = a[0] - b[0];
+        r[1] = a[1] - b[1];
+        return r;
+    };
+
+    V2.neg = function V2_neg(a) {
+        var r = new MJS_FLOAT_ARRAY_TYPE(2);
+        r[0] = - a[0];
+        r[1] = - a[1];
+        return r;
+    };
+
+    V2.direction = function V2_direction(a, b) {
+        var r = new MJS_FLOAT_ARRAY_TYPE(2);
+        r[0] = a[0] - b[0];
+        r[1] = a[1] - b[1];
+        var im = 1.0 / V2.length(r);
+        r[0] = r[0] * im;
+        r[1] = r[1] * im;
+        return r;
+    };
+
+    V2.length = function V2_length(a) {
+        return Math.sqrt(a[0]*a[0] + a[1]*a[1]);
+    };
+
+    V2.lengthSquared = function V2_lengthSquared(a) {
+        return a[0]*a[0] + a[1]*a[1];
+    };
+
+    V2.distance = function V2_distance(a, b) {
+        var dx = a[0] - b[0];
+        var dy = a[1] - b[1];
+        return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    V2.distanceSquared = function V2_distanceSquared(a, b) {
+        var dx = a[0] - b[0];
+        var dy = a[1] - b[1];
+        return dx * dx + dy * dy;
+    };
+
+    V2.normalize = function V2_normalize(a) {
+        var r = new MJS_FLOAT_ARRAY_TYPE(2);
+        var im = 1.0 / V2.length(a);
+        r[0] = a[0] * im;
+        r[1] = a[1] * im;
+        return r;
+    };
+
+    V2.scale = function V2_scale(k, a) {
+        var r = new MJS_FLOAT_ARRAY_TYPE(2);
+        r[0] = a[0] * k;
+        r[1] = a[1] * k;
+        return r;
+    };
+
+    V2.dot = function V2_dot(a, b) {
+        return a[0] * b[0] + a[1] * b[1];
+    };
+
+    return {
+        vec2: F2(V2.$),
+        getX: V2.getX,
+        getY: V2.getY,
+        setX: F2(V2.setX),
+        setY: F2(V2.setY),
+        toTuple: V2.toTuple,
+        toRecord: V2.toRecord,
+        fromTuple: V2.fromTuple,
+        fromRecord: V2.fromRecord,
+        add: F2(V2.add),
+        sub: F2(V2.sub),
+        neg: V2.neg,
+        direction: F2(V2.direction),
+        length: V2.length,
+        lengthSquared: V2.lengthSquared,
+        distance: F2(V2.distance),
+        distanceSquared: F2(V2.distanceSquared),
+        normalize: V2.normalize,
+        scale: F2(V2.scale),
+        dot: F2(V2.dot)
+    };
+
+}();
+
+var _elm_community$linear_algebra$Math_Vector2$dot = _elm_community$linear_algebra$Native_Math_Vector2.dot;
+var _elm_community$linear_algebra$Math_Vector2$scale = _elm_community$linear_algebra$Native_Math_Vector2.scale;
+var _elm_community$linear_algebra$Math_Vector2$normalize = _elm_community$linear_algebra$Native_Math_Vector2.normalize;
+var _elm_community$linear_algebra$Math_Vector2$distanceSquared = _elm_community$linear_algebra$Native_Math_Vector2.distanceSquared;
+var _elm_community$linear_algebra$Math_Vector2$distance = _elm_community$linear_algebra$Native_Math_Vector2.distance;
+var _elm_community$linear_algebra$Math_Vector2$lengthSquared = _elm_community$linear_algebra$Native_Math_Vector2.lengthSquared;
+var _elm_community$linear_algebra$Math_Vector2$length = _elm_community$linear_algebra$Native_Math_Vector2.length;
+var _elm_community$linear_algebra$Math_Vector2$direction = _elm_community$linear_algebra$Native_Math_Vector2.direction;
+var _elm_community$linear_algebra$Math_Vector2$negate = _elm_community$linear_algebra$Native_Math_Vector2.neg;
+var _elm_community$linear_algebra$Math_Vector2$sub = _elm_community$linear_algebra$Native_Math_Vector2.sub;
+var _elm_community$linear_algebra$Math_Vector2$add = _elm_community$linear_algebra$Native_Math_Vector2.add;
+var _elm_community$linear_algebra$Math_Vector2$fromRecord = _elm_community$linear_algebra$Native_Math_Vector2.fromRecord;
+var _elm_community$linear_algebra$Math_Vector2$fromTuple = _elm_community$linear_algebra$Native_Math_Vector2.fromTuple;
+var _elm_community$linear_algebra$Math_Vector2$toRecord = _elm_community$linear_algebra$Native_Math_Vector2.toRecord;
+var _elm_community$linear_algebra$Math_Vector2$toTuple = _elm_community$linear_algebra$Native_Math_Vector2.toTuple;
+var _elm_community$linear_algebra$Math_Vector2$setY = _elm_community$linear_algebra$Native_Math_Vector2.setY;
+var _elm_community$linear_algebra$Math_Vector2$setX = _elm_community$linear_algebra$Native_Math_Vector2.setX;
+var _elm_community$linear_algebra$Math_Vector2$getY = _elm_community$linear_algebra$Native_Math_Vector2.getY;
+var _elm_community$linear_algebra$Math_Vector2$getX = _elm_community$linear_algebra$Native_Math_Vector2.getX;
+var _elm_community$linear_algebra$Math_Vector2$vec2 = _elm_community$linear_algebra$Native_Math_Vector2.vec2;
+var _elm_community$linear_algebra$Math_Vector2$Vec2 = {ctor: 'Vec2'};
+
 // eslint-disable-next-line no-unused-vars, camelcase
 var _elm_community$webgl$Native_WebGL = function () {
 
@@ -11680,6 +11882,121 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _elm_lang$keyboard$Keyboard$onSelfMsg = F3(
 	function (router, _p0, state) {
 		var _p1 = _p0;
@@ -12038,38 +12355,51 @@ var _kosmoskatten$webgl_playground$Camera$keyDown = F2(
 		}
 	});
 
-var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n}\n'};
-var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 mvp;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n}\n'};
-var _kosmoskatten$webgl_playground$Square$Vertex = function (a) {
-	return {position: a};
-};
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vTexCoord = texCoord;\n}\n'};
 var _kosmoskatten$webgl_playground$Square$floorAt = F3(
 	function (x, y, z) {
 		return {
 			ctor: '::',
 			_0: {
 				ctor: '_Tuple3',
-				_0: _kosmoskatten$webgl_playground$Square$Vertex(
-					A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5)),
-				_1: _kosmoskatten$webgl_playground$Square$Vertex(
-					A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5)),
-				_2: _kosmoskatten$webgl_playground$Square$Vertex(
-					A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5))
+				_0: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+				},
+				_1: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+				},
+				_2: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+				}
 			},
 			_1: {
 				ctor: '::',
 				_0: {
 					ctor: '_Tuple3',
-					_0: _kosmoskatten$webgl_playground$Square$Vertex(
-						A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5)),
-					_1: _kosmoskatten$webgl_playground$Square$Vertex(
-						A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5)),
-					_2: _kosmoskatten$webgl_playground$Square$Vertex(
-						A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5))
+					_0: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+					},
+					_1: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+					},
+					_2: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+					}
 				},
 				_1: {ctor: '[]'}
 			}
 		};
+	});
+var _kosmoskatten$webgl_playground$Square$Vertex = F2(
+	function (a, b) {
+		return {position: a, texCoord: b};
 	});
 
 var _kosmoskatten$webgl_playground$Maze$crossFloor = _elm_community$webgl$WebGL$Triangle(
@@ -12150,6 +12480,14 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'ClearErrorMessage':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{errStr: _elm_lang$core$Maybe$Nothing}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'KeyDown':
 				return {
 					ctor: '_Tuple2',
@@ -12222,6 +12560,83 @@ var _kosmoskatten$webgl_playground$Main$viewHeader = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
+var _kosmoskatten$webgl_playground$Main$init = {
+	ctor: '_Tuple2',
+	_0: {
+		projection: A4(
+			_elm_community$linear_algebra$Math_Matrix4$makePerspective,
+			45,
+			_elm_lang$core$Basics$toFloat(_kosmoskatten$webgl_playground$Main$width) / _elm_lang$core$Basics$toFloat(_kosmoskatten$webgl_playground$Main$height),
+			1.0e-2,
+			100),
+		camera: A2(
+			_kosmoskatten$webgl_playground$Camera$init,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 5),
+			0),
+		maze: _kosmoskatten$webgl_playground$Maze$init,
+		errStr: _elm_lang$core$Maybe$Just('Some nasty error')
+	},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _kosmoskatten$webgl_playground$Main$Model = F4(
+	function (a, b, c, d) {
+		return {projection: a, camera: b, maze: c, errStr: d};
+	});
+var _kosmoskatten$webgl_playground$Main$KeyUp = function (a) {
+	return {ctor: 'KeyUp', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$KeyDown = function (a) {
+	return {ctor: 'KeyDown', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$ClearErrorMessage = {ctor: 'ClearErrorMessage'};
+var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
+	var _p1 = model.errStr;
+	if (_p1.ctor === 'Just') {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('w3-container w3-red'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('w3-closebtn'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_kosmoskatten$webgl_playground$Main$ClearErrorMessage),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('X'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p1._0),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	}
+};
 var _kosmoskatten$webgl_playground$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -12261,8 +12676,12 @@ var _kosmoskatten$webgl_playground$Main$view = function (model) {
 						_0: _kosmoskatten$webgl_playground$Main$viewHeader(model),
 						_1: {
 							ctor: '::',
-							_0: _kosmoskatten$webgl_playground$Main$view3DScene(model),
-							_1: {ctor: '[]'}
+							_0: _kosmoskatten$webgl_playground$Main$viewErrorMessage(model),
+							_1: {
+								ctor: '::',
+								_0: _kosmoskatten$webgl_playground$Main$view3DScene(model),
+								_1: {ctor: '[]'}
+							}
 						}
 					}),
 				_1: {
@@ -12286,33 +12705,6 @@ var _kosmoskatten$webgl_playground$Main$view = function (model) {
 				}
 			}
 		});
-};
-var _kosmoskatten$webgl_playground$Main$init = {
-	ctor: '_Tuple2',
-	_0: {
-		projection: A4(
-			_elm_community$linear_algebra$Math_Matrix4$makePerspective,
-			45,
-			_elm_lang$core$Basics$toFloat(_kosmoskatten$webgl_playground$Main$width) / _elm_lang$core$Basics$toFloat(_kosmoskatten$webgl_playground$Main$height),
-			1.0e-2,
-			100),
-		camera: A2(
-			_kosmoskatten$webgl_playground$Camera$init,
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 5),
-			0),
-		maze: _kosmoskatten$webgl_playground$Maze$init
-	},
-	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _kosmoskatten$webgl_playground$Main$Model = F3(
-	function (a, b, c) {
-		return {projection: a, camera: b, maze: c};
-	});
-var _kosmoskatten$webgl_playground$Main$KeyUp = function (a) {
-	return {ctor: 'KeyUp', _0: a};
-};
-var _kosmoskatten$webgl_playground$Main$KeyDown = function (a) {
-	return {ctor: 'KeyDown', _0: a};
 };
 var _kosmoskatten$webgl_playground$Main$Animate = function (a) {
 	return {ctor: 'Animate', _0: a};

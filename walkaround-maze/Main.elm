@@ -6,8 +6,9 @@ import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
 import Math.Vector3 exposing (vec3)
 import Maze exposing (Maze)
-import Html exposing (Html, div, h3, p, text)
+import Html exposing (Html, div, h3, p, span, text)
 import Html.Attributes as Attr
+import Html.Events as Evts
 import Time exposing (Time)
 import WebGL as WebGL
 
@@ -16,11 +17,13 @@ type alias Model =
     { projection : Mat4
     , camera : Camera
     , maze : Maze
+    , errStr : Maybe String
     }
 
 
 type Msg
     = Animate Time
+    | ClearErrorMessage
     | KeyDown KeyCode
     | KeyUp KeyCode
 
@@ -41,6 +44,7 @@ init =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , camera = Camera.init (vec3 0 1 5) 0
       , maze = Maze.init
+      , errStr = Just "Some nasty error"
       }
     , Cmd.none
     )
@@ -53,6 +57,7 @@ view model =
             [ p [] [] ]
         , div [ Attr.class "w3-col l10 w3-center" ]
             [ viewHeader model
+            , viewErrorMessage model
             , view3DScene model
             ]
         , div [ Attr.class "w3-col l1" ]
@@ -69,6 +74,23 @@ viewHeader model =
         ]
 
 
+viewErrorMessage : Model -> Html Msg
+viewErrorMessage model =
+    case model.errStr of
+        Just errStr ->
+            div [ Attr.class "w3-container w3-red" ]
+                [ span
+                    [ Attr.class "w3-closebtn"
+                    , Evts.onClick ClearErrorMessage
+                    ]
+                    [ text "X" ]
+                , h3 [] [ text errStr ]
+                ]
+
+        Nothing ->
+            div [] []
+
+
 view3DScene : Model -> Html Msg
 view3DScene model =
     div [ Attr.class "w3-container w3-black" ]
@@ -82,6 +104,11 @@ update msg model =
     case msg of
         Animate t ->
             ( { model | camera = Camera.animate t model.camera }
+            , Cmd.none
+            )
+
+        ClearErrorMessage ->
+            ( { model | errStr = Nothing }
             , Cmd.none
             )
 
