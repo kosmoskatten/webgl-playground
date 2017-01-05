@@ -12355,7 +12355,7 @@ var _kosmoskatten$webgl_playground$Camera$keyDown = F2(
 		}
 	});
 
-var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n}\n'};
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform sampler2D texture;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n    gl_FragColor = texture2D(texture, vTexCoord);\n}\n'};
 var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vTexCoord = texCoord;\n}\n'};
 var _kosmoskatten$webgl_playground$Square$floorAt = F3(
 	function (x, y, z) {
@@ -12402,7 +12402,7 @@ var _kosmoskatten$webgl_playground$Square$Vertex = F2(
 		return {position: a, texCoord: b};
 	});
 
-var _kosmoskatten$webgl_playground$Maze$crossFloor = _elm_community$webgl$WebGL$Triangle(
+var _kosmoskatten$webgl_playground$Maze$mazeFloor = _elm_community$webgl$WebGL$Triangle(
 	_elm_lang$core$List$concat(
 		{
 			ctor: '::',
@@ -12454,15 +12454,18 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 				_elm_community$webgl$WebGL$render,
 				_kosmoskatten$webgl_playground$Square$vertexShader,
 				_kosmoskatten$webgl_playground$Square$fragmentShader,
-				maze.crossFloor,
-				{mvp: mvp}),
+				maze.mazeFloor,
+				{mvp: mvp, texture: maze.mazeFloorTexture}),
 			_1: {ctor: '[]'}
 		};
 	});
-var _kosmoskatten$webgl_playground$Maze$init = {crossFloor: _kosmoskatten$webgl_playground$Maze$crossFloor};
-var _kosmoskatten$webgl_playground$Maze$Maze = function (a) {
-	return {crossFloor: a};
+var _kosmoskatten$webgl_playground$Maze$init = function (mazeFloorTexture) {
+	return {mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor, mazeFloorTexture: mazeFloorTexture};
 };
+var _kosmoskatten$webgl_playground$Maze$Maze = F2(
+	function (a, b) {
+		return {mazeFloor: a, mazeFloorTexture: b};
+	});
 
 var _kosmoskatten$webgl_playground$Main$height = 600;
 var _kosmoskatten$webgl_playground$Main$width = 800;
@@ -12488,6 +12491,16 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						{errStr: _elm_lang$core$Maybe$Nothing}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'Error':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							errStr: _elm_lang$core$Maybe$Just(_p0._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'KeyDown':
 				return {
 					ctor: '_Tuple2',
@@ -12498,7 +12511,7 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'KeyUp':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -12508,6 +12521,29 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			default:
+				if ((_p0._0.ctor === '::') && (_p0._0._1.ctor === '[]')) {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								maze: _elm_lang$core$Maybe$Just(
+									_kosmoskatten$webgl_playground$Maze$init(_p0._0._0))
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errStr: _elm_lang$core$Maybe$Just('Unexpected number of textures loaded')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
 		}
 	});
 var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
@@ -12531,11 +12567,18 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 						_1: {ctor: '[]'}
 					}
 				},
-				A3(
-					_kosmoskatten$webgl_playground$Maze$render,
-					model.projection,
-					_kosmoskatten$webgl_playground$Camera$matrix(model.camera),
-					model.maze)),
+				function () {
+					var _p1 = model.maze;
+					if (_p1.ctor === 'Just') {
+						return A3(
+							_kosmoskatten$webgl_playground$Maze$render,
+							model.projection,
+							_kosmoskatten$webgl_playground$Camera$matrix(model.camera),
+							_p1._0);
+					} else {
+						return {ctor: '[]'};
+					}
+				}()),
 			_1: {ctor: '[]'}
 		});
 };
@@ -12560,6 +12603,36 @@ var _kosmoskatten$webgl_playground$Main$viewHeader = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
+var _kosmoskatten$webgl_playground$Main$Model = F4(
+	function (a, b, c, d) {
+		return {projection: a, camera: b, maze: c, errStr: d};
+	});
+var _kosmoskatten$webgl_playground$Main$TexturesLoaded = function (a) {
+	return {ctor: 'TexturesLoaded', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$KeyUp = function (a) {
+	return {ctor: 'KeyUp', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$KeyDown = function (a) {
+	return {ctor: 'KeyDown', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$Error = function (a) {
+	return {ctor: 'Error', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$loadTextures = function (urls) {
+	return A2(
+		_elm_lang$core$Task$attempt,
+		function (result) {
+			var _p2 = result;
+			if (_p2.ctor === 'Ok') {
+				return _kosmoskatten$webgl_playground$Main$TexturesLoaded(_p2._0);
+			} else {
+				return _kosmoskatten$webgl_playground$Main$Error('Loading of texture(s) failed');
+			}
+		},
+		_elm_lang$core$Task$sequence(
+			A2(_elm_lang$core$List$map, _elm_community$webgl$WebGL$loadTexture, urls)));
+};
 var _kosmoskatten$webgl_playground$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -12573,25 +12646,20 @@ var _kosmoskatten$webgl_playground$Main$init = {
 			_kosmoskatten$webgl_playground$Camera$init,
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 5),
 			0),
-		maze: _kosmoskatten$webgl_playground$Maze$init,
-		errStr: _elm_lang$core$Maybe$Just('Some nasty error')
+		maze: _elm_lang$core$Maybe$Nothing,
+		errStr: _elm_lang$core$Maybe$Nothing
 	},
-	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _kosmoskatten$webgl_playground$Main$Model = F4(
-	function (a, b, c, d) {
-		return {projection: a, camera: b, maze: c, errStr: d};
-	});
-var _kosmoskatten$webgl_playground$Main$KeyUp = function (a) {
-	return {ctor: 'KeyUp', _0: a};
-};
-var _kosmoskatten$webgl_playground$Main$KeyDown = function (a) {
-	return {ctor: 'KeyDown', _0: a};
+	_1: _kosmoskatten$webgl_playground$Main$loadTextures(
+		{
+			ctor: '::',
+			_0: 'textures/maze-floor.jpg',
+			_1: {ctor: '[]'}
+		})
 };
 var _kosmoskatten$webgl_playground$Main$ClearErrorMessage = {ctor: 'ClearErrorMessage'};
 var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
-	var _p1 = model.errStr;
-	if (_p1.ctor === 'Just') {
+	var _p3 = model.errStr;
+	if (_p3.ctor === 'Just') {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -12624,7 +12692,7 @@ var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(_p1._0),
+							_0: _elm_lang$html$Html$text(_p3._0),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}

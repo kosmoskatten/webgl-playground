@@ -7,7 +7,7 @@ module Square exposing (Vertex, floorAt, fragmentShader, vertexShader)
 import Math.Vector2 exposing (Vec2, vec2)
 import Math.Vector3 exposing (Vec3, vec3)
 import Math.Matrix4 exposing (Mat4)
-import WebGL exposing (Shader)
+import WebGL exposing (Shader, Texture)
 
 
 type alias Vertex =
@@ -62,15 +62,18 @@ void main(void)
 |]
 
 
-fragmentShader : Shader {} unif { vTexCoord : Vec2 }
+fragmentShader : Shader {} { unif | texture : Texture } { vTexCoord : Vec2 }
 fragmentShader =
     [glsl|
 precision mediump float;
+
+uniform sampler2D texture;
 
 varying vec2 vTexCoord;
 
 void main(void)
 {
-    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);
+    //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);
+    gl_FragColor = texture2D(texture, vTexCoord);
 }
 |]

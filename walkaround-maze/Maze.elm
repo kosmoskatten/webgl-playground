@@ -1,18 +1,20 @@
 module Maze exposing (Maze, init, render)
 
 import Math.Matrix4 exposing (Mat4, mul, identity)
-import WebGL exposing (Drawable(..), Renderable)
+import WebGL exposing (Drawable(..), Renderable, Texture)
 import Square exposing (Vertex, floorAt)
 
 
 type alias Maze =
-    { crossFloor : Drawable Vertex
+    { mazeFloor : Drawable Vertex
+    , mazeFloorTexture : Texture
     }
 
 
-init : Maze
-init =
-    { crossFloor = crossFloor
+init : Texture -> Maze
+init mazeFloorTexture =
+    { mazeFloor = mazeFloor
+    , mazeFloorTexture = mazeFloorTexture
     }
 
 
@@ -29,14 +31,15 @@ render proj view maze =
     in
         [ WebGL.render Square.vertexShader
             Square.fragmentShader
-            maze.crossFloor
+            maze.mazeFloor
             { mvp = mvp
+            , texture = maze.mazeFloorTexture
             }
         ]
 
 
-crossFloor : Drawable Vertex
-crossFloor =
+mazeFloor : Drawable Vertex
+mazeFloor =
     Triangle <|
         List.concat
             [ floorAt 0 0 -2

@@ -9,14 +9,15 @@ import Maze exposing (Maze)
 import Html exposing (Html, div, h3, p, span, text)
 import Html.Attributes as Attr
 import Html.Events as Evts
+import Task exposing (attempt, sequence)
 import Time exposing (Time)
-import WebGL as WebGL
+import WebGL exposing (Texture)
 
 
 type alias Model =
     { projection : Mat4
     , camera : Camera
-    , maze : Maze
+    , maze : Maybe Maze
     , errStr : Maybe String
     }
 
@@ -24,8 +25,10 @@ type alias Model =
 type Msg
     = Animate Time
     | ClearErrorMessage
+    | Error String
     | KeyDown KeyCode
     | KeyUp KeyCode
+    | TexturesLoaded (List Texture)
 
 
 main : Program Never Model Msg
@@ -43,10 +46,10 @@ init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , camera = Camera.init (vec3 0 1 5) 0
-      , maze = Maze.init
-      , errStr = Just "Some nasty error"
+      , maze = Nothing
+      , errStr = Nothing
       }
-    , Cmd.none
+    , loadTextures [ "textures/maze-floor.jpg" ]
     )
 
 
@@ -95,7 +98,14 @@ view3DScene : Model -> Html Msg
 view3DScene model =
     div [ Attr.class "w3-container w3-black" ]
         [ WebGL.toHtml [ Attr.width width, Attr.height height ] <|
-            Maze.render model.projection (Camera.matrix model.camera) model.maze
+            case model.maze of
+                Just theMaze ->
+                    Maze.render model.projection
+                        (Camera.matrix model.camera)
+                        theMaze
+
+                Nothing ->
+                    []
         ]
 
 
@@ -112,6 +122,11 @@ update msg model =
             , Cmd.none
             )
 
+        Error errStr ->
+            ( { model | errStr = Just errStr }
+            , Cmd.none
+            )
+
         KeyDown code ->
             ( { model | camera = Camera.keyDown code model.camera }
             , Cmd.none
@@ -119,6 +134,16 @@ update msg model =
 
         KeyUp code ->
             ( { model | camera = Camera.keyUp code model.camera }
+            , Cmd.none
+            )
+
+        TexturesLoaded [ mazeFloorTexture ] ->
+            ( { model | maze = Just (Maze.init mazeFloorTexture) }
+            , Cmd.none
+            )
+
+        TexturesLoaded _ ->
+            ( { model | errStr = Just "Unexpected number of textures loaded" }
             , Cmd.none
             )
 
@@ -130,6 +155,21 @@ subscriptions model =
         , Keyboard.downs KeyDown
         , Keyboard.ups KeyUp
         ]
+
+
+loadTextures : List String -> Cmd Msg
+loadTextures urls =
+    Task.attempt
+        (\result ->
+            case result of
+                Ok textures ->
+                    TexturesLoaded textures
+
+                Err _ ->
+                    Error "Loading of texture(s) failed"
+        )
+    <|
+        Task.sequence (List.map WebGL.loadTexture urls)
 
 
 width : Int
