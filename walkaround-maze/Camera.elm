@@ -8,20 +8,39 @@ module Camera
         , keyUp
         )
 
+{- The camera is representing a person, moving around in the maze. -}
+
 import Keyboard exposing (KeyCode)
 import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
 import Math.Matrix4 exposing (Mat4, makeLookAt, makeRotate, transform)
 import Time exposing (Time, inSeconds)
 
 
+{- The representing state of the camera. -}
+
+
 type alias Camera =
-    { position : Vec3
-    , angle : Float
-    , headAdjustment : HeadAdjustment
-    , leftArrowDown : Bool
-    , rightArrowDown : Bool
-    , upArrowDown : Bool
-    , downArrowDown : Bool
+    { position :
+        Vec3
+        -- The current position of the camera.
+    , angle :
+        Float
+        -- The angle (in degrees) in which the camera is heading.
+    , headAdjustment :
+        HeadAdjustment
+        -- Tilt adjustment.
+    , leftArrowDown :
+        Bool
+        -- Is the left arrow key pressed?
+    , rightArrowDown :
+        Bool
+        -- Is the right arrow key pressed?
+    , upArrowDown :
+        Bool
+        -- Is the up arrow key pressed?
+    , downArrowDown :
+        Bool
+        -- Is the down arrow key pressed?
     }
 
 
@@ -59,6 +78,10 @@ matrix camera =
                 aheadOf camera.angle viewStride camera.position
     in
         makeLookAt camera.position focus up
+
+
+
+{- Animate the camera. I.e. take care of moving around. -}
 
 
 animate : Time -> Camera -> Camera
@@ -105,6 +128,10 @@ animateBackward t camera =
         camera
 
 
+
+{- Event got when a key is pressed. -}
+
+
 keyDown : KeyCode -> Camera -> Camera
 keyDown code camera =
     case code of
@@ -131,6 +158,10 @@ keyDown code camera =
 
         _ ->
             camera
+
+
+
+{- Event got when a key is released. -}
 
 
 keyUp : KeyCode -> Camera -> Camera
