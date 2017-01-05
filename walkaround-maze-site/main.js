@@ -10760,6 +10760,29 @@ var _elm_community$webgl$WebGL$Replace = {ctor: 'Replace'};
 var _elm_community$webgl$WebGL$None = {ctor: 'None'};
 var _elm_community$webgl$WebGL$Keep = {ctor: 'Keep'};
 
+var _elm_lang$animation_frame$Native_AnimationFrame = function()
+{
+
+function create()
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		var id = requestAnimationFrame(function() {
+			callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
+		});
+
+		return function() {
+			cancelAnimationFrame(id);
+		};
+	});
+}
+
+return {
+	create: create
+};
+
+}();
+
 //import Native.Scheduler //
 
 var _elm_lang$core$Native_Time = function() {
@@ -10978,6 +11001,148 @@ _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', i
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
 var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
+
+var _elm_lang$animation_frame$AnimationFrame$rAF = _elm_lang$animation_frame$Native_AnimationFrame.create(
+	{ctor: '_Tuple0'});
+var _elm_lang$animation_frame$AnimationFrame$subscription = _elm_lang$core$Native_Platform.leaf('AnimationFrame');
+var _elm_lang$animation_frame$AnimationFrame$State = F3(
+	function (a, b, c) {
+		return {subs: a, request: b, oldTime: c};
+	});
+var _elm_lang$animation_frame$AnimationFrame$init = _elm_lang$core$Task$succeed(
+	A3(
+		_elm_lang$animation_frame$AnimationFrame$State,
+		{ctor: '[]'},
+		_elm_lang$core$Maybe$Nothing,
+		0));
+var _elm_lang$animation_frame$AnimationFrame$onEffects = F3(
+	function (router, subs, _p0) {
+		var _p1 = _p0;
+		var _p5 = _p1.request;
+		var _p4 = _p1.oldTime;
+		var _p2 = {ctor: '_Tuple2', _0: _p5, _1: subs};
+		if (_p2._0.ctor === 'Nothing') {
+			if (_p2._1.ctor === '[]') {
+				return _elm_lang$core$Task$succeed(
+					A3(
+						_elm_lang$animation_frame$AnimationFrame$State,
+						{ctor: '[]'},
+						_elm_lang$core$Maybe$Nothing,
+						_p4));
+			} else {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (pid) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (time) {
+								return _elm_lang$core$Task$succeed(
+									A3(
+										_elm_lang$animation_frame$AnimationFrame$State,
+										subs,
+										_elm_lang$core$Maybe$Just(pid),
+										time));
+							},
+							_elm_lang$core$Time$now);
+					},
+					_elm_lang$core$Process$spawn(
+						A2(
+							_elm_lang$core$Task$andThen,
+							_elm_lang$core$Platform$sendToSelf(router),
+							_elm_lang$animation_frame$AnimationFrame$rAF)));
+			}
+		} else {
+			if (_p2._1.ctor === '[]') {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (_p3) {
+						return _elm_lang$core$Task$succeed(
+							A3(
+								_elm_lang$animation_frame$AnimationFrame$State,
+								{ctor: '[]'},
+								_elm_lang$core$Maybe$Nothing,
+								_p4));
+					},
+					_elm_lang$core$Process$kill(_p2._0._0));
+			} else {
+				return _elm_lang$core$Task$succeed(
+					A3(_elm_lang$animation_frame$AnimationFrame$State, subs, _p5, _p4));
+			}
+		}
+	});
+var _elm_lang$animation_frame$AnimationFrame$onSelfMsg = F3(
+	function (router, newTime, _p6) {
+		var _p7 = _p6;
+		var _p10 = _p7.subs;
+		var diff = newTime - _p7.oldTime;
+		var send = function (sub) {
+			var _p8 = sub;
+			if (_p8.ctor === 'Time') {
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p8._0(newTime));
+			} else {
+				return A2(
+					_elm_lang$core$Platform$sendToApp,
+					router,
+					_p8._0(diff));
+			}
+		};
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (pid) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (_p9) {
+						return _elm_lang$core$Task$succeed(
+							A3(
+								_elm_lang$animation_frame$AnimationFrame$State,
+								_p10,
+								_elm_lang$core$Maybe$Just(pid),
+								newTime));
+					},
+					_elm_lang$core$Task$sequence(
+						A2(_elm_lang$core$List$map, send, _p10)));
+			},
+			_elm_lang$core$Process$spawn(
+				A2(
+					_elm_lang$core$Task$andThen,
+					_elm_lang$core$Platform$sendToSelf(router),
+					_elm_lang$animation_frame$AnimationFrame$rAF)));
+	});
+var _elm_lang$animation_frame$AnimationFrame$Diff = function (a) {
+	return {ctor: 'Diff', _0: a};
+};
+var _elm_lang$animation_frame$AnimationFrame$diffs = function (tagger) {
+	return _elm_lang$animation_frame$AnimationFrame$subscription(
+		_elm_lang$animation_frame$AnimationFrame$Diff(tagger));
+};
+var _elm_lang$animation_frame$AnimationFrame$Time = function (a) {
+	return {ctor: 'Time', _0: a};
+};
+var _elm_lang$animation_frame$AnimationFrame$times = function (tagger) {
+	return _elm_lang$animation_frame$AnimationFrame$subscription(
+		_elm_lang$animation_frame$AnimationFrame$Time(tagger));
+};
+var _elm_lang$animation_frame$AnimationFrame$subMap = F2(
+	function (func, sub) {
+		var _p11 = sub;
+		if (_p11.ctor === 'Time') {
+			return _elm_lang$animation_frame$AnimationFrame$Time(
+				function (_p12) {
+					return func(
+						_p11._0(_p12));
+				});
+		} else {
+			return _elm_lang$animation_frame$AnimationFrame$Diff(
+				function (_p13) {
+					return func(
+						_p11._0(_p13));
+				});
+		}
+	});
+_elm_lang$core$Native_Platform.effectManagers['AnimationFrame'] = {pkg: 'elm-lang/animation-frame', init: _elm_lang$animation_frame$AnimationFrame$init, onEffects: _elm_lang$animation_frame$AnimationFrame$onEffects, onSelfMsg: _elm_lang$animation_frame$AnimationFrame$onSelfMsg, tag: 'sub', subMap: _elm_lang$animation_frame$AnimationFrame$subMap};
 
 var _elm_lang$dom$Native_Dom = function() {
 
@@ -11713,12 +11878,22 @@ var _kosmoskatten$webgl_playground$Camera$aheadOf = F3(
 		var direction = A2(_elm_community$linear_algebra$Math_Matrix4$transform, rotation, oneAhead);
 		return A2(_elm_community$linear_algebra$Math_Vector3$add, current, direction);
 	});
+var _kosmoskatten$webgl_playground$Camera$downArrowUp = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{downArrowDown: false});
+};
 var _kosmoskatten$webgl_playground$Camera$downArrowDown = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
 		camera,
 		{
 			position: A3(_kosmoskatten$webgl_playground$Camera$aheadOf, camera.angle, _kosmoskatten$webgl_playground$Camera$backwardStride, camera.position)
 		});
+};
+var _kosmoskatten$webgl_playground$Camera$upArrowUp = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{upArrowDown: false});
 };
 var _kosmoskatten$webgl_playground$Camera$upArrowDown = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
@@ -11728,16 +11903,42 @@ var _kosmoskatten$webgl_playground$Camera$upArrowDown = function (camera) {
 			upArrowDown: true
 		});
 };
+var _kosmoskatten$webgl_playground$Camera$rightArrowUp = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{rightArrowDown: false});
+};
 var _kosmoskatten$webgl_playground$Camera$rightArrowDown = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
 		camera,
 		{angle: camera.angle - 5, rightArrowDown: true});
+};
+var _kosmoskatten$webgl_playground$Camera$leftArrowUp = function (camera) {
+	return _elm_lang$core$Native_Utils.update(
+		camera,
+		{leftArrowDown: false});
 };
 var _kosmoskatten$webgl_playground$Camera$leftArrowDown = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
 		camera,
 		{angle: camera.angle + 5, leftArrowDown: true});
 };
+var _kosmoskatten$webgl_playground$Camera$keyUp = F2(
+	function (code, camera) {
+		var _p1 = code;
+		switch (_p1) {
+			case 37:
+				return _kosmoskatten$webgl_playground$Camera$leftArrowUp(camera);
+			case 38:
+				return _kosmoskatten$webgl_playground$Camera$upArrowUp(camera);
+			case 39:
+				return _kosmoskatten$webgl_playground$Camera$rightArrowUp(camera);
+			case 40:
+				return _kosmoskatten$webgl_playground$Camera$downArrowUp(camera);
+			default:
+				return camera;
+		}
+	});
 var _kosmoskatten$webgl_playground$Camera$matrix = function (camera) {
 	var focus = A2(
 		_kosmoskatten$webgl_playground$Camera$headAdjustment,
@@ -11771,6 +11972,28 @@ var _kosmoskatten$webgl_playground$Camera$pageUpDown = function (camera) {
 		camera,
 		{headAdjustment: _kosmoskatten$webgl_playground$Camera$LookUp});
 };
+var _kosmoskatten$webgl_playground$Camera$keyDown = F2(
+	function (code, camera) {
+		var _p2 = code;
+		switch (_p2) {
+			case 33:
+				return _kosmoskatten$webgl_playground$Camera$pageUpDown(camera);
+			case 34:
+				return _kosmoskatten$webgl_playground$Camera$pageDownDown(camera);
+			case 36:
+				return _kosmoskatten$webgl_playground$Camera$homeDown(camera);
+			case 37:
+				return _kosmoskatten$webgl_playground$Camera$leftArrowDown(camera);
+			case 38:
+				return _kosmoskatten$webgl_playground$Camera$upArrowDown(camera);
+			case 39:
+				return _kosmoskatten$webgl_playground$Camera$rightArrowDown(camera);
+			case 40:
+				return _kosmoskatten$webgl_playground$Camera$downArrowDown(camera);
+			default:
+				return camera;
+		}
+	});
 
 var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n}\n'};
 var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 mvp;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n}\n'};
@@ -11874,78 +12097,28 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
-			case 'LeftArrowDown':
+			case 'Animate':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'KeyDown':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							camera: _kosmoskatten$webgl_playground$Camera$leftArrowDown(model.camera)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'RightArrowDown':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							camera: _kosmoskatten$webgl_playground$Camera$rightArrowDown(model.camera)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'UpArrowDown':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							camera: _kosmoskatten$webgl_playground$Camera$upArrowDown(model.camera)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'DownArrowDown':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							camera: _kosmoskatten$webgl_playground$Camera$downArrowDown(model.camera)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'PageDownDown':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							camera: _kosmoskatten$webgl_playground$Camera$pageDownDown(model.camera)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'PageUpDown':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							camera: _kosmoskatten$webgl_playground$Camera$pageUpDown(model.camera)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'HomeDown':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							camera: _kosmoskatten$webgl_playground$Camera$homeDown(model.camera)
+							camera: A2(_kosmoskatten$webgl_playground$Camera$keyDown, _p0._0, model.camera)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
-				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							camera: A2(_kosmoskatten$webgl_playground$Camera$keyUp, _p0._0, model.camera)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
@@ -12084,37 +12257,30 @@ var _kosmoskatten$webgl_playground$Main$Model = F3(
 	function (a, b, c) {
 		return {projection: a, camera: b, maze: c};
 	});
-var _kosmoskatten$webgl_playground$Main$NoOp = {ctor: 'NoOp'};
-var _kosmoskatten$webgl_playground$Main$HomeDown = {ctor: 'HomeDown'};
-var _kosmoskatten$webgl_playground$Main$PageUpDown = {ctor: 'PageUpDown'};
-var _kosmoskatten$webgl_playground$Main$PageDownDown = {ctor: 'PageDownDown'};
-var _kosmoskatten$webgl_playground$Main$DownArrowDown = {ctor: 'DownArrowDown'};
-var _kosmoskatten$webgl_playground$Main$UpArrowDown = {ctor: 'UpArrowDown'};
-var _kosmoskatten$webgl_playground$Main$RightArrowDown = {ctor: 'RightArrowDown'};
-var _kosmoskatten$webgl_playground$Main$LeftArrowDown = {ctor: 'LeftArrowDown'};
-var _kosmoskatten$webgl_playground$Main$keyDown = function (code) {
-	var _p1 = code;
-	switch (_p1) {
-		case 37:
-			return _kosmoskatten$webgl_playground$Main$LeftArrowDown;
-		case 39:
-			return _kosmoskatten$webgl_playground$Main$RightArrowDown;
-		case 38:
-			return _kosmoskatten$webgl_playground$Main$UpArrowDown;
-		case 40:
-			return _kosmoskatten$webgl_playground$Main$DownArrowDown;
-		case 34:
-			return _kosmoskatten$webgl_playground$Main$PageDownDown;
-		case 33:
-			return _kosmoskatten$webgl_playground$Main$PageUpDown;
-		case 36:
-			return _kosmoskatten$webgl_playground$Main$HomeDown;
-		default:
-			return _kosmoskatten$webgl_playground$Main$NoOp;
-	}
+var _kosmoskatten$webgl_playground$Main$KeyUp = function (a) {
+	return {ctor: 'KeyUp', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$KeyDown = function (a) {
+	return {ctor: 'KeyDown', _0: a};
+};
+var _kosmoskatten$webgl_playground$Main$Animate = function (a) {
+	return {ctor: 'Animate', _0: a};
 };
 var _kosmoskatten$webgl_playground$Main$subscriptions = function (model) {
-	return _elm_lang$keyboard$Keyboard$downs(_kosmoskatten$webgl_playground$Main$keyDown);
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_kosmoskatten$webgl_playground$Main$Animate),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$downs(_kosmoskatten$webgl_playground$Main$KeyDown),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$keyboard$Keyboard$ups(_kosmoskatten$webgl_playground$Main$KeyUp),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
 };
 var _kosmoskatten$webgl_playground$Main$main = _elm_lang$html$Html$program(
 	{init: _kosmoskatten$webgl_playground$Main$init, view: _kosmoskatten$webgl_playground$Main$view, update: _kosmoskatten$webgl_playground$Main$update, subscriptions: _kosmoskatten$webgl_playground$Main$subscriptions})();

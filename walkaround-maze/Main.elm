@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import AnimationFrame exposing (diffs)
 import Camera exposing (Camera)
 import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
@@ -7,6 +8,7 @@ import Math.Vector3 exposing (vec3)
 import Maze exposing (Maze)
 import Html exposing (Html, div, h3, p, text)
 import Html.Attributes as Attr
+import Time exposing (Time)
 import WebGL as WebGL
 
 
@@ -18,14 +20,9 @@ type alias Model =
 
 
 type Msg
-    = LeftArrowDown
-    | RightArrowDown
-    | UpArrowDown
-    | DownArrowDown
-    | PageDownDown
-    | PageUpDown
-    | HomeDown
-    | NoOp
+    = Animate Time
+    | KeyDown KeyCode
+    | KeyUp KeyCode
 
 
 main : Program Never Model Msg
@@ -83,58 +80,29 @@ view3DScene model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        LeftArrowDown ->
-            ( { model
-                | camera = Camera.leftArrowDown model.camera
-              }
+        Animate t ->
+            ( model
             , Cmd.none
             )
 
-        RightArrowDown ->
-            ( { model
-                | camera = Camera.rightArrowDown model.camera
-              }
+        KeyDown code ->
+            ( { model | camera = Camera.keyDown code model.camera }
             , Cmd.none
             )
 
-        UpArrowDown ->
-            ( { model
-                | camera = Camera.upArrowDown model.camera
-              }
+        KeyUp code ->
+            ( { model | camera = Camera.keyUp code model.camera }
             , Cmd.none
             )
-
-        DownArrowDown ->
-            ( { model
-                | camera = Camera.downArrowDown model.camera
-              }
-            , Cmd.none
-            )
-
-        PageDownDown ->
-            ( { model
-                | camera = Camera.pageDownDown model.camera
-              }
-            , Cmd.none
-            )
-
-        PageUpDown ->
-            ( { model | camera = Camera.pageUpDown model.camera }
-            , Cmd.none
-            )
-
-        HomeDown ->
-            ( { model | camera = Camera.homeDown model.camera }
-            , Cmd.none
-            )
-
-        NoOp ->
-            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Keyboard.downs keyDown
+    Sub.batch
+        [ AnimationFrame.diffs Animate
+        , Keyboard.downs KeyDown
+        , Keyboard.ups KeyUp
+        ]
 
 
 width : Int
@@ -145,31 +113,3 @@ width =
 height : Int
 height =
     600
-
-
-keyDown : KeyCode -> Msg
-keyDown code =
-    case code of
-        37 ->
-            LeftArrowDown
-
-        39 ->
-            RightArrowDown
-
-        38 ->
-            UpArrowDown
-
-        40 ->
-            DownArrowDown
-
-        34 ->
-            PageDownDown
-
-        33 ->
-            PageUpDown
-
-        36 ->
-            HomeDown
-
-        _ ->
-            NoOp

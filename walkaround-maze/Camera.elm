@@ -3,15 +3,11 @@ module Camera
         ( Camera
         , init
         , matrix
-        , leftArrowDown
-        , rightArrowDown
-        , upArrowDown
-        , downArrowDown
-        , pageDownDown
-        , pageUpDown
-        , homeDown
+        , keyDown
+        , keyUp
         )
 
+import Keyboard exposing (KeyCode)
 import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
 import Math.Matrix4 exposing (Mat4, makeLookAt, makeRotate, transform)
 
@@ -63,10 +59,51 @@ matrix camera =
         makeLookAt camera.position focus up
 
 
+keyDown : KeyCode -> Camera -> Camera
+keyDown code camera =
+    case code of
+        33 ->
+            pageUpDown camera
 
-{- The left arrow key is pressed down. Make an initial turn without
-   waiting for the next animate event.
--}
+        34 ->
+            pageDownDown camera
+
+        36 ->
+            homeDown camera
+
+        37 ->
+            leftArrowDown camera
+
+        38 ->
+            upArrowDown camera
+
+        39 ->
+            rightArrowDown camera
+
+        40 ->
+            downArrowDown camera
+
+        _ ->
+            camera
+
+
+keyUp : KeyCode -> Camera -> Camera
+keyUp code camera =
+    case code of
+        37 ->
+            leftArrowUp camera
+
+        38 ->
+            upArrowUp camera
+
+        39 ->
+            rightArrowUp camera
+
+        40 ->
+            downArrowUp camera
+
+        _ ->
+            camera
 
 
 leftArrowDown : Camera -> Camera
@@ -77,12 +114,22 @@ leftArrowDown camera =
     }
 
 
+leftArrowUp : Camera -> Camera
+leftArrowUp camera =
+    { camera | leftArrowDown = False }
+
+
 rightArrowDown : Camera -> Camera
 rightArrowDown camera =
     { camera
         | angle = camera.angle - 5
         , rightArrowDown = True
     }
+
+
+rightArrowUp : Camera -> Camera
+rightArrowUp camera =
+    { camera | rightArrowDown = False }
 
 
 upArrowDown : Camera -> Camera
@@ -93,11 +140,21 @@ upArrowDown camera =
     }
 
 
+upArrowUp : Camera -> Camera
+upArrowUp camera =
+    { camera | upArrowDown = False }
+
+
 downArrowDown : Camera -> Camera
 downArrowDown camera =
     { camera
         | position = aheadOf camera.angle backwardStride camera.position
     }
+
+
+downArrowUp : Camera -> Camera
+downArrowUp camera =
+    { camera | downArrowDown = False }
 
 
 pageDownDown : Camera -> Camera
