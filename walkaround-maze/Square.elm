@@ -1,4 +1,11 @@
-module Square exposing (Vertex, floorAt, fragmentShader, vertexShader)
+module Square
+    exposing
+        ( Vertex
+        , floorAt
+        , leftWallAt
+        , fragmentShader
+        , vertexShader
+        )
 
 {- Square is the main building block for floor, walls and ceilings. A
    Square can be textured, and can be lighted.
@@ -21,7 +28,7 @@ type alias Vertex =
 
 
 
-{- Generate a floor segment with center at x, y z. -}
+{- Generate a floor segment with center at x, y, z. -}
 
 
 floorAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
@@ -33,6 +40,31 @@ floorAt x y z =
     , ( { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 1 1 }
       , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 1 }
       , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+      )
+    ]
+
+
+
+{- Generate a wall segment on the left size of x, y, z. -}
+
+
+leftWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
+leftWallAt x y z =
+    [ ( { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+      )
+    , ( { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
       )
     ]
 

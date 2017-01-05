@@ -45,11 +45,14 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , camera = Camera.init (vec3 -6 1 10) 0
+      , camera = Camera.init (vec3 -6 1.3 10) 0
       , maze = Nothing
       , errStr = Nothing
       }
-    , loadTextures [ "textures/maze-floor.jpg" ]
+    , loadTextures
+        [ "textures/maze-floor.jpg"
+        , "textures/maze-wall.jpg"
+        ]
     )
 
 
@@ -137,8 +140,11 @@ update msg model =
             , Cmd.none
             )
 
-        TexturesLoaded [ mazeFloorTexture ] ->
-            ( { model | maze = Just (Maze.init mazeFloorTexture) }
+        TexturesLoaded [ mazeFloorTexture, mazeWallTexture ] ->
+            ( { model
+                | maze =
+                    Just (Maze.init mazeFloorTexture mazeWallTexture)
+              }
             , Cmd.none
             )
 
