@@ -187,7 +187,7 @@ leftArrowDown : Camera -> Camera
 leftArrowDown camera =
     if not camera.leftArrowDown then
         { camera
-            | angle = camera.angle + 5
+            | angle = camera.angle + 2
             , leftArrowDown = True
         }
     else
@@ -203,7 +203,7 @@ rightArrowDown : Camera -> Camera
 rightArrowDown camera =
     if not camera.rightArrowDown then
         { camera
-            | angle = camera.angle - 5
+            | angle = camera.angle - 2
             , rightArrowDown = True
         }
     else

@@ -45,7 +45,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , camera = Camera.init (vec3 0 1 5) 0
+      , camera = Camera.init (vec3 -6 1 10) 0
       , maze = Nothing
       , errStr = Nothing
       }

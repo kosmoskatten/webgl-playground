@@ -12229,7 +12229,7 @@ var _kosmoskatten$webgl_playground$Camera$rightArrowUp = function (camera) {
 var _kosmoskatten$webgl_playground$Camera$rightArrowDown = function (camera) {
 	return (!camera.rightArrowDown) ? _elm_lang$core$Native_Utils.update(
 		camera,
-		{angle: camera.angle - 5, rightArrowDown: true}) : camera;
+		{angle: camera.angle - 2, rightArrowDown: true}) : camera;
 };
 var _kosmoskatten$webgl_playground$Camera$leftArrowUp = function (camera) {
 	return _elm_lang$core$Native_Utils.update(
@@ -12239,7 +12239,7 @@ var _kosmoskatten$webgl_playground$Camera$leftArrowUp = function (camera) {
 var _kosmoskatten$webgl_playground$Camera$leftArrowDown = function (camera) {
 	return (!camera.leftArrowDown) ? _elm_lang$core$Native_Utils.update(
 		camera,
-		{angle: camera.angle + 5, leftArrowDown: true}) : camera;
+		{angle: camera.angle + 2, leftArrowDown: true}) : camera;
 };
 var _kosmoskatten$webgl_playground$Camera$keyUp = F2(
 	function (code, camera) {
@@ -12406,32 +12406,180 @@ var _kosmoskatten$webgl_playground$Maze$mazeFloor = _elm_community$webgl$WebGL$T
 	_elm_lang$core$List$concat(
 		{
 			ctor: '::',
-			_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, -2),
+			_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 0),
 			_1: {
 				ctor: '::',
-				_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, -1),
+				_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 1),
 				_1: {
 					ctor: '::',
-					_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 0),
+					_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 2),
 					_1: {
 						ctor: '::',
-						_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 1),
+						_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 3),
 						_1: {
 							ctor: '::',
-							_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 2),
+							_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 4),
 							_1: {
 								ctor: '::',
-								_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -2, 0, 0),
+								_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 5),
 								_1: {
 									ctor: '::',
-									_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -1, 0, 0),
+									_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 6),
 									_1: {
 										ctor: '::',
-										_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 1, 0, 0),
+										_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 7),
 										_1: {
 											ctor: '::',
-											_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 2, 0, 0),
-											_1: {ctor: '[]'}
+											_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 0, 0, 8),
+											_1: {
+												ctor: '::',
+												_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -1, 0, 5),
+												_1: {
+													ctor: '::',
+													_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -2, 0, 5),
+													_1: {
+														ctor: '::',
+														_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -3, 0, 5),
+														_1: {
+															ctor: '::',
+															_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -4, 0, 5),
+															_1: {
+																ctor: '::',
+																_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -5, 0, 5),
+																_1: {
+																	ctor: '::',
+																	_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 5),
+																	_1: {
+																		ctor: '::',
+																		_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, 5),
+																		_1: {
+																			ctor: '::',
+																			_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -8, 0, 5),
+																			_1: {
+																				ctor: '::',
+																				_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 5),
+																				_1: {
+																					ctor: '::',
+																					_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 5),
+																					_1: {
+																						ctor: '::',
+																						_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 6),
+																						_1: {
+																							ctor: '::',
+																							_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 7),
+																							_1: {
+																								ctor: '::',
+																								_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 8),
+																								_1: {
+																									ctor: '::',
+																									_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 9),
+																									_1: {
+																										ctor: '::',
+																										_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -6, 0, 10),
+																										_1: {
+																											ctor: '::',
+																											_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 5),
+																											_1: {
+																												ctor: '::',
+																												_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 4),
+																												_1: {
+																													ctor: '::',
+																													_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 3),
+																													_1: {
+																														ctor: '::',
+																														_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 2),
+																														_1: {
+																															ctor: '::',
+																															_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 1),
+																															_1: {
+																																ctor: '::',
+																																_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, 0),
+																																_1: {
+																																	ctor: '::',
+																																	_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, -1),
+																																	_1: {
+																																		ctor: '::',
+																																		_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, -2),
+																																		_1: {
+																																			ctor: '::',
+																																			_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -9, 0, -3),
+																																			_1: {
+																																				ctor: '::',
+																																				_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -8, 0, -3),
+																																				_1: {
+																																					ctor: '::',
+																																					_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, -3),
+																																					_1: {
+																																						ctor: '::',
+																																						_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, -4),
+																																						_1: {
+																																							ctor: '::',
+																																							_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, -5),
+																																							_1: {
+																																								ctor: '::',
+																																								_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, -6),
+																																								_1: {
+																																									ctor: '::',
+																																									_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, -7),
+																																									_1: {
+																																										ctor: '::',
+																																										_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, -7, 0, -8),
+																																										_1: {
+																																											ctor: '::',
+																																											_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 1, 0, 0),
+																																											_1: {
+																																												ctor: '::',
+																																												_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 2, 0, 0),
+																																												_1: {
+																																													ctor: '::',
+																																													_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 3, 0, 0),
+																																													_1: {
+																																														ctor: '::',
+																																														_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 4, 0, 0),
+																																														_1: {
+																																															ctor: '::',
+																																															_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 5, 0, 0),
+																																															_1: {
+																																																ctor: '::',
+																																																_0: A3(_kosmoskatten$webgl_playground$Square$floorAt, 6, 0, 0),
+																																																_1: {ctor: '[]'}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
 										}
 									}
 								}
@@ -12644,7 +12792,7 @@ var _kosmoskatten$webgl_playground$Main$init = {
 			100),
 		camera: A2(
 			_kosmoskatten$webgl_playground$Camera$init,
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 5),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -6, 1, 10),
 			0),
 		maze: _elm_lang$core$Maybe$Nothing,
 		errStr: _elm_lang$core$Maybe$Nothing
