@@ -52,8 +52,9 @@ init =
       , errStr = Nothing
       }
     , loadTextures
-        [ "textures/maze-floor.jpg"
+        [ "textures/maze-floor.png"
         , "textures/maze-wall.jpg"
+        , "textures/maze-ceiling.jpg"
         ]
     )
 
@@ -152,10 +153,14 @@ update msg model =
             , Cmd.none
             )
 
-        TexturesLoaded [ mazeFloorTexture, mazeWallTexture ] ->
+        TexturesLoaded [ mazeFloorTexture, mazeWallTexture, mazeCeilingTexture ] ->
             ( { model
                 | maze =
-                    Just (Maze.init mazeFloorTexture mazeWallTexture)
+                    Just
+                        (Maze.init mazeFloorTexture
+                            mazeWallTexture
+                            mazeCeilingTexture
+                        )
               }
             , Cmd.none
             )

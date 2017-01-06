@@ -7,6 +7,7 @@ import Square
     exposing
         ( Vertex
         , floorAt
+        , ceilingAt
         , leftWallAt
         , rightWallAt
         , northWallAt
@@ -19,6 +20,8 @@ type alias Maze =
     , mazeFloorTexture : Texture
     , mazeWalls : Drawable Vertex
     , mazeWallTexture : Texture
+    , mazeCeiling : Drawable Vertex
+    , mazeCeilingTexture : Texture
     }
 
 
@@ -26,12 +29,14 @@ type alias Class =
     Int
 
 
-init : Texture -> Texture -> Maze
-init mazeFloorTexture mazeWallTexture =
+init : Texture -> Texture -> Texture -> Maze
+init mazeFloorTexture mazeWallTexture mazeCeilingTexture =
     { mazeFloor = mazeFloor
     , mazeFloorTexture = mazeFloorTexture
     , mazeWalls = mazeWalls
     , mazeWallTexture = mazeWallTexture
+    , mazeCeiling = mazeCeiling
+    , mazeCeilingTexture = mazeCeilingTexture
     }
 
 
@@ -51,6 +56,12 @@ render proj view maze =
             maze.mazeFloor
             { mvp = mvp
             , texture = maze.mazeFloorTexture
+            }
+        , WebGL.render Square.vertexShader
+            Square.fragmentShader
+            maze.mazeCeiling
+            { mvp = mvp
+            , texture = maze.mazeCeilingTexture
             }
         , WebGL.render Square.vertexShader
             Square.fragmentShader
@@ -140,32 +151,32 @@ filterClass spec xs =
 maze : List ( Float, Float, Float, Class )
 maze =
     [ -- Inner north to south corridor.
-      ( 0, 0, -5, mf )
-    , ( 0, 0, -4, mf )
-    , ( 0, 0, -3, mf )
-    , ( 0, 0, -2, or lw <| or mf rw )
-    , ( 0, 0, -1, mf )
-    , ( 0, 0, 0, or rw <| or mf lw )
-    , ( 0, 0, 1, mf )
-    , ( 0, 0, 2, or lw <| or mf rw )
-    , ( 0, 0, 3, mf )
-    , ( 0, 0, 4, mf )
-    , ( 0, 0, 5, mf )
-    , ( 0, 0, 6, mf )
-    , ( 0, 0, 7, mf )
-    , ( 0, 0, 8, mf )
-    , ( 0, 0, 9, mf )
+      ( 0, 0, -5, or mc mf )
+    , ( 0, 0, -4, or mc mf )
+    , ( 0, 0, -3, or mc mf )
+    , ( 0, 0, -2, or mc <| or lw <| or mf rw )
+    , ( 0, 0, -1, or mc mf )
+    , ( 0, 0, 0, or mc <| or rw <| or mf lw )
+    , ( 0, 0, 1, or mc mf )
+    , ( 0, 0, 2, or mc <| or lw <| or mf rw )
+    , ( 0, 0, 3, or mc mf )
+    , ( 0, 0, 4, or mc mf )
+    , ( 0, 0, 5, or mc mf )
+    , ( 0, 0, 6, or mc mf )
+    , ( 0, 0, 7, or mc mf )
+    , ( 0, 0, 8, or mc mf )
+    , ( 0, 0, 9, or mc mf )
       -- First loop, clockwise.
-    , ( 1, 0, -1, or sw <| or mf nw )
-    , ( 2, 0, -1, or nw <| or mf rw )
-    , ( 2, 0, 0, or rw <| or mf lw )
-    , ( 2, 0, 1, or sw <| or mf rw )
-    , ( 1, 0, 1, or sw <| or mf nw )
-    , ( -1, 0, 1, or sw <| or mf nw )
-    , ( -2, 0, 1, or sw <| or mf lw )
-    , ( -2, 0, 0, or rw <| or mf lw )
-    , ( -2, 0, -1, or nw <| or mf lw )
-    , ( -1, 0, -1, or sw <| or mf nw )
+    , ( 1, 0, -1, or mc <| or sw <| or mf nw )
+    , ( 2, 0, -1, or mc <| or nw <| or mf rw )
+    , ( 2, 0, 0, or mc <| or rw <| or mf lw )
+    , ( 2, 0, 1, or mc <| or sw <| or mf rw )
+    , ( 1, 0, 1, or mc <| or sw <| or mf nw )
+    , ( -1, 0, 1, or mc <| or sw <| or mf nw )
+    , ( -2, 0, 1, or mc <| or sw <| or mf lw )
+    , ( -2, 0, 0, or mc <| or rw <| or mf lw )
+    , ( -2, 0, -1, or mc <| or nw <| or mf lw )
+    , ( -1, 0, -1, or mc <| or sw <| or mf nw )
     ]
 
 
@@ -206,3 +217,11 @@ mazeWalls =
                     filterClass sw maze
     in
         Triangle <| leftWalls ++ rightWalls ++ northWalls ++ southWalls
+
+
+mazeCeiling : Drawable Vertex
+mazeCeiling =
+    Triangle <|
+        List.concat <|
+            List.map (uncurry3 ceilingAt) <|
+                filterClass mc maze

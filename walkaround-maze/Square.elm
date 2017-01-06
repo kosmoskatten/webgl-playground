@@ -2,6 +2,7 @@ module Square
     exposing
         ( Vertex
         , floorAt
+        , ceilingAt
         , leftWallAt
         , rightWallAt
         , northWallAt
@@ -43,6 +44,23 @@ floorAt x y z =
     , ( { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 1 1 }
       , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 1 }
       , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+      )
+    ]
+
+
+
+{- Generate a ceiling segment with center at x, y, z. -}
+
+
+ceilingAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
+ceilingAt x y z =
+    [ ( { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 0 }
       )
     ]
 
