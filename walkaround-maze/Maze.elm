@@ -1,5 +1,6 @@
-module Maze exposing (Maze, init, render)
+module Maze exposing (Maze, init, render, maze, filterClass)
 
+import Bitwise exposing (and, or)
 import Math.Matrix4 exposing (Mat4, mul, identity)
 import WebGL exposing (Drawable(..), Renderable, Texture)
 import Square exposing (Vertex, floorAt, leftWallAt)
@@ -11,6 +12,10 @@ type alias Maze =
     , mazeWall : Drawable Vertex
     , mazeWallTexture : Texture
     }
+
+
+type alias Class =
+    Int
 
 
 init : Texture -> Texture -> Maze
@@ -57,98 +62,71 @@ render proj view maze =
          -10  -9  -8  -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7   8   9  10
       -10  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
       - 9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 8  0   0   0   M6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 7  0   0   0   M6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 6  0   0   0   M6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 5  0   0   0   M6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 4  0   0   0   M6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 3  0   M4  M5  M6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 2  0   M4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 1  0   M4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      +-0  0   M4  0   0   0   0   0   0   0   0  (M1) M7  M7  M7  M7  M7  M7  0   0   0   0
-        1  0   M4  0   0   0   0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        2  0   M4  0   0   0   0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        3  0   M4  0   0   0   0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        4  0   M4  0   0   0   0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        5  0   M2  M2  M2  M2  M2  M2  M2  M2  M2  M1  0   0   0   0   0   0   0   0   0   0
-        6  0   0   0   0   M3  0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        7  0   0   0   0   M3  0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        8  0   0   0   0   M3  0   0   0   0   0   M1  0   0   0   0   0   0   0   0   0   0
-        9  0   0   0   0   M3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-       10  0   0   0   0   M3   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 1  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+      +-0  0   0   0   0   0   0   0   0   0   0  (M)  0   0   0   0   0   0   0   0   0   0
+        1  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
+        2  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        3  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        4  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        5  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+       10  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
 
 -}
+
+
+mf : Int
+mf =
+    1
+
+
+lw : Int
+lw =
+    2
+
+
+filterClass :
+    Class
+    -> List ( Float, Float, Float, Class )
+    -> List ( Float, Float, Float )
+filterClass spec xs =
+    List.map (\( x, y, z, _ ) -> ( x, y, z )) <|
+        List.filter (\( _, _, _, c ) -> and c spec == spec) xs
+
+
+maze : List ( Float, Float, Float, Class )
+maze =
+    [ ( 0, 0, 0, or mf lw )
+    , ( 0, 0, 1, or mf lw )
+    ]
+
+
+uncurry3 : (a -> b -> c -> d) -> ( a, b, c ) -> d
+uncurry3 g ( a, b, c ) =
+    g a b c
 
 
 mazeFloor : Drawable Vertex
 mazeFloor =
     Triangle <|
-        List.concat
-            [ floorAt 0 0 0
-            , floorAt 0 0 1
-            , floorAt 0 0 2
-            , floorAt 0 0 3
-            , floorAt 0 0 4
-            , floorAt 0 0 5
-            , floorAt 0 0 6
-            , floorAt 0 0 7
-            , floorAt 0 0 8
-              -- M2 starts
-            , floorAt -1 0 5
-            , floorAt -2 0 5
-            , floorAt -3 0 5
-            , floorAt -4 0 5
-            , floorAt -5 0 5
-            , floorAt -6 0 5
-            , floorAt -7 0 5
-            , floorAt -8 0 5
-            , floorAt -9 0 5
-              -- M3 starts
-            , floorAt -6 0 5
-            , floorAt -6 0 6
-            , floorAt -6 0 7
-            , floorAt -6 0 8
-            , floorAt -6 0 9
-            , floorAt -6 0 10
-              --M4 starts
-            , floorAt -9 0 5
-            , floorAt -9 0 4
-            , floorAt -9 0 3
-            , floorAt -9 0 2
-            , floorAt -9 0 1
-            , floorAt -9 0 0
-            , floorAt -9 0 -1
-            , floorAt -9 0 -2
-            , floorAt -9 0 -3
-              -- M5 starts
-            , floorAt -8 0 -3
-              -- M6 starts
-            , floorAt -7 0 -3
-            , floorAt -7 0 -4
-            , floorAt -7 0 -5
-            , floorAt -7 0 -6
-            , floorAt -7 0 -7
-            , floorAt -7 0 -8
-              --M7 starts
-            , floorAt 1 0 0
-            , floorAt 2 0 0
-            , floorAt 3 0 0
-            , floorAt 4 0 0
-            , floorAt 5 0 0
-            , floorAt 6 0 0
-            ]
+        List.concat <|
+            List.map (uncurry3 floorAt) <|
+                filterClass mf maze
 
 
 mazeWall : Drawable Vertex
 mazeWall =
     Triangle <|
-        List.concat
-            [ leftWallAt 0 0 0
-            , leftWallAt 0 0 1
-            , leftWallAt 0 0 2
-            , leftWallAt 0 0 3
-            , leftWallAt 0 0 4
-            , leftWallAt 0 0 6
-            , leftWallAt 0 0 7
-            , leftWallAt 0 0 8
-            ]
+        List.concat <|
+            List.map (uncurry3 leftWallAt) <|
+                filterClass lw maze
