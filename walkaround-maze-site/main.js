@@ -12382,6 +12382,234 @@ var _kosmoskatten$webgl_playground$Camera$keyDown = F2(
 
 var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform sampler2D texture;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n    gl_FragColor = texture2D(texture, vTexCoord);\n}\n'};
 var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vTexCoord = texCoord;\n}\n'};
+var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
+	function (x, y, z) {
+		return {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+				},
+				_1: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+				},
+				_2: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+				}
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+					},
+					_1: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+					},
+					_2: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+					}
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple3',
+						_0: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+						},
+						_1: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+						},
+						_2: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+						}
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple3',
+							_0: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+							},
+							_1: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+							},
+							_2: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+							}
+						},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	});
+var _kosmoskatten$webgl_playground$Square$northWallAt = F3(
+	function (x, y, z) {
+		return {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+				},
+				_1: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+				},
+				_2: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+				}
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+					},
+					_1: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+					},
+					_2: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+					}
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple3',
+						_0: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+						},
+						_1: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+						},
+						_2: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+						}
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple3',
+							_0: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+							},
+							_1: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z - 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+							},
+							_2: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+							}
+						},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	});
+var _kosmoskatten$webgl_playground$Square$rightWallAt = F3(
+	function (x, y, z) {
+		return {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+				},
+				_1: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+				},
+				_2: {
+					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+				}
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+					},
+					_1: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+					},
+					_2: {
+						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+					}
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple3',
+						_0: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+						},
+						_1: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
+						},
+						_2: {
+							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+						}
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple3',
+							_0: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
+							},
+							_1: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
+							},
+							_2: {
+								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
+							}
+						},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		};
+	});
 var _kosmoskatten$webgl_playground$Square$leftWallAt = F3(
 	function (x, y, z) {
 		return {
@@ -12524,23 +12752,144 @@ var _kosmoskatten$webgl_playground$Maze$filterClass = F2(
 				},
 				xs));
 	});
+var _kosmoskatten$webgl_playground$Maze$rf = 64;
+var _kosmoskatten$webgl_playground$Maze$mc = 32;
+var _kosmoskatten$webgl_playground$Maze$sw = 16;
+var _kosmoskatten$webgl_playground$Maze$nw = 8;
+var _kosmoskatten$webgl_playground$Maze$rw = 4;
 var _kosmoskatten$webgl_playground$Maze$lw = 2;
 var _kosmoskatten$webgl_playground$Maze$mf = 1;
 var _kosmoskatten$webgl_playground$Maze$maze = {
 	ctor: '::',
-	_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw},
+	_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$mf},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw},
-		_1: {ctor: '[]'}
+		_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$mf},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -3, _3: _kosmoskatten$webgl_playground$Maze$mf},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -2, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw)},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mf},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw)},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mf},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 2, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw)},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 3, _3: _kosmoskatten$webgl_playground$Maze$mf},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 4, _3: _kosmoskatten$webgl_playground$Maze$mf},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 5, _3: _kosmoskatten$webgl_playground$Maze$mf},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 6, _3: _kosmoskatten$webgl_playground$Maze$mf},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 7, _3: _kosmoskatten$webgl_playground$Maze$mf},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 8, _3: _kosmoskatten$webgl_playground$Maze$mf},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$mf},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw)},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw)},
+																	_1: {
+																		ctor: '::',
+																		_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw)},
+																		_1: {
+																			ctor: '::',
+																			_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw)},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw)},
+																				_1: {
+																					ctor: '::',
+																					_0: {ctor: '_Tuple4', _0: -1, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw)},
+																					_1: {
+																						ctor: '::',
+																						_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw)},
+																						_1: {
+																							ctor: '::',
+																							_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw)},
+																							_1: {
+																								ctor: '::',
+																								_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw)},
+																								_1: {
+																									ctor: '::',
+																									_0: {ctor: '_Tuple4', _0: -1, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw)},
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 };
-var _kosmoskatten$webgl_playground$Maze$mazeWall = _elm_community$webgl$WebGL$Triangle(
-	_elm_lang$core$List$concat(
+var _kosmoskatten$webgl_playground$Maze$mazeWalls = function () {
+	var southWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$southWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$sw, _kosmoskatten$webgl_playground$Maze$maze)));
+	var northWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$northWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$nw, _kosmoskatten$webgl_playground$Maze$maze)));
+	var rightWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$rightWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$rw, _kosmoskatten$webgl_playground$Maze$maze)));
+	var leftWalls = _elm_lang$core$List$concat(
 		A2(
 			_elm_lang$core$List$map,
 			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$leftWallAt),
-			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$lw, _kosmoskatten$webgl_playground$Maze$maze))));
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$lw, _kosmoskatten$webgl_playground$Maze$maze)));
+	return _elm_community$webgl$WebGL$Triangle(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			leftWalls,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				rightWalls,
+				A2(_elm_lang$core$Basics_ops['++'], northWalls, southWalls))));
+}();
 var _kosmoskatten$webgl_playground$Maze$mazeFloor = _elm_community$webgl$WebGL$Triangle(
 	_elm_lang$core$List$concat(
 		A2(
@@ -12568,7 +12917,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 					_elm_community$webgl$WebGL$render,
 					_kosmoskatten$webgl_playground$Square$vertexShader,
 					_kosmoskatten$webgl_playground$Square$fragmentShader,
-					maze.mazeWall,
+					maze.mazeWalls,
 					{mvp: mvp, texture: maze.mazeWallTexture}),
 				_1: {ctor: '[]'}
 			}
@@ -12576,11 +12925,11 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 	});
 var _kosmoskatten$webgl_playground$Maze$init = F2(
 	function (mazeFloorTexture, mazeWallTexture) {
-		return {mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor, mazeFloorTexture: mazeFloorTexture, mazeWall: _kosmoskatten$webgl_playground$Maze$mazeWall, mazeWallTexture: mazeWallTexture};
+		return {mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor, mazeFloorTexture: mazeFloorTexture, mazeWalls: _kosmoskatten$webgl_playground$Maze$mazeWalls, mazeWallTexture: mazeWallTexture};
 	});
 var _kosmoskatten$webgl_playground$Maze$Maze = F4(
 	function (a, b, c, d) {
-		return {mazeFloor: a, mazeFloorTexture: b, mazeWall: c, mazeWallTexture: d};
+		return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d};
 	});
 
 var _kosmoskatten$webgl_playground$Main$height = 600;
@@ -12792,7 +13141,7 @@ var _kosmoskatten$webgl_playground$Main$init = {
 			100),
 		camera: A2(
 			_kosmoskatten$webgl_playground$Camera$init,
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -6, 1.3, 10),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1.3, 6),
 			0),
 		maze: _elm_lang$core$Maybe$Nothing,
 		fps: 0,

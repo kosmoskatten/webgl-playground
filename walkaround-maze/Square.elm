@@ -3,6 +3,9 @@ module Square
         ( Vertex
         , floorAt
         , leftWallAt
+        , rightWallAt
+        , northWallAt
+        , southWallAt
         , fragmentShader
         , vertexShader
         )
@@ -45,7 +48,7 @@ floorAt x y z =
 
 
 
-{- Generate a wall segment on the left size of x, y, z. -}
+{- Generate a wall segment on the left side of x, y, z. -}
 
 
 leftWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
@@ -65,6 +68,81 @@ leftWallAt x y z =
     , ( { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
       , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 1 }
       , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
+      )
+    ]
+
+
+
+{- Generate a wall segment on the right side of x, y, z. -}
+
+
+rightWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
+rightWallAt x y z =
+    [ ( { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 0 0 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
+      )
+    ]
+
+
+
+{- Generate a wall segment on the north side of x, y, z. -}
+
+
+northWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
+northWallAt x y z =
+    [ ( { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 0 }
+      )
+    , ( { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
+      )
+    ]
+
+
+
+{- Generate a wall segment on the south side of x, y, z. -}
+
+
+southWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
+southWallAt x y z =
+    [ ( { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+      )
+    , ( { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
+      )
+    , ( { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
       )
     ]
 
