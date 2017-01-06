@@ -3,6 +3,7 @@ module Camera
         ( Camera
         , init
         , matrix
+        , position
         , animate
         , keyDown
         , keyUp
@@ -78,6 +79,15 @@ matrix camera =
                 aheadOf camera.angle viewStride camera.position
     in
         makeLookAt camera.position focus up
+
+
+
+{- Get the current position for the camera. -}
+
+
+position : Camera -> Vec3
+position camera =
+    camera.position
 
 
 

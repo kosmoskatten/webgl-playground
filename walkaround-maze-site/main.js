@@ -12299,6 +12299,9 @@ var _kosmoskatten$webgl_playground$Camera$animate = F2(
 					t,
 					A2(_kosmoskatten$webgl_playground$Camera$animateLeftRotate, t, camera))));
 	});
+var _kosmoskatten$webgl_playground$Camera$position = function (camera) {
+	return camera.position;
+};
 var _kosmoskatten$webgl_playground$Camera$matrix = function (camera) {
 	var focus = A2(
 		_kosmoskatten$webgl_playground$Camera$headAdjustment,
@@ -12738,17 +12741,25 @@ var _kosmoskatten$webgl_playground$Maze$Maze = F4(
 
 var _kosmoskatten$webgl_playground$Main$height = 600;
 var _kosmoskatten$webgl_playground$Main$width = 800;
+var _kosmoskatten$webgl_playground$Main$updateFps = F2(
+	function (t, fps) {
+		var newFps = 1 / _elm_lang$core$Time$inSeconds(t);
+		var threshold = fps * 0.1;
+		return ((_elm_lang$core$Native_Utils.cmp(newFps, fps - threshold) < 0) || (_elm_lang$core$Native_Utils.cmp(newFps, fps + threshold) > 0)) ? newFps : fps;
+	});
 var _kosmoskatten$webgl_playground$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Animate':
+				var _p1 = _p0._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							camera: A2(_kosmoskatten$webgl_playground$Camera$animate, _p0._0, model.camera)
+							camera: A2(_kosmoskatten$webgl_playground$Camera$animate, _p1, model.camera),
+							fps: A2(_kosmoskatten$webgl_playground$Main$updateFps, _p1, model.fps)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -12837,13 +12848,13 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 					}
 				},
 				function () {
-					var _p1 = model.maze;
-					if (_p1.ctor === 'Just') {
+					var _p2 = model.maze;
+					if (_p2.ctor === 'Just') {
 						return A3(
 							_kosmoskatten$webgl_playground$Maze$render,
 							model.projection,
 							_kosmoskatten$webgl_playground$Camera$matrix(model.camera),
-							_p1._0);
+							_p2._0);
 					} else {
 						return {ctor: '[]'};
 					}
@@ -12866,15 +12877,39 @@ var _kosmoskatten$webgl_playground$Main$viewHeader = function (model) {
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Elm WebGL Walkaround Maze Demo'),
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Elm WebGL Walkaround Maze Demo [X = ',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(
+									_elm_lang$core$Basics$ceiling(
+										_elm_community$linear_algebra$Math_Vector3$getX(model.camera.position))),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									', Y = ',
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(
+											_elm_lang$core$Basics$ceiling(
+												_elm_community$linear_algebra$Math_Vector3$getZ(model.camera.position))),
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'] @ ',
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												_elm_lang$core$Basics$toString(
+													_elm_lang$core$Basics$ceiling(model.fps)),
+												' fps'))))))),
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
 		});
 };
-var _kosmoskatten$webgl_playground$Main$Model = F4(
-	function (a, b, c, d) {
-		return {projection: a, camera: b, maze: c, errStr: d};
+var _kosmoskatten$webgl_playground$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {projection: a, camera: b, maze: c, fps: d, errStr: e};
 	});
 var _kosmoskatten$webgl_playground$Main$TexturesLoaded = function (a) {
 	return {ctor: 'TexturesLoaded', _0: a};
@@ -12892,9 +12927,9 @@ var _kosmoskatten$webgl_playground$Main$loadTextures = function (urls) {
 	return A2(
 		_elm_lang$core$Task$attempt,
 		function (result) {
-			var _p2 = result;
-			if (_p2.ctor === 'Ok') {
-				return _kosmoskatten$webgl_playground$Main$TexturesLoaded(_p2._0);
+			var _p3 = result;
+			if (_p3.ctor === 'Ok') {
+				return _kosmoskatten$webgl_playground$Main$TexturesLoaded(_p3._0);
 			} else {
 				return _kosmoskatten$webgl_playground$Main$Error('Loading of texture(s) failed');
 			}
@@ -12916,6 +12951,7 @@ var _kosmoskatten$webgl_playground$Main$init = {
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -6, 1.3, 10),
 			0),
 		maze: _elm_lang$core$Maybe$Nothing,
+		fps: 0,
 		errStr: _elm_lang$core$Maybe$Nothing
 	},
 	_1: _kosmoskatten$webgl_playground$Main$loadTextures(
@@ -12931,8 +12967,8 @@ var _kosmoskatten$webgl_playground$Main$init = {
 };
 var _kosmoskatten$webgl_playground$Main$ClearErrorMessage = {ctor: 'ClearErrorMessage'};
 var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
-	var _p3 = model.errStr;
-	if (_p3.ctor === 'Just') {
+	var _p4 = model.errStr;
+	if (_p4.ctor === 'Just') {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -12965,7 +13001,7 @@ var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(_p3._0),
+							_0: _elm_lang$html$Html$text(_p4._0),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}

@@ -4,13 +4,13 @@ import AnimationFrame exposing (diffs)
 import Camera exposing (Camera)
 import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
-import Math.Vector3 exposing (vec3)
+import Math.Vector3 exposing (vec3, getX, getZ)
 import Maze exposing (Maze)
 import Html exposing (Html, div, h3, p, span, text)
 import Html.Attributes as Attr
 import Html.Events as Evts
 import Task exposing (attempt, sequence)
-import Time exposing (Time)
+import Time exposing (Time, inSeconds)
 import WebGL exposing (Texture)
 
 
@@ -18,6 +18,7 @@ type alias Model =
     { projection : Mat4
     , camera : Camera
     , maze : Maybe Maze
+    , fps : Float
     , errStr : Maybe String
     }
 
@@ -47,6 +48,7 @@ init =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , camera = Camera.init (vec3 -6 1.3 10) 0
       , maze = Nothing
+      , fps = 0
       , errStr = Nothing
       }
     , loadTextures
@@ -75,7 +77,14 @@ viewHeader : Model -> Html Msg
 viewHeader model =
     div [ Attr.class "w3-container w3-indigo" ]
         [ h3 []
-            [ text "Elm WebGL Walkaround Maze Demo"
+            [ text <|
+                "Elm WebGL Walkaround Maze Demo [X = "
+                    ++ toString (ceiling (getX model.camera.position))
+                    ++ ", Y = "
+                    ++ toString (ceiling (getZ model.camera.position))
+                    ++ "] @ "
+                    ++ toString (ceiling model.fps)
+                    ++ " fps"
             ]
         ]
 
@@ -116,7 +125,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Animate t ->
-            ( { model | camera = Camera.animate t model.camera }
+            ( { model
+                | camera = Camera.animate t model.camera
+                , fps = updateFps t model.fps
+              }
             , Cmd.none
             )
 
@@ -176,6 +188,21 @@ loadTextures urls =
         )
     <|
         Task.sequence (List.map WebGL.loadTexture urls)
+
+
+updateFps : Time -> Float -> Float
+updateFps t fps =
+    let
+        threshold =
+            fps * 0.1
+
+        newFps =
+            1 / inSeconds t
+    in
+        if (newFps < (fps - threshold)) || (newFps > (fps + threshold)) then
+            newFps
+        else
+            fps
 
 
 width : Int
