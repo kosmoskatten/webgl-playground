@@ -12384,8 +12384,8 @@ var _kosmoskatten$webgl_playground$Walker$keyDown = F2(
 		}
 	});
 
-var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform bool ambientLightning;\nuniform float ambientStrength;\nuniform vec3 ambientColor;\n\nuniform sampler2D texture;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvec3 maybeAddAmbientLight(vec3 inp)\n{\n    if (ambientLightning)\n    {\n        vec3 ambientCoeff = ambientColor * ambientStrength;\n        return inp + ambientCoeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvoid main(void)\n{\n    if (ambientLightning)\n    {\n        // At least some lightning is activated.\n        vec3 lightningCoeffs = maybeAddAmbientLight(vec3(0.0, 0.0, 0.0));\n\n        vec4 textureColor = texture2D(texture, vTexCoord);\n        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);\n    }\n    else\n    {\n        // No lightning at all.\n        gl_FragColor = texture2D(texture, vTexCoord);\n    }\n}\n\n'};
-var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\nuniform mat4 model;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n\n    // Bring the position to model space (lightning is made in model space).\n    vModelPosition = vec3(model * vec4(position, 1.0));\n\n    // No real normal matrix yet. Just case the model matrix.\n    vNormal = vec3(model) * normal;\n\n    vTexCoord = texCoord;\n}\n'};
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform bool ambientLightning;\nuniform float ambientStrength;\nuniform vec3 ambientColor;\n\nuniform bool diffuseLightning;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\n\nuniform sampler2D texture;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvec3 maybeAddAmbientLight(vec3 inp)\n{\n    if (ambientLightning)\n    {\n        vec3 ambientCoeff = ambientColor * ambientStrength;\n        return inp + ambientCoeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvec3 maybeAddDiffuseLight(vec3 inp)\n{\n    if (diffuseLightning)\n    {\n        vec3 lightDirection = normalize(lightPosition - vModelPosition);\n        float coeff = max(dot(vNormal, lightDirection), 0.0);\n        return inp + lightColor * coeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvoid main(void)\n{\n    if (ambientLightning || diffuseLightning)\n    {\n        // At least some lightning is activated.\n        vec3 lightningCoeffs =\n            maybeAddDiffuseLight(\n                maybeAddAmbientLight(vec3(0.0, 0.0, 0.0))\n            );\n\n        vec4 textureColor = texture2D(texture, vTexCoord);\n        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);\n    }\n    else\n    {\n        // No lightning at all.\n        gl_FragColor = texture2D(texture, vTexCoord);\n    }\n}\n\n'};
+var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\nuniform mat4 model;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n\n    // Bring the position to model space (lightning is made in model space).\n    vModelPosition = vec3(model * vec4(position, 1.0));\n\n    // No real normal matrix yet. Just the model matrix, but the whole maze\n    // is in local, which also is model, coordinates as nothing is scaled or\n    // translated. Just use the normals as is.\n    vNormal = normal;\n\n    vTexCoord = texCoord;\n}\n'};
 var _kosmoskatten$webgl_playground$Square$backward = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1);
 var _kosmoskatten$webgl_playground$Square$forward = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1);
 var _kosmoskatten$webgl_playground$Square$right = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0);
@@ -13012,6 +13012,15 @@ var _kosmoskatten$webgl_playground$Maze$mazeFloor = _elm_community$webgl$WebGL$T
 			_elm_lang$core$List$map,
 			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$floorAt),
 			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$mf, _kosmoskatten$webgl_playground$Maze$maze))));
+var _kosmoskatten$webgl_playground$Maze$setDiffuseLightning = F2(
+	function (val, maze) {
+		return _elm_lang$core$Native_Utils.update(
+			maze,
+			{diffuseLightning: val});
+	});
+var _kosmoskatten$webgl_playground$Maze$diffuseLightning = function (maze) {
+	return maze.diffuseLightning;
+};
 var _kosmoskatten$webgl_playground$Maze$setAmbientLightning = F2(
 	function (val, maze) {
 		return _elm_lang$core$Native_Utils.update(
@@ -13021,8 +13030,8 @@ var _kosmoskatten$webgl_playground$Maze$setAmbientLightning = F2(
 var _kosmoskatten$webgl_playground$Maze$ambientLightning = function (maze) {
 	return maze.ambientLightning;
 };
-var _kosmoskatten$webgl_playground$Maze$render = F3(
-	function (proj, view, maze) {
+var _kosmoskatten$webgl_playground$Maze$render = F5(
+	function (proj, view, walkerPos, walkerColor, maze) {
 		var model = _elm_community$linear_algebra$Math_Matrix4$identity;
 		var mvp = A2(
 			_elm_community$linear_algebra$Math_Matrix4$mul,
@@ -13035,7 +13044,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 				_kosmoskatten$webgl_playground$Square$vertexShader,
 				_kosmoskatten$webgl_playground$Square$fragmentShader,
 				maze.mazeFloor,
-				{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeFloorTexture}),
+				{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeFloorTexture}),
 			_1: {
 				ctor: '::',
 				_0: A4(
@@ -13043,7 +13052,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 					_kosmoskatten$webgl_playground$Square$vertexShader,
 					_kosmoskatten$webgl_playground$Square$fragmentShader,
 					maze.mazeCeiling,
-					{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeCeilingTexture}),
+					{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeCeilingTexture}),
 				_1: {
 					ctor: '::',
 					_0: A4(
@@ -13051,7 +13060,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 						_kosmoskatten$webgl_playground$Square$vertexShader,
 						_kosmoskatten$webgl_playground$Square$fragmentShader,
 						maze.mazeWalls,
-						{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeWallTexture}),
+						{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeWallTexture}),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -13067,20 +13076,47 @@ var _kosmoskatten$webgl_playground$Maze$init = F3(
 			mazeCeiling: _kosmoskatten$webgl_playground$Maze$mazeCeiling,
 			mazeCeilingTexture: mazeCeilingTexture,
 			ambientLightning: true,
-			ambientStrength: 0.15,
-			ambientColor: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1)
+			ambientStrength: 5.0e-2,
+			ambientColor: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
+			diffuseLightning: true
 		};
 	});
-var _kosmoskatten$webgl_playground$Maze$Maze = F9(
-	function (a, b, c, d, e, f, g, h, i) {
-		return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, ambientLightning: g, ambientStrength: h, ambientColor: i};
-	});
+var _kosmoskatten$webgl_playground$Maze$Maze = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, ambientLightning: g, ambientStrength: h, ambientColor: i, diffuseLightning: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 
 var _kosmoskatten$webgl_playground$Main$checkBox = F3(
 	function (msg, str, sel) {
 		return A2(
 			_elm_lang$html$Html$label,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'padding', _1: '20px'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: A2(
@@ -13191,7 +13227,7 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
-			default:
+			case 'ToggleAmbientLightning':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -13206,6 +13242,28 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 											_kosmoskatten$webgl_playground$Maze$setAmbientLightning,
 											!_kosmoskatten$webgl_playground$Maze$ambientLightning(_p3),
 											_p3));
+								} else {
+									return _elm_lang$core$Maybe$Nothing;
+								}
+							}()
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							maze: function () {
+								var _p4 = model.maze;
+								if (_p4.ctor === 'Just') {
+									var _p5 = _p4._0;
+									return _elm_lang$core$Maybe$Just(
+										A2(
+											_kosmoskatten$webgl_playground$Maze$setDiffuseLightning,
+											!_kosmoskatten$webgl_playground$Maze$diffuseLightning(_p5),
+											_p5));
 								} else {
 									return _elm_lang$core$Maybe$Nothing;
 								}
@@ -13237,13 +13295,15 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 					}
 				},
 				function () {
-					var _p4 = model.maze;
-					if (_p4.ctor === 'Just') {
-						return A3(
+					var _p6 = model.maze;
+					if (_p6.ctor === 'Just') {
+						return A5(
 							_kosmoskatten$webgl_playground$Maze$render,
 							model.projection,
 							_kosmoskatten$webgl_playground$Walker$matrix(model.walker),
-							_p4._0);
+							_kosmoskatten$webgl_playground$Walker$position(model.walker),
+							_kosmoskatten$webgl_playground$Walker$lightColor(model.walker),
+							_p6._0);
 					} else {
 						return {ctor: '[]'};
 					}
@@ -13300,31 +13360,42 @@ var _kosmoskatten$webgl_playground$Main$Model = F5(
 	function (a, b, c, d, e) {
 		return {projection: a, walker: b, maze: c, fps: d, errStr: e};
 	});
+var _kosmoskatten$webgl_playground$Main$ToggleDiffuseLightning = {ctor: 'ToggleDiffuseLightning'};
 var _kosmoskatten$webgl_playground$Main$ToggleAmbientLightning = {ctor: 'ToggleAmbientLightning'};
 var _kosmoskatten$webgl_playground$Main$viewToolbar = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('w3-container w3-indigo w3-left-align'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A3(
-				_kosmoskatten$webgl_playground$Main$checkBox,
-				_kosmoskatten$webgl_playground$Main$ToggleAmbientLightning,
-				'Ambient Lightning',
-				function () {
-					var _p5 = model.maze;
-					if (_p5.ctor === 'Just') {
-						return _kosmoskatten$webgl_playground$Maze$ambientLightning(_p5._0);
-					} else {
-						return false;
-					}
-				}()),
-			_1: {ctor: '[]'}
-		});
+	var _p7 = model.maze;
+	if (_p7.ctor === 'Just') {
+		var _p8 = _p7._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('w3-container w3-indigo w3-left-align'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A3(
+					_kosmoskatten$webgl_playground$Main$checkBox,
+					_kosmoskatten$webgl_playground$Main$ToggleAmbientLightning,
+					'Ambient Lightning',
+					_kosmoskatten$webgl_playground$Maze$ambientLightning(_p8)),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_kosmoskatten$webgl_playground$Main$checkBox,
+						_kosmoskatten$webgl_playground$Main$ToggleDiffuseLightning,
+						'Diffuse lightning',
+						_kosmoskatten$webgl_playground$Maze$diffuseLightning(_p8)),
+					_1: {ctor: '[]'}
+				}
+			});
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	}
 };
 var _kosmoskatten$webgl_playground$Main$TexturesLoaded = function (a) {
 	return {ctor: 'TexturesLoaded', _0: a};
@@ -13342,9 +13413,9 @@ var _kosmoskatten$webgl_playground$Main$loadTextures = function (urls) {
 	return A2(
 		_elm_lang$core$Task$attempt,
 		function (result) {
-			var _p6 = result;
-			if (_p6.ctor === 'Ok') {
-				return _kosmoskatten$webgl_playground$Main$TexturesLoaded(_p6._0);
+			var _p9 = result;
+			if (_p9.ctor === 'Ok') {
+				return _kosmoskatten$webgl_playground$Main$TexturesLoaded(_p9._0);
 			} else {
 				return _kosmoskatten$webgl_playground$Main$Error('Loading of texture(s) failed');
 			}
@@ -13386,8 +13457,8 @@ var _kosmoskatten$webgl_playground$Main$init = {
 };
 var _kosmoskatten$webgl_playground$Main$ClearErrorMessage = {ctor: 'ClearErrorMessage'};
 var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
-	var _p7 = model.errStr;
-	if (_p7.ctor === 'Just') {
+	var _p10 = model.errStr;
+	if (_p10.ctor === 'Just') {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -13420,7 +13491,7 @@ var _kosmoskatten$webgl_playground$Main$viewErrorMessage = function (model) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text(_p7._0),
+							_0: _elm_lang$html$Html$text(_p10._0),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}

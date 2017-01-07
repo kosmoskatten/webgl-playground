@@ -1,4 +1,13 @@
-module Maze exposing (Maze, init, render, ambientLightning, setAmbientLightning)
+module Maze
+    exposing
+        ( Maze
+        , init
+        , render
+        , ambientLightning
+        , setAmbientLightning
+        , diffuseLightning
+        , setDiffuseLightning
+        )
 
 import Bitwise exposing (and, or)
 import Math.Matrix4 exposing (Mat4, mul, identity)
@@ -26,6 +35,7 @@ type alias Maze =
     , ambientLightning : Bool
     , ambientStrength : Float
     , ambientColor : Vec3
+    , diffuseLightning : Bool
     }
 
 
@@ -42,13 +52,14 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture =
     , mazeCeiling = mazeCeiling
     , mazeCeilingTexture = mazeCeilingTexture
     , ambientLightning = True
-    , ambientStrength = 0.15
+    , ambientStrength = 0.05
     , ambientColor = vec3 1 1 1
+    , diffuseLightning = True
     }
 
 
-render : Mat4 -> Mat4 -> Maze -> List Renderable
-render proj view maze =
+render : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Maze -> List Renderable
+render proj view walkerPos walkerColor maze =
     -- Nothing in the maze will be scaled, rotated nor moved. That's until
     -- there will be support for normal matrices in Matrix4.
     let
@@ -66,6 +77,9 @@ render proj view maze =
             , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
+            , diffuseLightning = maze.diffuseLightning
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
             , texture = maze.mazeFloorTexture
             }
         , WebGL.render Square.vertexShader
@@ -76,6 +90,9 @@ render proj view maze =
             , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
+            , diffuseLightning = maze.diffuseLightning
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
             , texture = maze.mazeCeilingTexture
             }
         , WebGL.render Square.vertexShader
@@ -86,6 +103,9 @@ render proj view maze =
             , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
+            , diffuseLightning = maze.diffuseLightning
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
             , texture = maze.mazeWallTexture
             }
         ]
@@ -107,6 +127,24 @@ ambientLightning maze =
 setAmbientLightning : Bool -> Maze -> Maze
 setAmbientLightning val maze =
     { maze | ambientLightning = val }
+
+
+
+{- Get the diffuse lightning on/off value. -}
+
+
+diffuseLightning : Maze -> Bool
+diffuseLightning maze =
+    maze.diffuseLightning
+
+
+
+{- Set the diffuse lightning on/off value. -}
+
+
+setDiffuseLightning : Bool -> Maze -> Maze
+setDiffuseLightning val maze =
+    { maze | diffuseLightning = val }
 
 
 

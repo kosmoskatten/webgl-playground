@@ -230,8 +230,10 @@ void main(void)
     // Bring the position to model space (lightning is made in model space).
     vModelPosition = vec3(model * vec4(position, 1.0));
 
-    // No real normal matrix yet. Just case the model matrix.
-    vNormal = vec3(model) * normal;
+    // No real normal matrix yet. Just the model matrix, but the whole maze
+    // is in local, which also is model, coordinates as nothing is scaled or
+    // translated. Just use the normals as is.
+    vNormal = normal;
 
     vTexCoord = texCoord;
 }
@@ -244,6 +246,9 @@ fragmentShader :
             | ambientLightning : Bool
             , ambientStrength : Float
             , ambientColor : Vec3
+            , diffuseLightning : Bool
+            , lightPosition : Vec3
+            , lightColor : Vec3
             , texture : Texture
         }
         { vModelPosition : Vec3
@@ -257,6 +262,10 @@ precision mediump float;
 uniform bool ambientLightning;
 uniform float ambientStrength;
 uniform vec3 ambientColor;
+
+uniform bool diffuseLightning;
+uniform vec3 lightPosition;
+uniform vec3 lightColor;
 
 uniform sampler2D texture;
 
@@ -277,12 +286,29 @@ vec3 maybeAddAmbientLight(vec3 inp)
     }
 }
 
+vec3 maybeAddDiffuseLight(vec3 inp)
+{
+    if (diffuseLightning)
+    {
+        vec3 lightDirection = normalize(lightPosition - vModelPosition);
+        float coeff = max(dot(vNormal, lightDirection), 0.0);
+        return inp + lightColor * coeff;
+    }
+    else
+    {
+        return inp;
+    }
+}
+
 void main(void)
 {
-    if (ambientLightning)
+    if (ambientLightning || diffuseLightning)
     {
         // At least some lightning is activated.
-        vec3 lightningCoeffs = maybeAddAmbientLight(vec3(0.0, 0.0, 0.0));
+        vec3 lightningCoeffs =
+            maybeAddDiffuseLight(
+                maybeAddAmbientLight(vec3(0.0, 0.0, 0.0))
+            );
 
         vec4 textureColor = texture2D(texture, vTexCoord);
         gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);

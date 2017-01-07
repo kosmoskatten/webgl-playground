@@ -31,6 +31,7 @@ type Msg
     | KeyUp KeyCode
     | TexturesLoaded (List Texture)
     | ToggleAmbientLightning
+    | ToggleDiffuseLightning
 
 
 main : Program Never Model Msg
@@ -117,6 +118,8 @@ view3DScene model =
                 Just theMaze ->
                     Maze.render model.projection
                         (Walker.matrix model.walker)
+                        (Walker.position model.walker)
+                        (Walker.lightColor model.walker)
                         theMaze
 
                 Nothing ->
@@ -126,17 +129,21 @@ view3DScene model =
 
 viewToolbar : Model -> Html Msg
 viewToolbar model =
-    div [ Attr.class "w3-container w3-indigo w3-left-align" ]
-        [ checkBox ToggleAmbientLightning
-            "Ambient Lightning"
-          <|
-            case model.maze of
-                Just mz ->
+    case model.maze of
+        Just mz ->
+            div [ Attr.class "w3-container w3-indigo w3-left-align" ]
+                [ checkBox ToggleAmbientLightning
+                    "Ambient Lightning"
+                  <|
                     Maze.ambientLightning mz
+                , checkBox ToggleDiffuseLightning
+                    "Diffuse lightning"
+                  <|
+                    Maze.diffuseLightning mz
+                ]
 
-                Nothing ->
-                    False
-        ]
+        Nothing ->
+            div [] []
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -200,6 +207,19 @@ update msg model =
             , Cmd.none
             )
 
+        ToggleDiffuseLightning ->
+            ( { model
+                | maze =
+                    case model.maze of
+                        Just mz ->
+                            Just (Maze.setDiffuseLightning (not <| Maze.diffuseLightning mz) mz)
+
+                        Nothing ->
+                            Nothing
+              }
+            , Cmd.none
+            )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -252,7 +272,7 @@ height =
 
 checkBox : Msg -> String -> Bool -> Html Msg
 checkBox msg str sel =
-    label []
+    label [ Attr.style [ ( "padding", "20px" ) ] ]
         [ input [ Attr.type_ "checkbox", Attr.checked sel, Evts.onClick msg ]
             []
         , text str
