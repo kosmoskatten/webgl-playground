@@ -12384,8 +12384,14 @@ var _kosmoskatten$webgl_playground$Walker$keyDown = F2(
 		}
 	});
 
-var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform bool ambientLightning;\nuniform float ambientStrength;\nuniform vec3 ambientColor;\n\nuniform sampler2D texture;\n\nvarying vec2 vTexCoord;\n\nvec3 maybeAddAmbientLight(vec3 inp)\n{\n    if (ambientLightning)\n    {\n        vec3 ambientCoeff = ambientColor * ambientStrength;\n        return inp + ambientCoeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvoid main(void)\n{\n    if (ambientLightning)\n    {\n        // At least some lightning is activated.\n        vec3 lightningCoeffs = maybeAddAmbientLight(vec3(0.0, 0.0, 0.0));\n\n        vec4 textureColor = texture2D(texture, vTexCoord);\n        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);\n    }\n    else\n    {\n        // No lightning at all.\n        gl_FragColor = texture2D(texture, vTexCoord);\n    }\n}\n\n'};
-var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vTexCoord = texCoord;\n}\n'};
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform bool ambientLightning;\nuniform float ambientStrength;\nuniform vec3 ambientColor;\n\nuniform sampler2D texture;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvec3 maybeAddAmbientLight(vec3 inp)\n{\n    if (ambientLightning)\n    {\n        vec3 ambientCoeff = ambientColor * ambientStrength;\n        return inp + ambientCoeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvoid main(void)\n{\n    if (ambientLightning)\n    {\n        // At least some lightning is activated.\n        vec3 lightningCoeffs = maybeAddAmbientLight(vec3(0.0, 0.0, 0.0));\n\n        vec4 textureColor = texture2D(texture, vTexCoord);\n        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);\n    }\n    else\n    {\n        // No lightning at all.\n        gl_FragColor = texture2D(texture, vTexCoord);\n    }\n}\n\n'};
+var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\nuniform mat4 model;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n\n    // Bring the position to model space (lightning is made in model space).\n    vModelPosition = vec3(model * vec4(position, 1.0));\n\n    // No real normal matrix yet. Just case the model matrix.\n    vNormal = vec3(model) * normal;\n\n    vTexCoord = texCoord;\n}\n'};
+var _kosmoskatten$webgl_playground$Square$backward = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1);
+var _kosmoskatten$webgl_playground$Square$forward = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1);
+var _kosmoskatten$webgl_playground$Square$right = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0);
+var _kosmoskatten$webgl_playground$Square$left = A3(_elm_community$linear_algebra$Math_Vector3$vec3, -1, 0, 0);
+var _kosmoskatten$webgl_playground$Square$down = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, -1, 0);
+var _kosmoskatten$webgl_playground$Square$up = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0);
 var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
 	function (x, y, z) {
 		return {
@@ -12394,14 +12400,17 @@ var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
 				ctor: '_Tuple3',
 				_0: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$forward,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 				},
 				_1: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$forward,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 				},
 				_2: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$forward,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 				}
 			},
@@ -12411,14 +12420,17 @@ var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
 					ctor: '_Tuple3',
 					_0: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$forward,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 					},
 					_1: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$forward,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 					},
 					_2: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$forward,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 					}
 				},
@@ -12428,14 +12440,17 @@ var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
 						ctor: '_Tuple3',
 						_0: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$forward,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 						},
 						_1: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$forward,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 						},
 						_2: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$forward,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 						}
 					},
@@ -12445,14 +12460,17 @@ var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
 							ctor: '_Tuple3',
 							_0: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$forward,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 							},
 							_1: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$forward,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 							},
 							_2: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$forward,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 							}
 						},
@@ -12470,14 +12488,17 @@ var _kosmoskatten$webgl_playground$Square$northWallAt = F3(
 				ctor: '_Tuple3',
 				_0: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$backward,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 				},
 				_1: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$backward,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 				},
 				_2: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$backward,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 				}
 			},
@@ -12487,14 +12508,17 @@ var _kosmoskatten$webgl_playground$Square$northWallAt = F3(
 					ctor: '_Tuple3',
 					_0: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$backward,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 					},
 					_1: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$backward,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 					},
 					_2: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$backward,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 					}
 				},
@@ -12504,14 +12528,17 @@ var _kosmoskatten$webgl_playground$Square$northWallAt = F3(
 						ctor: '_Tuple3',
 						_0: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$backward,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 						},
 						_1: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$backward,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 						},
 						_2: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$backward,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 						}
 					},
@@ -12521,14 +12548,17 @@ var _kosmoskatten$webgl_playground$Square$northWallAt = F3(
 							ctor: '_Tuple3',
 							_0: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$backward,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 							},
 							_1: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z - 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$backward,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 							},
 							_2: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$backward,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 							}
 						},
@@ -12546,14 +12576,17 @@ var _kosmoskatten$webgl_playground$Square$rightWallAt = F3(
 				ctor: '_Tuple3',
 				_0: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$left,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 				},
 				_1: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$left,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 				},
 				_2: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$left,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 				}
 			},
@@ -12563,14 +12596,17 @@ var _kosmoskatten$webgl_playground$Square$rightWallAt = F3(
 					ctor: '_Tuple3',
 					_0: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$left,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 					},
 					_1: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$left,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 					},
 					_2: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$left,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 					}
 				},
@@ -12580,14 +12616,17 @@ var _kosmoskatten$webgl_playground$Square$rightWallAt = F3(
 						ctor: '_Tuple3',
 						_0: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$left,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 						},
 						_1: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z + 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$left,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 						},
 						_2: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$left,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 						}
 					},
@@ -12597,14 +12636,17 @@ var _kosmoskatten$webgl_playground$Square$rightWallAt = F3(
 							ctor: '_Tuple3',
 							_0: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$left,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 							},
 							_1: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$left,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 							},
 							_2: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 1, z - 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$left,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 							}
 						},
@@ -12622,14 +12664,17 @@ var _kosmoskatten$webgl_playground$Square$leftWallAt = F3(
 				ctor: '_Tuple3',
 				_0: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$right,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 				},
 				_1: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$right,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 				},
 				_2: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$right,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 				}
 			},
@@ -12639,14 +12684,17 @@ var _kosmoskatten$webgl_playground$Square$leftWallAt = F3(
 					ctor: '_Tuple3',
 					_0: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$right,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 					},
 					_1: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$right,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 					},
 					_2: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$right,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 					}
 				},
@@ -12656,14 +12704,17 @@ var _kosmoskatten$webgl_playground$Square$leftWallAt = F3(
 						ctor: '_Tuple3',
 						_0: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$right,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 						},
 						_1: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z - 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$right,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 						},
 						_2: {
 							position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z - 0.5),
+							normal: _kosmoskatten$webgl_playground$Square$right,
 							texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 						}
 					},
@@ -12673,14 +12724,17 @@ var _kosmoskatten$webgl_playground$Square$leftWallAt = F3(
 							ctor: '_Tuple3',
 							_0: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z - 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$right,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 							},
 							_1: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$right,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 							},
 							_2: {
 								position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 1, z + 0.5),
+								normal: _kosmoskatten$webgl_playground$Square$right,
 								texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 							}
 						},
@@ -12698,14 +12752,17 @@ var _kosmoskatten$webgl_playground$Square$ceilingAt = F3(
 				ctor: '_Tuple3',
 				_0: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$down,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 				},
 				_1: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$down,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 				},
 				_2: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$down,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 				}
 			},
@@ -12715,14 +12772,17 @@ var _kosmoskatten$webgl_playground$Square$ceilingAt = F3(
 					ctor: '_Tuple3',
 					_0: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y + 2, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$down,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 					},
 					_1: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$down,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 					},
 					_2: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y + 2, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$down,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 					}
 				},
@@ -12738,14 +12798,17 @@ var _kosmoskatten$webgl_playground$Square$floorAt = F3(
 				ctor: '_Tuple3',
 				_0: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$up,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 				},
 				_1: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z + 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$up,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 0)
 				},
 				_2: {
 					position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+					normal: _kosmoskatten$webgl_playground$Square$up,
 					texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 				}
 			},
@@ -12755,14 +12818,17 @@ var _kosmoskatten$webgl_playground$Square$floorAt = F3(
 					ctor: '_Tuple3',
 					_0: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x + 0.5, y, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$up,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 1, 1)
 					},
 					_1: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z - 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$up,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 1)
 					},
 					_2: {
 						position: A3(_elm_community$linear_algebra$Math_Vector3$vec3, x - 0.5, y, z + 0.5),
+						normal: _kosmoskatten$webgl_playground$Square$up,
 						texCoord: A2(_elm_community$linear_algebra$Math_Vector2$vec2, 0, 0)
 					}
 				},
@@ -12770,9 +12836,9 @@ var _kosmoskatten$webgl_playground$Square$floorAt = F3(
 			}
 		};
 	});
-var _kosmoskatten$webgl_playground$Square$Vertex = F2(
-	function (a, b) {
-		return {position: a, texCoord: b};
+var _kosmoskatten$webgl_playground$Square$Vertex = F3(
+	function (a, b, c) {
+		return {position: a, normal: b, texCoord: c};
 	});
 
 var _kosmoskatten$webgl_playground$Maze$uncurry3 = F2(
@@ -12969,7 +13035,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 				_kosmoskatten$webgl_playground$Square$vertexShader,
 				_kosmoskatten$webgl_playground$Square$fragmentShader,
 				maze.mazeFloor,
-				{mvp: mvp, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeFloorTexture}),
+				{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeFloorTexture}),
 			_1: {
 				ctor: '::',
 				_0: A4(
@@ -12977,7 +13043,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 					_kosmoskatten$webgl_playground$Square$vertexShader,
 					_kosmoskatten$webgl_playground$Square$fragmentShader,
 					maze.mazeCeiling,
-					{mvp: mvp, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeCeilingTexture}),
+					{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeCeilingTexture}),
 				_1: {
 					ctor: '::',
 					_0: A4(
@@ -12985,7 +13051,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 						_kosmoskatten$webgl_playground$Square$vertexShader,
 						_kosmoskatten$webgl_playground$Square$fragmentShader,
 						maze.mazeWalls,
-						{mvp: mvp, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeWallTexture}),
+						{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeWallTexture}),
 					_1: {ctor: '[]'}
 				}
 			}

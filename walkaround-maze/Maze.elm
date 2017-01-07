@@ -62,6 +62,7 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeFloor
             { mvp = mvp
+            , model = model
             , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
@@ -71,6 +72,7 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeCeiling
             { mvp = mvp
+            , model = model
             , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
@@ -80,6 +82,7 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeWalls
             { mvp = mvp
+            , model = model
             , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor

@@ -25,6 +25,9 @@ type alias Vertex =
     { position :
         Vec3
         -- The position for the vertex.
+    , normal :
+        Vec3
+        -- The normal vector for the surface.
     , texCoord :
         Vec2
         -- Texture coordinates.
@@ -37,13 +40,13 @@ type alias Vertex =
 
 floorAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
 floorAt x y z =
-    [ ( { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 1 1 }
+    [ ( { position = vec3 (x - 0.5) y (z + 0.5), normal = up, texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) y (z + 0.5), normal = up, texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) y (z - 0.5), normal = up, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x + 0.5) y (z - 0.5), normal = up, texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) y (z - 0.5), normal = up, texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) y (z + 0.5), normal = up, texCoord = vec2 0 0 }
       )
     ]
 
@@ -54,13 +57,13 @@ floorAt x y z =
 
 ceilingAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
 ceilingAt x y z =
-    [ ( { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+    [ ( { position = vec3 (x - 0.5) (y + 2) (z + 0.5), normal = down, texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), normal = down, texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), normal = down, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x + 0.5) (y + 2) (z - 0.5), normal = down, texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), normal = down, texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), normal = down, texCoord = vec2 0 0 }
       )
     ]
 
@@ -71,21 +74,21 @@ ceilingAt x y z =
 
 leftWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
 leftWallAt x y z =
-    [ ( { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
+    [ ( { position = vec3 (x - 0.5) y (z + 0.5), normal = right, texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) y (z - 0.5), normal = right, texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), normal = right, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x - 0.5) (y + 1) (z - 0.5), normal = right, texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), normal = right, texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) y (z + 0.5), normal = right, texCoord = vec2 0 0 }
       )
-    , ( { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+    , ( { position = vec3 (x - 0.5) (y + 1) (z + 0.5), normal = right, texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), normal = right, texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), normal = right, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x - 0.5) (y + 2) (z - 0.5), normal = right, texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), normal = right, texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), normal = right, texCoord = vec2 0 0 }
       )
     ]
 
@@ -96,21 +99,21 @@ leftWallAt x y z =
 
 rightWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
 rightWallAt x y z =
-    [ ( { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
+    [ ( { position = vec3 (x + 0.5) y (z - 0.5), normal = left, texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) y (z + 0.5), normal = left, texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), normal = left, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x + 0.5) (y + 1) (z + 0.5), normal = left, texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), normal = left, texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) y (z - 0.5), normal = left, texCoord = vec2 0 0 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
+    , ( { position = vec3 (x + 0.5) (y + 1) (z - 0.5), normal = left, texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), normal = left, texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), normal = left, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x + 0.5) (y + 2) (z + 0.5), normal = left, texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), normal = left, texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), normal = left, texCoord = vec2 0 0 }
       )
     ]
 
@@ -121,21 +124,21 @@ rightWallAt x y z =
 
 northWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
 northWallAt x y z =
-    [ ( { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x + 0.5) y (z - 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
+    [ ( { position = vec3 (x - 0.5) y (z - 0.5), normal = backward, texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) y (z - 0.5), normal = backward, texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), normal = backward, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x - 0.5) y (z - 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x + 0.5) (y + 1) (z - 0.5), normal = backward, texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), normal = backward, texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) y (z - 0.5), normal = backward, texCoord = vec2 0 0 }
       )
-    , ( { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
+    , ( { position = vec3 (x - 0.5) (y + 1) (z - 0.5), normal = backward, texCoord = vec2 0 0 }
+      , { position = vec3 (x + 0.5) (y + 1) (z - 0.5), normal = backward, texCoord = vec2 1 0 }
+      , { position = vec3 (x + 0.5) (y + 2) (z - 0.5), normal = backward, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 2) (z - 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x + 0.5) (y + 2) (z - 0.5), normal = backward, texCoord = vec2 1 1 }
+      , { position = vec3 (x - 0.5) (y + 2) (z - 0.5), normal = backward, texCoord = vec2 0 1 }
+      , { position = vec3 (x - 0.5) (y + 1) (z - 0.5), normal = backward, texCoord = vec2 0 0 }
       )
     ]
 
@@ -146,45 +149,90 @@ northWallAt x y z =
 
 southWallAt : Float -> Float -> Float -> List ( Vertex, Vertex, Vertex )
 southWallAt x y z =
-    [ ( { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x - 0.5) y (z + 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
+    [ ( { position = vec3 (x + 0.5) y (z + 0.5), normal = forward, texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) y (z + 0.5), normal = forward, texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), normal = forward, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x + 0.5) y (z + 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x - 0.5) (y + 1) (z + 0.5), normal = forward, texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), normal = forward, texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) y (z + 0.5), normal = forward, texCoord = vec2 0 0 }
       )
-    , ( { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
-      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), texCoord = vec2 1 0 }
-      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
+    , ( { position = vec3 (x + 0.5) (y + 1) (z + 0.5), normal = forward, texCoord = vec2 0 0 }
+      , { position = vec3 (x - 0.5) (y + 1) (z + 0.5), normal = forward, texCoord = vec2 1 0 }
+      , { position = vec3 (x - 0.5) (y + 2) (z + 0.5), normal = forward, texCoord = vec2 1 1 }
       )
-    , ( { position = vec3 (x - 0.5) (y + 2) (z + 0.5), texCoord = vec2 1 1 }
-      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), texCoord = vec2 0 1 }
-      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), texCoord = vec2 0 0 }
+    , ( { position = vec3 (x - 0.5) (y + 2) (z + 0.5), normal = forward, texCoord = vec2 1 1 }
+      , { position = vec3 (x + 0.5) (y + 2) (z + 0.5), normal = forward, texCoord = vec2 0 1 }
+      , { position = vec3 (x + 0.5) (y + 1) (z + 0.5), normal = forward, texCoord = vec2 0 0 }
       )
     ]
+
+
+up : Vec3
+up =
+    vec3 0 1 0
+
+
+down : Vec3
+down =
+    vec3 0 -1 0
+
+
+left : Vec3
+left =
+    vec3 -1 0 0
+
+
+right : Vec3
+right =
+    vec3 1 0 0
+
+
+forward : Vec3
+forward =
+    vec3 0 0 -1
+
+
+backward : Vec3
+backward =
+    vec3 0 0 1
 
 
 vertexShader :
     Shader
         { attr
             | position : Vec3
+            , normal : Vec3
             , texCoord : Vec2
         }
-        { unif | mvp : Mat4 }
-        { vTexCoord : Vec2 }
+        { unif | mvp : Mat4, model : Mat4 }
+        { vModelPosition : Vec3
+        , vNormal : Vec3
+        , vTexCoord : Vec2
+        }
 vertexShader =
     [glsl|
 attribute vec3 position;
+attribute vec3 normal;
 attribute vec2 texCoord;
 
 uniform mat4 mvp;
+uniform mat4 model;
 
+varying vec3 vModelPosition;
+varying vec3 vNormal;
 varying vec2 vTexCoord;
 
 void main(void)
 {
     gl_Position = mvp * vec4(position, 1.0);
+
+    // Bring the position to model space (lightning is made in model space).
+    vModelPosition = vec3(model * vec4(position, 1.0));
+
+    // No real normal matrix yet. Just case the model matrix.
+    vNormal = vec3(model) * normal;
+
     vTexCoord = texCoord;
 }
 |]
@@ -198,7 +246,10 @@ fragmentShader :
             , ambientColor : Vec3
             , texture : Texture
         }
-        { vTexCoord : Vec2 }
+        { vModelPosition : Vec3
+        , vNormal : Vec3
+        , vTexCoord : Vec2
+        }
 fragmentShader =
     [glsl|
 precision mediump float;
@@ -209,6 +260,8 @@ uniform vec3 ambientColor;
 
 uniform sampler2D texture;
 
+varying vec3 vModelPosition;
+varying vec3 vNormal;
 varying vec2 vTexCoord;
 
 vec3 maybeAddAmbientLight(vec3 inp)
