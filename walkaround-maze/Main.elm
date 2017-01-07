@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import AnimationFrame exposing (diffs)
-import Camera exposing (Camera)
+import Walker exposing (Walker)
 import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
 import Math.Vector3 exposing (vec3, getX, getZ)
@@ -16,7 +16,7 @@ import WebGL exposing (Texture)
 
 type alias Model =
     { projection : Mat4
-    , camera : Camera
+    , walker : Walker
     , maze : Maybe Maze
     , fps : Float
     , errStr : Maybe String
@@ -46,7 +46,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , camera = Camera.init (vec3 0 1.3 6) 0
+      , walker = Walker.init (vec3 0 1.3 6) 0
       , maze = Nothing
       , fps = 0
       , errStr = Nothing
@@ -80,9 +80,9 @@ viewHeader model =
         [ h3 []
             [ text <|
                 "Elm WebGL Walkaround Maze Demo [X = "
-                    ++ toString (ceiling (getX model.camera.position))
+                    ++ toString (ceiling (getX model.walker.position))
                     ++ ", Y = "
-                    ++ toString (ceiling (getZ model.camera.position))
+                    ++ toString (ceiling (getZ model.walker.position))
                     ++ "] @ "
                     ++ toString (ceiling model.fps)
                     ++ " fps"
@@ -114,7 +114,7 @@ view3DScene model =
             case model.maze of
                 Just theMaze ->
                     Maze.render model.projection
-                        (Camera.matrix model.camera)
+                        (Walker.matrix model.walker)
                         theMaze
 
                 Nothing ->
@@ -127,7 +127,7 @@ update msg model =
     case msg of
         Animate t ->
             ( { model
-                | camera = Camera.animate t model.camera
+                | walker = Walker.animate t model.walker
                 , fps = updateFps t model.fps
               }
             , Cmd.none
@@ -144,12 +144,12 @@ update msg model =
             )
 
         KeyDown code ->
-            ( { model | camera = Camera.keyDown code model.camera }
+            ( { model | walker = Walker.keyDown code model.walker }
             , Cmd.none
             )
 
         KeyUp code ->
-            ( { model | camera = Camera.keyUp code model.camera }
+            ( { model | walker = Walker.keyUp code model.walker }
             , Cmd.none
             )
 
