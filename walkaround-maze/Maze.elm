@@ -1,4 +1,4 @@
-module Maze exposing (Maze, init, render)
+module Maze exposing (Maze, init, render, ambientLightning, setAmbientLightning)
 
 import Bitwise exposing (and, or)
 import Math.Matrix4 exposing (Mat4, mul, identity)
@@ -23,6 +23,7 @@ type alias Maze =
     , mazeWallTexture : Texture
     , mazeCeiling : Drawable Vertex
     , mazeCeilingTexture : Texture
+    , ambientLightning : Bool
     , ambientStrength : Float
     , ambientColor : Vec3
     }
@@ -40,6 +41,7 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture =
     , mazeWallTexture = mazeWallTexture
     , mazeCeiling = mazeCeiling
     , mazeCeilingTexture = mazeCeilingTexture
+    , ambientLightning = True
     , ambientStrength = 0.15
     , ambientColor = vec3 1 1 1
     }
@@ -60,6 +62,7 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeFloor
             { mvp = mvp
+            , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , texture = maze.mazeFloorTexture
@@ -68,6 +71,7 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeCeiling
             { mvp = mvp
+            , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , texture = maze.mazeCeilingTexture
@@ -76,11 +80,30 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeWalls
             { mvp = mvp
+            , ambientLightning = maze.ambientLightning
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , texture = maze.mazeWallTexture
             }
         ]
+
+
+
+{- Get the ambient lightning on/off value. -}
+
+
+ambientLightning : Maze -> Bool
+ambientLightning maze =
+    maze.ambientLightning
+
+
+
+{- Set the ambient lightning on/off value. -}
+
+
+setAmbientLightning : Bool -> Maze -> Maze
+setAmbientLightning val maze =
+    { maze | ambientLightning = val }
 
 
 

@@ -6,7 +6,7 @@ import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
 import Math.Vector3 exposing (vec3, getX, getZ)
 import Maze exposing (Maze)
-import Html exposing (Html, div, h3, p, span, text)
+import Html exposing (Html, div, h3, input, label, p, span, text)
 import Html.Attributes as Attr
 import Html.Events as Evts
 import Task exposing (attempt, sequence)
@@ -30,6 +30,7 @@ type Msg
     | KeyDown KeyCode
     | KeyUp KeyCode
     | TexturesLoaded (List Texture)
+    | ToggleAmbientLightning
 
 
 main : Program Never Model Msg
@@ -68,6 +69,7 @@ view model =
             [ viewHeader model
             , viewErrorMessage model
             , view3DScene model
+            , viewToolbar model
             ]
         , div [ Attr.class "w3-col l1" ]
             [ p [] [] ]
@@ -122,6 +124,21 @@ view3DScene model =
         ]
 
 
+viewToolbar : Model -> Html Msg
+viewToolbar model =
+    div [ Attr.class "w3-container w3-indigo w3-left-align" ]
+        [ checkBox ToggleAmbientLightning
+            "Ambient Lightning"
+          <|
+            case model.maze of
+                Just mz ->
+                    Maze.ambientLightning mz
+
+                Nothing ->
+                    False
+        ]
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -167,6 +184,19 @@ update msg model =
 
         TexturesLoaded _ ->
             ( { model | errStr = Just "Unexpected number of textures loaded" }
+            , Cmd.none
+            )
+
+        ToggleAmbientLightning ->
+            ( { model
+                | maze =
+                    case model.maze of
+                        Just mz ->
+                            Just (Maze.setAmbientLightning (not <| Maze.ambientLightning mz) mz)
+
+                        Nothing ->
+                            Nothing
+              }
             , Cmd.none
             )
 
@@ -218,3 +248,12 @@ width =
 height : Int
 height =
     600
+
+
+checkBox : Msg -> String -> Bool -> Html Msg
+checkBox msg str sel =
+    label []
+        [ input [ Attr.type_ "checkbox", Attr.checked sel, Evts.onClick msg ]
+            []
+        , text str
+        ]

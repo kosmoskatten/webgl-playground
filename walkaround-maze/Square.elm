@@ -193,7 +193,8 @@ void main(void)
 fragmentShader :
     Shader {}
         { unif
-            | ambientStrength : Float
+            | ambientLightning : Bool
+            , ambientStrength : Float
             , ambientColor : Vec3
             , texture : Texture
         }
@@ -202,21 +203,42 @@ fragmentShader =
     [glsl|
 precision mediump float;
 
+uniform bool ambientLightning;
 uniform float ambientStrength;
 uniform vec3 ambientColor;
+
 uniform sampler2D texture;
 
 varying vec2 vTexCoord;
 
+vec3 maybeAddAmbientLight(vec3 inp)
+{
+    if (ambientLightning)
+    {
+        vec3 ambientCoeff = ambientColor * ambientStrength;
+        return inp + ambientCoeff;
+    }
+    else
+    {
+        return inp;
+    }
+}
+
 void main(void)
 {
-    //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);
-    vec3 ambientCoeff = ambientColor * ambientStrength;
+    if (ambientLightning)
+    {
+        // At least some lightning is activated.
+        vec3 lightningCoeffs = maybeAddAmbientLight(vec3(0.0, 0.0, 0.0));
 
-    vec4 textureColor = texture2D(texture, vTexCoord);
-
-    vec3 finalColor = textureColor.rgb * ambientCoeff;
-    gl_FragColor = vec4(finalColor, textureColor.a);
-    //gl_FragColor = texture2D(texture, vTexCoord);
+        vec4 textureColor = texture2D(texture, vTexCoord);
+        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);
+    }
+    else
+    {
+        // No lightning at all.
+        gl_FragColor = texture2D(texture, vTexCoord);
+    }
 }
+
 |]
