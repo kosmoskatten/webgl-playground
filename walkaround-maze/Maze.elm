@@ -2,6 +2,7 @@ module Maze exposing (Maze, init, render)
 
 import Bitwise exposing (and, or)
 import Math.Matrix4 exposing (Mat4, mul, identity)
+import Math.Vector3 exposing (Vec3, vec3)
 import WebGL exposing (Drawable(..), Renderable, Texture)
 import Square
     exposing
@@ -22,6 +23,8 @@ type alias Maze =
     , mazeWallTexture : Texture
     , mazeCeiling : Drawable Vertex
     , mazeCeilingTexture : Texture
+    , ambientStrength : Float
+    , ambientColor : Vec3
     }
 
 
@@ -37,6 +40,8 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture =
     , mazeWallTexture = mazeWallTexture
     , mazeCeiling = mazeCeiling
     , mazeCeilingTexture = mazeCeilingTexture
+    , ambientStrength = 0.15
+    , ambientColor = vec3 1 1 1
     }
 
 
@@ -55,18 +60,24 @@ render proj view maze =
             Square.fragmentShader
             maze.mazeFloor
             { mvp = mvp
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
             , texture = maze.mazeFloorTexture
             }
         , WebGL.render Square.vertexShader
             Square.fragmentShader
             maze.mazeCeiling
             { mvp = mvp
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
             , texture = maze.mazeCeilingTexture
             }
         , WebGL.render Square.vertexShader
             Square.fragmentShader
             maze.mazeWalls
             { mvp = mvp
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
             , texture = maze.mazeWallTexture
             }
         ]

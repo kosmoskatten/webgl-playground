@@ -4,6 +4,7 @@ module Walker
         , init
         , matrix
         , position
+        , lightColor
         , animate
         , keyDown
         , keyUp
@@ -30,6 +31,9 @@ type alias Walker =
     , headAdjustment :
         HeadAdjustment
         -- Tilt adjustment.
+    , lightColor :
+        Vec3
+        -- The color the walker is carrying.
     , leftArrowDown :
         Bool
         -- Is the left arrow key pressed?
@@ -60,6 +64,7 @@ init position angle =
     { position = position
     , angle = angle
     , headAdjustment = LookStraight
+    , lightColor = candleLight
     , leftArrowDown = False
     , rightArrowDown = False
     , upArrowDown = False
@@ -88,6 +93,15 @@ matrix walker =
 position : Walker -> Vec3
 position walker =
     walker.position
+
+
+
+{- Get the current light color of the walker. -}
+
+
+lightColor : Walker -> Vec3
+lightColor walker =
+    walker.lightColor
 
 
 
@@ -340,3 +354,8 @@ headAdjustment adjustment vec =
 up : Vec3
 up =
     vec3 0 1 0
+
+
+candleLight : Vec3
+candleLight =
+    vec3 (255 / 255) (147 / 255) (41 / 255)

@@ -190,11 +190,20 @@ void main(void)
 |]
 
 
-fragmentShader : Shader {} { unif | texture : Texture } { vTexCoord : Vec2 }
+fragmentShader :
+    Shader {}
+        { unif
+            | ambientStrength : Float
+            , ambientColor : Vec3
+            , texture : Texture
+        }
+        { vTexCoord : Vec2 }
 fragmentShader =
     [glsl|
 precision mediump float;
 
+uniform float ambientStrength;
+uniform vec3 ambientColor;
 uniform sampler2D texture;
 
 varying vec2 vTexCoord;
@@ -202,6 +211,12 @@ varying vec2 vTexCoord;
 void main(void)
 {
     //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);
-    gl_FragColor = texture2D(texture, vTexCoord);
+    vec3 ambientCoeff = ambientColor * ambientStrength;
+
+    vec4 textureColor = texture2D(texture, vTexCoord);
+
+    vec3 finalColor = textureColor.rgb * ambientCoeff;
+    gl_FragColor = vec4(finalColor, textureColor.a);
+    //gl_FragColor = texture2D(texture, vTexCoord);
 }
 |]

@@ -12188,6 +12188,7 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
+var _kosmoskatten$webgl_playground$Walker$candleLight = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 255 / 255, 147 / 255, 41 / 255);
 var _kosmoskatten$webgl_playground$Walker$up = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0);
 var _kosmoskatten$webgl_playground$Walker$headAdjustment = F2(
 	function (adjustment, vec) {
@@ -12321,6 +12322,9 @@ var _kosmoskatten$webgl_playground$Walker$animate = F2(
 					t,
 					A2(_kosmoskatten$webgl_playground$Walker$animateLeftRotate, t, walker))));
 	});
+var _kosmoskatten$webgl_playground$Walker$lightColor = function (walker) {
+	return walker.lightColor;
+};
 var _kosmoskatten$webgl_playground$Walker$position = function (walker) {
 	return walker.position;
 };
@@ -12331,9 +12335,9 @@ var _kosmoskatten$webgl_playground$Walker$matrix = function (walker) {
 		A3(_kosmoskatten$webgl_playground$Walker$aheadOf, walker.angle, _kosmoskatten$webgl_playground$Walker$viewStride, walker.position));
 	return A3(_elm_community$linear_algebra$Math_Matrix4$makeLookAt, walker.position, focus, _kosmoskatten$webgl_playground$Walker$up);
 };
-var _kosmoskatten$webgl_playground$Walker$Walker = F7(
-	function (a, b, c, d, e, f, g) {
-		return {position: a, angle: b, headAdjustment: c, leftArrowDown: d, rightArrowDown: e, upArrowDown: f, downArrowDown: g};
+var _kosmoskatten$webgl_playground$Walker$Walker = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {position: a, angle: b, headAdjustment: c, lightColor: d, leftArrowDown: e, rightArrowDown: f, upArrowDown: g, downArrowDown: h};
 	});
 var _kosmoskatten$webgl_playground$Walker$LookDown = {ctor: 'LookDown'};
 var _kosmoskatten$webgl_playground$Walker$pageDownDown = function (walker) {
@@ -12344,7 +12348,7 @@ var _kosmoskatten$webgl_playground$Walker$pageDownDown = function (walker) {
 var _kosmoskatten$webgl_playground$Walker$LookStraight = {ctor: 'LookStraight'};
 var _kosmoskatten$webgl_playground$Walker$init = F2(
 	function (position, angle) {
-		return {position: position, angle: angle, headAdjustment: _kosmoskatten$webgl_playground$Walker$LookStraight, leftArrowDown: false, rightArrowDown: false, upArrowDown: false, downArrowDown: false};
+		return {position: position, angle: angle, headAdjustment: _kosmoskatten$webgl_playground$Walker$LookStraight, lightColor: _kosmoskatten$webgl_playground$Walker$candleLight, leftArrowDown: false, rightArrowDown: false, upArrowDown: false, downArrowDown: false};
 	});
 var _kosmoskatten$webgl_playground$Walker$homeDown = function (walker) {
 	return _elm_lang$core$Native_Utils.update(
@@ -12380,7 +12384,7 @@ var _kosmoskatten$webgl_playground$Walker$keyDown = F2(
 		}
 	});
 
-var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform sampler2D texture;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n    gl_FragColor = texture2D(texture, vTexCoord);\n}\n'};
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform float ambientStrength;\nuniform vec3 ambientColor;\nuniform sampler2D texture;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    //gl_FragColor = vec4(1.0, 0.5, 0.31, 1.0);\n    vec3 ambientCoeff = ambientColor * ambientStrength;\n\n    vec4 textureColor = texture2D(texture, vTexCoord);\n\n    vec3 finalColor = textureColor.rgb * ambientCoeff;\n    gl_FragColor = vec4(finalColor, textureColor.a);\n    //gl_FragColor = texture2D(texture, vTexCoord);\n}\n'};
 var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\n\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vTexCoord = texCoord;\n}\n'};
 var _kosmoskatten$webgl_playground$Square$southWallAt = F3(
 	function (x, y, z) {
@@ -12956,7 +12960,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 				_kosmoskatten$webgl_playground$Square$vertexShader,
 				_kosmoskatten$webgl_playground$Square$fragmentShader,
 				maze.mazeFloor,
-				{mvp: mvp, texture: maze.mazeFloorTexture}),
+				{mvp: mvp, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeFloorTexture}),
 			_1: {
 				ctor: '::',
 				_0: A4(
@@ -12964,7 +12968,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 					_kosmoskatten$webgl_playground$Square$vertexShader,
 					_kosmoskatten$webgl_playground$Square$fragmentShader,
 					maze.mazeCeiling,
-					{mvp: mvp, texture: maze.mazeCeilingTexture}),
+					{mvp: mvp, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeCeilingTexture}),
 				_1: {
 					ctor: '::',
 					_0: A4(
@@ -12972,7 +12976,7 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 						_kosmoskatten$webgl_playground$Square$vertexShader,
 						_kosmoskatten$webgl_playground$Square$fragmentShader,
 						maze.mazeWalls,
-						{mvp: mvp, texture: maze.mazeWallTexture}),
+						{mvp: mvp, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, texture: maze.mazeWallTexture}),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -12980,11 +12984,20 @@ var _kosmoskatten$webgl_playground$Maze$render = F3(
 	});
 var _kosmoskatten$webgl_playground$Maze$init = F3(
 	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture) {
-		return {mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor, mazeFloorTexture: mazeFloorTexture, mazeWalls: _kosmoskatten$webgl_playground$Maze$mazeWalls, mazeWallTexture: mazeWallTexture, mazeCeiling: _kosmoskatten$webgl_playground$Maze$mazeCeiling, mazeCeilingTexture: mazeCeilingTexture};
+		return {
+			mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor,
+			mazeFloorTexture: mazeFloorTexture,
+			mazeWalls: _kosmoskatten$webgl_playground$Maze$mazeWalls,
+			mazeWallTexture: mazeWallTexture,
+			mazeCeiling: _kosmoskatten$webgl_playground$Maze$mazeCeiling,
+			mazeCeilingTexture: mazeCeilingTexture,
+			ambientStrength: 0.15,
+			ambientColor: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1)
+		};
 	});
-var _kosmoskatten$webgl_playground$Maze$Maze = F6(
-	function (a, b, c, d, e, f) {
-		return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f};
+var _kosmoskatten$webgl_playground$Maze$Maze = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, ambientStrength: g, ambientColor: h};
 	});
 
 var _kosmoskatten$webgl_playground$Main$height = 600;
