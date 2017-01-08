@@ -48,7 +48,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , walker = Walker.init (vec3 0 1.3 6) 0
+      , walker = Walker.init (vec3 -15 1.3 0) -90
       , maze = Nothing
       , fps = 0
       , errStr = Nothing

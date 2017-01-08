@@ -204,7 +204,7 @@ setDiffuseLightning val maze =
       - 3  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
       - 2  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
       - 1  0   0   0   0   0   0   0   W   M   M   M   M   M   0   0   0   0   M   0   0   0
-      +-0  0   0   0   0   0   0   0   0   M   0  (M)  0   M   M   M   M   M   M   0   0   0
+      +-0  0   0   0   0   0   0   0   M   M   0  (M)  0   M   M   M   M   M   M   0   0   0
         1  0   0   0   0   0   0   0   W   M   M   M   M   M   0   0   0   0   M   0   0   0
         2  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
         3  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
@@ -313,7 +313,7 @@ maze =
     , ( 1, 0, 1, or mc <| or sw <| or mf nw )
     , ( -1, 0, 1, or mc <| or sw <| or mf nw )
     , ( -2, 0, 1, or mc <| or sw <| or mf lw )
-    , ( -2, 0, 0, or mc <| or rw <| or mf lw )
+    , ( -2, 0, 0, or mc <| or rw mf )
     , ( -2, 0, -1, or mc <| or nw <| or mf lw )
     , ( -1, 0, -1, or mc <| or sw <| or mf nw )
       -- Room.
@@ -388,22 +388,24 @@ maze =
     , ( -3, 0, -9, olw )
     , ( -3, 0, -8, olw )
     , ( -3, 0, -7, olw )
-      --, ( -3, 0, -6, olw )
-      --, ( -3, 0, -5, olw )
-      --, ( -3, 0, -4, olw )
-      --, ( -3, 0, -3, olw )
-      --, ( -3, 0, -2, olw )
+    , ( -3, 0, -6, olw )
+    , ( -3, 0, -5, olw )
+    , ( -3, 0, -4, olw )
+    , ( -3, 0, -3, olw )
+    , ( -3, 0, -2, olw )
     , ( -3, 0, -1, or osw olw )
     , ( -3, 0, 1, or onw olw )
-      --, ( -3, 0, 2, olw )
-      --, ( -3, 0, 3, olw )
-      --, ( -3, 0, 4, olw )
-      --, ( -3, 0, 5, olw )
-      --, ( -3, 0, 6, olw )
-      --, ( -3, 0, 7, olw )
-      --, ( -3, 0, 8, olw )
-      --, ( -3, 0, 9, olw )
-      --, ( -3, 0, 10, olw )
+    , ( -3, 0, 2, olw )
+    , ( -3, 0, 3, olw )
+    , ( -3, 0, 4, olw )
+    , ( -3, 0, 5, olw )
+    , ( -3, 0, 6, olw )
+    , ( -3, 0, 7, olw )
+    , ( -3, 0, 8, olw )
+    , ( -3, 0, 9, olw )
+    , ( -3, 0, 10, olw )
+      -- Connection to outdoor from the maze
+    , ( -3, 0, 0, or mf mc )
     ]
 
 
