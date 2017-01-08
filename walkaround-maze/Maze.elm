@@ -36,6 +36,8 @@ type alias Maze =
     , roomFloorTexture : Texture
     , outdoorWalls : Drawable Vertex
     , outdoorWallTexture : Texture
+    , outdoorGrass : Drawable Vertex
+    , outdoorGrassTexture : Texture
     , ambientLightning : Bool
     , ambientStrength : Float
     , ambientColor : Vec3
@@ -47,8 +49,8 @@ type alias Class =
     Int
 
 
-init : Texture -> Texture -> Texture -> Texture -> Texture -> Maze
-init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture outdoorWallTexture =
+init : Texture -> Texture -> Texture -> Texture -> Texture -> Texture -> Maze
+init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture outdoorWallTexture outdoorGrassTexture =
     { mazeFloor = mazeFloor
     , mazeFloorTexture = mazeFloorTexture
     , mazeWalls = mazeWalls
@@ -59,6 +61,8 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture outdoo
     , roomFloorTexture = roomFloorTexture
     , outdoorWalls = outdoorWalls
     , outdoorWallTexture = outdoorWallTexture
+    , outdoorGrass = outdoorGrass
+    , outdoorGrassTexture = outdoorGrassTexture
     , ambientLightning = True
     , ambientStrength = 0.05
     , ambientColor = vec3 1 1 1
@@ -146,6 +150,20 @@ render proj view walkerPos walkerColor maze =
             , lightPosition = walkerPos
             , lightColor = walkerColor
             , texture = maze.outdoorWallTexture
+            }
+          -- Render the outdoor grass. No lightning!
+        , WebGL.render Square.vertexShader
+            Square.fragmentShader
+            maze.outdoorGrass
+            { mvp = mvp
+            , model = model
+            , ambientLightning = False
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
+            , diffuseLightning = False
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
+            , texture = maze.outdoorGrassTexture
             }
         ]
 
@@ -537,3 +555,31 @@ outdoorWalls =
                     filterClass osw maze
     in
         Triangle <| leftWalls ++ rightWalls ++ northWalls ++ southWalls
+
+
+outdoorGrass : Drawable Vertex
+outdoorGrass =
+    Triangle <|
+        List.concat <|
+            [ List.concat <| List.map (\x -> floorAt (toFloat x) 0 -10) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -9) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -8) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -7) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -6) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -5) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -4) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -3) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -2) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -1) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 0) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 1) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 2) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 3) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 4) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 5) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 6) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 7) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 8) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 9) <| List.range -20 -4
+            , List.concat <| List.map (\x -> floorAt (toFloat x) 0 10) <| List.range -20 -4
+            ]

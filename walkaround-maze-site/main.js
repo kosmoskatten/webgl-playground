@@ -12841,6 +12841,303 @@ var _kosmoskatten$webgl_playground$Square$Vertex = F3(
 		return {position: a, normal: b, texCoord: c};
 	});
 
+var _kosmoskatten$webgl_playground$Maze$outdoorGrass = _elm_community$webgl$WebGL$Triangle(
+	_elm_lang$core$List$concat(
+		{
+			ctor: '::',
+			_0: _elm_lang$core$List$concat(
+				A2(
+					_elm_lang$core$List$map,
+					function (x) {
+						return A3(
+							_kosmoskatten$webgl_playground$Square$floorAt,
+							_elm_lang$core$Basics$toFloat(x),
+							0,
+							-10);
+					},
+					A2(_elm_lang$core$List$range, -20, -4))),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$List$concat(
+					A2(
+						_elm_lang$core$List$map,
+						function (x) {
+							return A3(
+								_kosmoskatten$webgl_playground$Square$floorAt,
+								_elm_lang$core$Basics$toFloat(x),
+								0,
+								-9);
+						},
+						A2(_elm_lang$core$List$range, -20, -4))),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$List$concat(
+						A2(
+							_elm_lang$core$List$map,
+							function (x) {
+								return A3(
+									_kosmoskatten$webgl_playground$Square$floorAt,
+									_elm_lang$core$Basics$toFloat(x),
+									0,
+									-8);
+							},
+							A2(_elm_lang$core$List$range, -20, -4))),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$List$concat(
+							A2(
+								_elm_lang$core$List$map,
+								function (x) {
+									return A3(
+										_kosmoskatten$webgl_playground$Square$floorAt,
+										_elm_lang$core$Basics$toFloat(x),
+										0,
+										-7);
+								},
+								A2(_elm_lang$core$List$range, -20, -4))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$List$concat(
+								A2(
+									_elm_lang$core$List$map,
+									function (x) {
+										return A3(
+											_kosmoskatten$webgl_playground$Square$floorAt,
+											_elm_lang$core$Basics$toFloat(x),
+											0,
+											-6);
+									},
+									A2(_elm_lang$core$List$range, -20, -4))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$List$concat(
+									A2(
+										_elm_lang$core$List$map,
+										function (x) {
+											return A3(
+												_kosmoskatten$webgl_playground$Square$floorAt,
+												_elm_lang$core$Basics$toFloat(x),
+												0,
+												-5);
+										},
+										A2(_elm_lang$core$List$range, -20, -4))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$List$concat(
+										A2(
+											_elm_lang$core$List$map,
+											function (x) {
+												return A3(
+													_kosmoskatten$webgl_playground$Square$floorAt,
+													_elm_lang$core$Basics$toFloat(x),
+													0,
+													-4);
+											},
+											A2(_elm_lang$core$List$range, -20, -4))),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$List$concat(
+											A2(
+												_elm_lang$core$List$map,
+												function (x) {
+													return A3(
+														_kosmoskatten$webgl_playground$Square$floorAt,
+														_elm_lang$core$Basics$toFloat(x),
+														0,
+														-3);
+												},
+												A2(_elm_lang$core$List$range, -20, -4))),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$List$concat(
+												A2(
+													_elm_lang$core$List$map,
+													function (x) {
+														return A3(
+															_kosmoskatten$webgl_playground$Square$floorAt,
+															_elm_lang$core$Basics$toFloat(x),
+															0,
+															-2);
+													},
+													A2(_elm_lang$core$List$range, -20, -4))),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$List$concat(
+													A2(
+														_elm_lang$core$List$map,
+														function (x) {
+															return A3(
+																_kosmoskatten$webgl_playground$Square$floorAt,
+																_elm_lang$core$Basics$toFloat(x),
+																0,
+																-1);
+														},
+														A2(_elm_lang$core$List$range, -20, -4))),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$core$List$concat(
+														A2(
+															_elm_lang$core$List$map,
+															function (x) {
+																return A3(
+																	_kosmoskatten$webgl_playground$Square$floorAt,
+																	_elm_lang$core$Basics$toFloat(x),
+																	0,
+																	0);
+															},
+															A2(_elm_lang$core$List$range, -20, -4))),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$core$List$concat(
+															A2(
+																_elm_lang$core$List$map,
+																function (x) {
+																	return A3(
+																		_kosmoskatten$webgl_playground$Square$floorAt,
+																		_elm_lang$core$Basics$toFloat(x),
+																		0,
+																		1);
+																},
+																A2(_elm_lang$core$List$range, -20, -4))),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$core$List$concat(
+																A2(
+																	_elm_lang$core$List$map,
+																	function (x) {
+																		return A3(
+																			_kosmoskatten$webgl_playground$Square$floorAt,
+																			_elm_lang$core$Basics$toFloat(x),
+																			0,
+																			2);
+																	},
+																	A2(_elm_lang$core$List$range, -20, -4))),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$core$List$concat(
+																	A2(
+																		_elm_lang$core$List$map,
+																		function (x) {
+																			return A3(
+																				_kosmoskatten$webgl_playground$Square$floorAt,
+																				_elm_lang$core$Basics$toFloat(x),
+																				0,
+																				3);
+																		},
+																		A2(_elm_lang$core$List$range, -20, -4))),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$core$List$concat(
+																		A2(
+																			_elm_lang$core$List$map,
+																			function (x) {
+																				return A3(
+																					_kosmoskatten$webgl_playground$Square$floorAt,
+																					_elm_lang$core$Basics$toFloat(x),
+																					0,
+																					4);
+																			},
+																			A2(_elm_lang$core$List$range, -20, -4))),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$core$List$concat(
+																			A2(
+																				_elm_lang$core$List$map,
+																				function (x) {
+																					return A3(
+																						_kosmoskatten$webgl_playground$Square$floorAt,
+																						_elm_lang$core$Basics$toFloat(x),
+																						0,
+																						5);
+																				},
+																				A2(_elm_lang$core$List$range, -20, -4))),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$core$List$concat(
+																				A2(
+																					_elm_lang$core$List$map,
+																					function (x) {
+																						return A3(
+																							_kosmoskatten$webgl_playground$Square$floorAt,
+																							_elm_lang$core$Basics$toFloat(x),
+																							0,
+																							6);
+																					},
+																					A2(_elm_lang$core$List$range, -20, -4))),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$core$List$concat(
+																					A2(
+																						_elm_lang$core$List$map,
+																						function (x) {
+																							return A3(
+																								_kosmoskatten$webgl_playground$Square$floorAt,
+																								_elm_lang$core$Basics$toFloat(x),
+																								0,
+																								7);
+																						},
+																						A2(_elm_lang$core$List$range, -20, -4))),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$core$List$concat(
+																						A2(
+																							_elm_lang$core$List$map,
+																							function (x) {
+																								return A3(
+																									_kosmoskatten$webgl_playground$Square$floorAt,
+																									_elm_lang$core$Basics$toFloat(x),
+																									0,
+																									8);
+																							},
+																							A2(_elm_lang$core$List$range, -20, -4))),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$core$List$concat(
+																							A2(
+																								_elm_lang$core$List$map,
+																								function (x) {
+																									return A3(
+																										_kosmoskatten$webgl_playground$Square$floorAt,
+																										_elm_lang$core$Basics$toFloat(x),
+																										0,
+																										9);
+																								},
+																								A2(_elm_lang$core$List$range, -20, -4))),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$core$List$concat(
+																								A2(
+																									_elm_lang$core$List$map,
+																									function (x) {
+																										return A3(
+																											_kosmoskatten$webgl_playground$Square$floorAt,
+																											_elm_lang$core$Basics$toFloat(x),
+																											0,
+																											10);
+																									},
+																									A2(_elm_lang$core$List$range, -20, -4))),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}));
 var _kosmoskatten$webgl_playground$Maze$uncurry3 = F2(
 	function (g, _p0) {
 		var _p1 = _p0;
@@ -13661,15 +13958,24 @@ var _kosmoskatten$webgl_playground$Maze$render = F5(
 								_kosmoskatten$webgl_playground$Square$fragmentShader,
 								maze.outdoorWalls,
 								{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.outdoorWallTexture}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A4(
+									_elm_community$webgl$WebGL$render,
+									_kosmoskatten$webgl_playground$Square$vertexShader,
+									_kosmoskatten$webgl_playground$Square$fragmentShader,
+									maze.outdoorGrass,
+									{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.outdoorGrassTexture}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
 			}
 		};
 	});
-var _kosmoskatten$webgl_playground$Maze$init = F5(
-	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture, outdoorWallTexture) {
+var _kosmoskatten$webgl_playground$Maze$init = F6(
+	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture, outdoorWallTexture, outdoorGrassTexture) {
 		return {
 			mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor,
 			mazeFloorTexture: mazeFloorTexture,
@@ -13681,6 +13987,8 @@ var _kosmoskatten$webgl_playground$Maze$init = F5(
 			roomFloorTexture: roomFloorTexture,
 			outdoorWalls: _kosmoskatten$webgl_playground$Maze$outdoorWalls,
 			outdoorWallTexture: outdoorWallTexture,
+			outdoorGrass: _kosmoskatten$webgl_playground$Maze$outdoorGrass,
+			outdoorGrassTexture: outdoorGrassTexture,
 			ambientLightning: true,
 			ambientStrength: 5.0e-2,
 			ambientColor: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
@@ -13701,7 +14009,11 @@ var _kosmoskatten$webgl_playground$Maze$Maze = function (a) {
 											return function (l) {
 												return function (m) {
 													return function (n) {
-														return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, roomFloor: g, roomFloorTexture: h, outdoorWalls: i, outdoorWallTexture: j, ambientLightning: k, ambientStrength: l, ambientColor: m, diffuseLightning: n};
+														return function (o) {
+															return function (p) {
+																return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, roomFloor: g, roomFloorTexture: h, outdoorWalls: i, outdoorWallTexture: j, outdoorGrass: k, outdoorGrassTexture: l, ambientLightning: m, ambientStrength: n, ambientColor: o, diffuseLightning: p};
+															};
+														};
 													};
 												};
 											};
@@ -13819,14 +14131,14 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'TexturesLoaded':
-				if ((((((_p0._0.ctor === '::') && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1._1.ctor === '[]')) {
+				if (((((((_p0._0.ctor === '::') && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1._1._1.ctor === '[]')) {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
 								maze: _elm_lang$core$Maybe$Just(
-									A5(_kosmoskatten$webgl_playground$Maze$init, _p0._0._0, _p0._0._1._0, _p0._0._1._1._0, _p0._0._1._1._1._0, _p0._0._1._1._1._1._0))
+									A6(_kosmoskatten$webgl_playground$Maze$init, _p0._0._0, _p0._0._1._0, _p0._0._1._1._0, _p0._0._1._1._1._0, _p0._0._1._1._1._1._0, _p0._0._1._1._1._1._1._0))
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -14070,7 +14382,11 @@ var _kosmoskatten$webgl_playground$Main$init = {
 						_1: {
 							ctor: '::',
 							_0: 'textures/outdoor-wall.jpg',
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: 'textures/outdoor-grass.jpg',
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
