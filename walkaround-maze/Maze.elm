@@ -32,6 +32,8 @@ type alias Maze =
     , mazeWallTexture : Texture
     , mazeCeiling : Drawable Vertex
     , mazeCeilingTexture : Texture
+    , roomFloor : Drawable Vertex
+    , roomFloorTexture : Texture
     , ambientLightning : Bool
     , ambientStrength : Float
     , ambientColor : Vec3
@@ -43,14 +45,16 @@ type alias Class =
     Int
 
 
-init : Texture -> Texture -> Texture -> Maze
-init mazeFloorTexture mazeWallTexture mazeCeilingTexture =
+init : Texture -> Texture -> Texture -> Texture -> Maze
+init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture =
     { mazeFloor = mazeFloor
     , mazeFloorTexture = mazeFloorTexture
     , mazeWalls = mazeWalls
     , mazeWallTexture = mazeWallTexture
     , mazeCeiling = mazeCeiling
     , mazeCeilingTexture = mazeCeilingTexture
+    , roomFloor = roomFloor
+    , roomFloorTexture = roomFloorTexture
     , ambientLightning = True
     , ambientStrength = 0.05
     , ambientColor = vec3 1 1 1
@@ -69,7 +73,8 @@ render proj view walkerPos walkerColor maze =
         mvp =
             mul proj <| mul view model
     in
-        [ WebGL.render Square.vertexShader
+        [ -- Render the maze floor.
+          WebGL.render Square.vertexShader
             Square.fragmentShader
             maze.mazeFloor
             { mvp = mvp
@@ -82,6 +87,7 @@ render proj view walkerPos walkerColor maze =
             , lightColor = walkerColor
             , texture = maze.mazeFloorTexture
             }
+          -- Render the maze ceilings.
         , WebGL.render Square.vertexShader
             Square.fragmentShader
             maze.mazeCeiling
@@ -95,6 +101,7 @@ render proj view walkerPos walkerColor maze =
             , lightColor = walkerColor
             , texture = maze.mazeCeilingTexture
             }
+          -- Render the maze walls.
         , WebGL.render Square.vertexShader
             Square.fragmentShader
             maze.mazeWalls
@@ -107,6 +114,20 @@ render proj view walkerPos walkerColor maze =
             , lightPosition = walkerPos
             , lightColor = walkerColor
             , texture = maze.mazeWallTexture
+            }
+          -- Render the room floor.
+        , WebGL.render Square.vertexShader
+            Square.fragmentShader
+            maze.roomFloor
+            { mvp = mvp
+            , model = model
+            , ambientLightning = maze.ambientLightning
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
+            , diffuseLightning = maze.diffuseLightning
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
+            , texture = maze.roomFloorTexture
             }
         ]
 
@@ -155,25 +176,25 @@ setDiffuseLightning val maze =
 
          -10  -9  -8  -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7   8   9  10
       -10  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 9  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 8  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 7  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 6  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 5  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-      - 4  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-      - 3  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-      - 2  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-      - 1  0   0   0   0   0   0   0   0   M   M   M   M   M   0   0   0   0   0   0   0   0
-      +-0  0   0   0   0   0   0   0   0   M   0  (M)  0   M   0   0   0   0   0   0   0   0
-        1  0   0   0   0   0   0   0   0   M   M   M   M   M   0   0   0   0   0   0   0   0
-        2  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        3  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        4  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        5  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        6  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        7  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        8  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
-        9  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   0   0   0   0
+      - 9  0   0   0   0   0   0   0   0   0   0   M   M   M   M   R   R   R   R   R   R   0
+      - 8  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 7  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 6  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 5  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 4  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 3  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+      - 2  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+      - 1  0   0   0   0   0   0   0   0   M   M   M   M   M   0   0   0   0   M   0   0   0
+      +-0  0   0   0   0   0   0   0   0   M   0  (M)  0   M   M   M   M   M   M   0   0   0
+        1  0   0   0   0   0   0   0   0   M   M   M   M   M   0   0   0   0   M   0   0   0
+        2  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        3  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        4  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        5  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        6  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        7  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        8  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
+        9  0   0   0   0   0   0   0   0   0   0   M   M   M   M   M   M   M   M   0   0   0
        10  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
 
 -}
@@ -226,25 +247,29 @@ filterClass spec xs =
 maze : List ( Float, Float, Float, Class )
 maze =
     [ -- Inner north to south corridor.
-      ( 0, 0, -5, or mc mf )
-    , ( 0, 0, -4, or mc mf )
-    , ( 0, 0, -3, or mc mf )
+      ( 0, 0, -9, or nw <| or lw <| or mc mf )
+    , ( 0, 0, -8, or rw <| or lw <| or mc mf )
+    , ( 0, 0, -7, or rw <| or lw <| or mc mf )
+    , ( 0, 0, -6, or rw <| or lw <| or mc mf )
+    , ( 0, 0, -5, or rw <| or lw <| or mc mf )
+    , ( 0, 0, -4, or rw <| or lw <| or mc mf )
+    , ( 0, 0, -3, or rw <| or lw <| or mc mf )
     , ( 0, 0, -2, or mc <| or lw <| or mf rw )
     , ( 0, 0, -1, or mc mf )
     , ( 0, 0, 0, or mc <| or rw <| or mf lw )
     , ( 0, 0, 1, or mc mf )
     , ( 0, 0, 2, or mc <| or lw <| or mf rw )
-    , ( 0, 0, 3, or mc mf )
-    , ( 0, 0, 4, or mc mf )
-    , ( 0, 0, 5, or mc mf )
-    , ( 0, 0, 6, or mc mf )
-    , ( 0, 0, 7, or mc mf )
-    , ( 0, 0, 8, or mc mf )
-    , ( 0, 0, 9, or mc mf )
-      -- First loop, clockwise.
+    , ( 0, 0, 3, or lw <| or rw <| or mc mf )
+    , ( 0, 0, 4, or lw <| or rw <| or mc mf )
+    , ( 0, 0, 5, or lw <| or rw <| or mc mf )
+    , ( 0, 0, 6, or lw <| or rw <| or mc mf )
+    , ( 0, 0, 7, or lw <| or rw <| or mc mf )
+    , ( 0, 0, 8, or lw <| or rw <| or mc mf )
+    , ( 0, 0, 9, or lw <| or sw <| or mc mf )
+      -- Inner loop, clockwise.
     , ( 1, 0, -1, or mc <| or sw <| or mf nw )
     , ( 2, 0, -1, or mc <| or nw <| or mf rw )
-    , ( 2, 0, 0, or mc <| or rw <| or mf lw )
+    , ( 2, 0, 0, or mc <| or mf lw )
     , ( 2, 0, 1, or mc <| or sw <| or mf rw )
     , ( 1, 0, 1, or mc <| or sw <| or mf nw )
     , ( -1, 0, 1, or mc <| or sw <| or mf nw )
@@ -252,6 +277,73 @@ maze =
     , ( -2, 0, 0, or mc <| or rw <| or mf lw )
     , ( -2, 0, -1, or mc <| or nw <| or mf lw )
     , ( -1, 0, -1, or mc <| or sw <| or mf nw )
+      -- Room.
+    , ( 4, 0, -9, rf )
+    , ( 5, 0, -9, rf )
+    , ( 6, 0, -9, rf )
+    , ( 7, 0, -9, rf )
+    , ( 8, 0, -9, rf )
+    , ( 9, 0, -9, rf )
+    , ( 4, 0, -8, rf )
+    , ( 5, 0, -8, rf )
+    , ( 6, 0, -8, rf )
+    , ( 7, 0, -8, rf )
+    , ( 8, 0, -8, rf )
+    , ( 9, 0, -8, rf )
+    , ( 4, 0, -7, rf )
+    , ( 5, 0, -7, rf )
+    , ( 6, 0, -7, rf )
+    , ( 7, 0, -7, rf )
+    , ( 8, 0, -7, rf )
+    , ( 9, 0, -7, rf )
+    , ( 4, 0, -6, rf )
+    , ( 5, 0, -6, rf )
+    , ( 6, 0, -6, rf )
+    , ( 7, 0, -6, rf )
+    , ( 8, 0, -6, rf )
+    , ( 9, 0, -6, rf )
+    , ( 4, 0, -5, rf )
+    , ( 5, 0, -5, rf )
+    , ( 6, 0, -5, rf )
+    , ( 7, 0, -5, rf )
+    , ( 8, 0, -5, rf )
+    , ( 9, 0, -5, rf )
+    , ( 4, 0, -4, rf )
+    , ( 5, 0, -4, rf )
+    , ( 6, 0, -4, rf )
+    , ( 7, 0, -4, rf )
+    , ( 8, 0, -4, rf )
+    , ( 9, 0, -4, rf )
+      -- Corridor going south from room.
+    , ( 7, 0, -3, or rw <| or lw <| or mf mc )
+    , ( 7, 0, -2, or rw <| or lw <| or mf mc )
+    , ( 7, 0, -1, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 0, or rw <| or mf mc )
+    , ( 7, 0, 1, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 2, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 3, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 4, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 5, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 6, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 7, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 8, or rw <| or lw <| or mf mc )
+    , ( 7, 0, 9, or rw <| or sw <| or mf mc )
+      -- Connection between inner loop and the ^ corridor.
+    , ( 3, 0, 0, or sw <| or nw <| or mf mc )
+    , ( 4, 0, 0, or sw <| or nw <| or mf mc )
+    , ( 5, 0, 0, or sw <| or nw <| or mf mc )
+    , ( 6, 0, 0, or sw <| or nw <| or mf mc )
+      -- Southmost connection of the corridors.
+    , ( 1, 0, 9, or sw <| or nw <| or mf mc )
+    , ( 2, 0, 9, or sw <| or nw <| or mf mc )
+    , ( 3, 0, 9, or sw <| or nw <| or mf mc )
+    , ( 4, 0, 9, or sw <| or nw <| or mf mc )
+    , ( 5, 0, 9, or sw <| or nw <| or mf mc )
+    , ( 6, 0, 9, or sw <| or nw <| or mf mc )
+      -- Northmost connection of corridor and room.
+    , ( 1, 0, -9, or sw <| or nw <| or mf mc )
+    , ( 2, 0, -9, or sw <| or nw <| or mf mc )
+    , ( 3, 0, -9, or sw <| or nw <| or mf mc )
     ]
 
 
@@ -300,3 +392,11 @@ mazeCeiling =
         List.concat <|
             List.map (uncurry3 ceilingAt) <|
                 filterClass mc maze
+
+
+roomFloor : Drawable Vertex
+roomFloor =
+    Triangle <|
+        List.concat <|
+            List.map (uncurry3 floorAt) <|
+                filterClass rf maze

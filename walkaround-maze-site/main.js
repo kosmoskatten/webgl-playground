@@ -12871,80 +12871,344 @@ var _kosmoskatten$webgl_playground$Maze$lw = 2;
 var _kosmoskatten$webgl_playground$Maze$mf = 1;
 var _kosmoskatten$webgl_playground$Maze$maze = {
 	ctor: '::',
-	_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+	_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+		_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -3, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+			_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -2, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
+				_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+					_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+						_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+							_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -3, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 2, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
+								_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -2, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 3, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+									_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
 									_1: {
 										ctor: '::',
-										_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 4, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+										_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
 										_1: {
 											ctor: '::',
-											_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 5, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+											_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
 											_1: {
 												ctor: '::',
-												_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 6, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+												_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 2, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
 												_1: {
 													ctor: '::',
-													_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 7, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+													_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 3, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 													_1: {
 														ctor: '::',
-														_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 8, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+														_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 4, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 														_1: {
 															ctor: '::',
-															_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf},
+															_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 5, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 															_1: {
 																ctor: '::',
-																_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
+																_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 6, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 																_1: {
 																	ctor: '::',
-																	_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
+																	_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 7, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 																	_1: {
 																		ctor: '::',
-																		_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																		_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 8, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 																		_1: {
 																			ctor: '::',
-																			_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
+																			_0: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mc | _kosmoskatten$webgl_playground$Maze$mf))},
 																			_1: {
 																				ctor: '::',
-																				_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
+																				_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
 																				_1: {
 																					ctor: '::',
-																					_0: {ctor: '_Tuple4', _0: -1, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
+																					_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
 																					_1: {
 																						ctor: '::',
-																						_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																						_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw)},
 																						_1: {
 																							ctor: '::',
-																							_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																							_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$rw))},
 																							_1: {
 																								ctor: '::',
-																								_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																								_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
 																								_1: {
 																									ctor: '::',
-																									_0: {ctor: '_Tuple4', _0: -1, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
-																									_1: {ctor: '[]'}
+																									_0: {ctor: '_Tuple4', _0: -1, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
+																									_1: {
+																										ctor: '::',
+																										_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																										_1: {
+																											ctor: '::',
+																											_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																											_1: {
+																												ctor: '::',
+																												_0: {ctor: '_Tuple4', _0: -2, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$lw))},
+																												_1: {
+																													ctor: '::',
+																													_0: {ctor: '_Tuple4', _0: -1, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$mc | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$nw))},
+																													_1: {
+																														ctor: '::',
+																														_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																														_1: {
+																															ctor: '::',
+																															_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																															_1: {
+																																ctor: '::',
+																																_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																	_1: {
+																																		ctor: '::',
+																																		_0: {ctor: '_Tuple4', _0: 8, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: {ctor: '_Tuple4', _0: 9, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																			_1: {
+																																				ctor: '::',
+																																				_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																				_1: {
+																																					ctor: '::',
+																																					_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																					_1: {
+																																						ctor: '::',
+																																						_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																						_1: {
+																																							ctor: '::',
+																																							_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																							_1: {
+																																								ctor: '::',
+																																								_0: {ctor: '_Tuple4', _0: 8, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																								_1: {
+																																									ctor: '::',
+																																									_0: {ctor: '_Tuple4', _0: 9, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																									_1: {
+																																										ctor: '::',
+																																										_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																										_1: {
+																																											ctor: '::',
+																																											_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																											_1: {
+																																												ctor: '::',
+																																												_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																												_1: {
+																																													ctor: '::',
+																																													_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																													_1: {
+																																														ctor: '::',
+																																														_0: {ctor: '_Tuple4', _0: 8, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																														_1: {
+																																															ctor: '::',
+																																															_0: {ctor: '_Tuple4', _0: 9, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																															_1: {
+																																																ctor: '::',
+																																																_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																	_1: {
+																																																		ctor: '::',
+																																																		_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																		_1: {
+																																																			ctor: '::',
+																																																			_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: {ctor: '_Tuple4', _0: 8, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																				_1: {
+																																																					ctor: '::',
+																																																					_0: {ctor: '_Tuple4', _0: 9, _1: 0, _2: -6, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																					_1: {
+																																																						ctor: '::',
+																																																						_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																						_1: {
+																																																							ctor: '::',
+																																																							_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																							_1: {
+																																																								ctor: '::',
+																																																								_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																								_1: {
+																																																									ctor: '::',
+																																																									_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																									_1: {
+																																																										ctor: '::',
+																																																										_0: {ctor: '_Tuple4', _0: 8, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																										_1: {
+																																																											ctor: '::',
+																																																											_0: {ctor: '_Tuple4', _0: 9, _1: 0, _2: -5, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																											_1: {
+																																																												ctor: '::',
+																																																												_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																												_1: {
+																																																													ctor: '::',
+																																																													_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																													_1: {
+																																																														ctor: '::',
+																																																														_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																														_1: {
+																																																															ctor: '::',
+																																																															_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																															_1: {
+																																																																ctor: '::',
+																																																																_0: {ctor: '_Tuple4', _0: 8, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																																_1: {
+																																																																	ctor: '::',
+																																																																	_0: {ctor: '_Tuple4', _0: 9, _1: 0, _2: -4, _3: _kosmoskatten$webgl_playground$Maze$rf},
+																																																																	_1: {
+																																																																		ctor: '::',
+																																																																		_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -3, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																		_1: {
+																																																																			ctor: '::',
+																																																																			_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -2, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																			_1: {
+																																																																				ctor: '::',
+																																																																				_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																				_1: {
+																																																																					ctor: '::',
+																																																																					_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc)},
+																																																																					_1: {
+																																																																						ctor: '::',
+																																																																						_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																						_1: {
+																																																																							ctor: '::',
+																																																																							_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 2, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																							_1: {
+																																																																								ctor: '::',
+																																																																								_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 3, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																								_1: {
+																																																																									ctor: '::',
+																																																																									_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 4, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																									_1: {
+																																																																										ctor: '::',
+																																																																										_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 5, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																										_1: {
+																																																																											ctor: '::',
+																																																																											_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 6, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																											_1: {
+																																																																												ctor: '::',
+																																																																												_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 7, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																												_1: {
+																																																																													ctor: '::',
+																																																																													_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 8, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$lw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																													_1: {
+																																																																														ctor: '::',
+																																																																														_0: {ctor: '_Tuple4', _0: 7, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$rw | (_kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																														_1: {
+																																																																															ctor: '::',
+																																																																															_0: {ctor: '_Tuple4', _0: 3, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																															_1: {
+																																																																																ctor: '::',
+																																																																																_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																_1: {
+																																																																																	ctor: '::',
+																																																																																	_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																	_1: {
+																																																																																		ctor: '::',
+																																																																																		_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: 0, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																		_1: {
+																																																																																			ctor: '::',
+																																																																																			_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																			_1: {
+																																																																																				ctor: '::',
+																																																																																				_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																				_1: {
+																																																																																					ctor: '::',
+																																																																																					_0: {ctor: '_Tuple4', _0: 3, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																					_1: {
+																																																																																						ctor: '::',
+																																																																																						_0: {ctor: '_Tuple4', _0: 4, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																						_1: {
+																																																																																							ctor: '::',
+																																																																																							_0: {ctor: '_Tuple4', _0: 5, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																							_1: {
+																																																																																								ctor: '::',
+																																																																																								_0: {ctor: '_Tuple4', _0: 6, _1: 0, _2: 9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																								_1: {
+																																																																																									ctor: '::',
+																																																																																									_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																									_1: {
+																																																																																										ctor: '::',
+																																																																																										_0: {ctor: '_Tuple4', _0: 2, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																										_1: {
+																																																																																											ctor: '::',
+																																																																																											_0: {ctor: '_Tuple4', _0: 3, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
+																																																																																											_1: {ctor: '[]'}
+																																																																																										}
+																																																																																									}
+																																																																																								}
+																																																																																							}
+																																																																																						}
+																																																																																					}
+																																																																																				}
+																																																																																			}
+																																																																																		}
+																																																																																	}
+																																																																																}
+																																																																															}
+																																																																														}
+																																																																													}
+																																																																												}
+																																																																											}
+																																																																										}
+																																																																									}
+																																																																								}
+																																																																							}
+																																																																						}
+																																																																					}
+																																																																				}
+																																																																			}
+																																																																		}
+																																																																	}
+																																																																}
+																																																															}
+																																																														}
+																																																													}
+																																																												}
+																																																											}
+																																																										}
+																																																									}
+																																																								}
+																																																							}
+																																																						}
+																																																					}
+																																																				}
+																																																			}
+																																																		}
+																																																	}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
 																								}
 																							}
 																						}
@@ -13006,6 +13270,12 @@ var _kosmoskatten$webgl_playground$Maze$mazeCeiling = _elm_community$webgl$WebGL
 			_elm_lang$core$List$map,
 			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$ceilingAt),
 			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$mc, _kosmoskatten$webgl_playground$Maze$maze))));
+var _kosmoskatten$webgl_playground$Maze$roomFloor = _elm_community$webgl$WebGL$Triangle(
+	_elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$floorAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$rf, _kosmoskatten$webgl_playground$Maze$maze))));
 var _kosmoskatten$webgl_playground$Maze$mazeFloor = _elm_community$webgl$WebGL$Triangle(
 	_elm_lang$core$List$concat(
 		A2(
@@ -13061,13 +13331,22 @@ var _kosmoskatten$webgl_playground$Maze$render = F5(
 						_kosmoskatten$webgl_playground$Square$fragmentShader,
 						maze.mazeWalls,
 						{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeWallTexture}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A4(
+							_elm_community$webgl$WebGL$render,
+							_kosmoskatten$webgl_playground$Square$vertexShader,
+							_kosmoskatten$webgl_playground$Square$fragmentShader,
+							maze.roomFloor,
+							{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.roomFloorTexture}),
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		};
 	});
-var _kosmoskatten$webgl_playground$Maze$init = F3(
-	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture) {
+var _kosmoskatten$webgl_playground$Maze$init = F4(
+	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture) {
 		return {
 			mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor,
 			mazeFloorTexture: mazeFloorTexture,
@@ -13075,6 +13354,8 @@ var _kosmoskatten$webgl_playground$Maze$init = F3(
 			mazeWallTexture: mazeWallTexture,
 			mazeCeiling: _kosmoskatten$webgl_playground$Maze$mazeCeiling,
 			mazeCeilingTexture: mazeCeilingTexture,
+			roomFloor: _kosmoskatten$webgl_playground$Maze$roomFloor,
+			roomFloorTexture: roomFloorTexture,
 			ambientLightning: true,
 			ambientStrength: 5.0e-2,
 			ambientColor: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
@@ -13091,7 +13372,11 @@ var _kosmoskatten$webgl_playground$Maze$Maze = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, ambientLightning: g, ambientStrength: h, ambientColor: i, diffuseLightning: j};
+										return function (k) {
+											return function (l) {
+												return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, roomFloor: g, roomFloorTexture: h, ambientLightning: i, ambientStrength: j, ambientColor: k, diffuseLightning: l};
+											};
+										};
 									};
 								};
 							};
@@ -13205,14 +13490,14 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'TexturesLoaded':
-				if ((((_p0._0.ctor === '::') && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '[]')) {
+				if (((((_p0._0.ctor === '::') && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1.ctor === '[]')) {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
 								maze: _elm_lang$core$Maybe$Just(
-									A3(_kosmoskatten$webgl_playground$Maze$init, _p0._0._0, _p0._0._1._0, _p0._0._1._1._0))
+									A4(_kosmoskatten$webgl_playground$Maze$init, _p0._0._0, _p0._0._1._0, _p0._0._1._1._0, _p0._0._1._1._1._0))
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -13450,7 +13735,11 @@ var _kosmoskatten$webgl_playground$Main$init = {
 				_1: {
 					ctor: '::',
 					_0: 'textures/maze-ceiling.jpg',
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: 'textures/room-floor.jpg',
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		})

@@ -57,6 +57,7 @@ init =
         [ "textures/maze-floor.png"
         , "textures/maze-wall.jpg"
         , "textures/maze-ceiling.jpg"
+        , "textures/room-floor.jpg"
         ]
     )
 
@@ -177,13 +178,14 @@ update msg model =
             , Cmd.none
             )
 
-        TexturesLoaded [ mazeFloorTexture, mazeWallTexture, mazeCeilingTexture ] ->
+        TexturesLoaded [ mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture ] ->
             ( { model
                 | maze =
                     Just
                         (Maze.init mazeFloorTexture
                             mazeWallTexture
                             mazeCeilingTexture
+                            roomFloorTexture
                         )
               }
             , Cmd.none
