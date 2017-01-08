@@ -34,6 +34,8 @@ type alias Maze =
     , mazeCeilingTexture : Texture
     , roomFloor : Drawable Vertex
     , roomFloorTexture : Texture
+    , roomCeiling : Drawable Vertex
+    , roomCeilingTexture : Texture
     , outdoorWalls : Drawable Vertex
     , outdoorWallTexture : Texture
     , outdoorGrass : Drawable Vertex
@@ -49,8 +51,8 @@ type alias Class =
     Int
 
 
-init : Texture -> Texture -> Texture -> Texture -> Texture -> Texture -> Maze
-init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture outdoorWallTexture outdoorGrassTexture =
+init : Texture -> Texture -> Texture -> Texture -> Texture -> Texture -> Texture -> Maze
+init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture roomCeilingTexture outdoorWallTexture outdoorGrassTexture =
     { mazeFloor = mazeFloor
     , mazeFloorTexture = mazeFloorTexture
     , mazeWalls = mazeWalls
@@ -59,6 +61,8 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture outdoo
     , mazeCeilingTexture = mazeCeilingTexture
     , roomFloor = roomFloor
     , roomFloorTexture = roomFloorTexture
+    , roomCeiling = roomCeiling
+    , roomCeilingTexture = roomCeilingTexture
     , outdoorWalls = outdoorWalls
     , outdoorWallTexture = outdoorWallTexture
     , outdoorGrass = outdoorGrass
@@ -109,7 +113,7 @@ render proj view walkerPos walkerColor maze =
             , lightColor = walkerColor
             , texture = maze.mazeCeilingTexture
             }
-          -- Render the maze walls.
+          -- Render the maze/room walls.
         , WebGL.render Square.vertexShader
             Square.fragmentShader
             maze.mazeWalls
@@ -136,6 +140,20 @@ render proj view walkerPos walkerColor maze =
             , lightPosition = walkerPos
             , lightColor = walkerColor
             , texture = maze.roomFloorTexture
+            }
+          -- Render the room ceiling.
+        , WebGL.render Square.vertexShader
+            Square.fragmentShader
+            maze.roomCeiling
+            { mvp = mvp
+            , model = model
+            , ambientLightning = maze.ambientLightning
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
+            , diffuseLightning = maze.diffuseLightning
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
+            , texture = maze.roomCeilingTexture
             }
           -- Render the outdoor walls. No lightning!
         , WebGL.render Square.vertexShader
@@ -272,6 +290,11 @@ rf =
     64
 
 
+rc : Int
+rc =
+    128
+
+
 olw : Int
 olw =
     512
@@ -335,42 +358,42 @@ maze =
     , ( -2, 0, -1, or mc <| or nw <| or mf lw )
     , ( -1, 0, -1, or mc <| or sw <| or mf nw )
       -- Room.
-    , ( 4, 0, -9, rf )
-    , ( 5, 0, -9, rf )
-    , ( 6, 0, -9, rf )
-    , ( 7, 0, -9, rf )
-    , ( 8, 0, -9, rf )
-    , ( 9, 0, -9, rf )
-    , ( 4, 0, -8, rf )
-    , ( 5, 0, -8, rf )
-    , ( 6, 0, -8, rf )
-    , ( 7, 0, -8, rf )
-    , ( 8, 0, -8, rf )
-    , ( 9, 0, -8, rf )
-    , ( 4, 0, -7, rf )
-    , ( 5, 0, -7, rf )
-    , ( 6, 0, -7, rf )
-    , ( 7, 0, -7, rf )
-    , ( 8, 0, -7, rf )
-    , ( 9, 0, -7, rf )
-    , ( 4, 0, -6, rf )
-    , ( 5, 0, -6, rf )
-    , ( 6, 0, -6, rf )
-    , ( 7, 0, -6, rf )
-    , ( 8, 0, -6, rf )
-    , ( 9, 0, -6, rf )
-    , ( 4, 0, -5, rf )
-    , ( 5, 0, -5, rf )
-    , ( 6, 0, -5, rf )
-    , ( 7, 0, -5, rf )
-    , ( 8, 0, -5, rf )
-    , ( 9, 0, -5, rf )
-    , ( 4, 0, -4, rf )
-    , ( 5, 0, -4, rf )
-    , ( 6, 0, -4, rf )
-    , ( 7, 0, -4, rf )
-    , ( 8, 0, -4, rf )
-    , ( 9, 0, -4, rf )
+    , ( 4, 0, -9, or rc <| or rf nw )
+    , ( 5, 0, -9, or rc <| or rf nw )
+    , ( 6, 0, -9, or rc <| or rf nw )
+    , ( 7, 0, -9, or rc <| or rf nw )
+    , ( 8, 0, -9, or rc <| or rf nw )
+    , ( 9, 0, -9, or rc <| or rw <| or rf nw )
+    , ( 4, 0, -8, or rc <| or rf lw )
+    , ( 5, 0, -8, or rf rc )
+    , ( 6, 0, -8, or rf rc )
+    , ( 7, 0, -8, or rf rc )
+    , ( 8, 0, -8, or rc rf )
+    , ( 9, 0, -8, or rc <| or rf rw )
+    , ( 4, 0, -7, or rc <| or rf lw )
+    , ( 5, 0, -7, or rf rc )
+    , ( 6, 0, -7, or rf rc )
+    , ( 7, 0, -7, or rf rc )
+    , ( 8, 0, -7, or rf rc )
+    , ( 9, 0, -7, or rc <| or rf rw )
+    , ( 4, 0, -6, or rc <| or rf lw )
+    , ( 5, 0, -6, or rf rc )
+    , ( 6, 0, -6, or rf rc )
+    , ( 7, 0, -6, or rf rc )
+    , ( 8, 0, -6, or rf rc )
+    , ( 9, 0, -6, or rc <| or rf rw )
+    , ( 4, 0, -5, or rc <| or rf lw )
+    , ( 5, 0, -5, or rf rc )
+    , ( 6, 0, -5, or rf rc )
+    , ( 7, 0, -5, or rf rc )
+    , ( 8, 0, -5, or rf rc )
+    , ( 9, 0, -5, or rc <| or rf rw )
+    , ( 4, 0, -4, or rc <| or sw <| or rf lw )
+    , ( 5, 0, -4, or rc <| or rf sw )
+    , ( 6, 0, -4, or rc <| or rf sw )
+    , ( 7, 0, -4, or rf rc )
+    , ( 8, 0, -4, or rc <| or rf sw )
+    , ( 9, 0, -4, or rc <| or sw <| or rf rw )
       -- Corridor going south from room.
     , ( 7, 0, -3, or rw <| or lw <| or mf mc )
     , ( 7, 0, -2, or rw <| or lw <| or mf mc )
@@ -529,6 +552,14 @@ roomFloor =
         List.concat <|
             List.map (uncurry3 floorAt) <|
                 filterClass rf maze
+
+
+roomCeiling : Drawable Vertex
+roomCeiling =
+    Triangle <|
+        List.concat <|
+            List.map (uncurry3 ceilingAt) <|
+                filterClass rc maze
 
 
 outdoorWalls : Drawable Vertex

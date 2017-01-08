@@ -48,7 +48,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , walker = Walker.init (vec3 -15 1.3 0) -90
+      , walker = Walker.init (vec3 -7 1.3 -1) -110
       , maze = Nothing
       , fps = 0
       , errStr = Nothing
@@ -58,6 +58,7 @@ init =
         , "textures/maze-wall.jpg"
         , "textures/maze-ceiling.jpg"
         , "textures/room-floor.jpg"
+        , "textures/room-ceiling.jpg"
         , "textures/outdoor-wall.jpg"
         , "textures/outdoor-grass.jpg"
         ]
@@ -180,7 +181,7 @@ update msg model =
             , Cmd.none
             )
 
-        TexturesLoaded [ mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture, outdoorWallTexture, outdoorGrassTexture ] ->
+        TexturesLoaded [ mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture, roomCeilingTexture, outdoorWallTexture, outdoorGrassTexture ] ->
             ( { model
                 | maze =
                     Just
@@ -188,6 +189,7 @@ update msg model =
                             mazeWallTexture
                             mazeCeilingTexture
                             roomFloorTexture
+                            roomCeilingTexture
                             outdoorWallTexture
                             outdoorGrassTexture
                         )
