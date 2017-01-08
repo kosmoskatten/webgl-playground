@@ -34,6 +34,8 @@ type alias Maze =
     , mazeCeilingTexture : Texture
     , roomFloor : Drawable Vertex
     , roomFloorTexture : Texture
+    , outdoorWalls : Drawable Vertex
+    , outdoorWallTexture : Texture
     , ambientLightning : Bool
     , ambientStrength : Float
     , ambientColor : Vec3
@@ -45,8 +47,8 @@ type alias Class =
     Int
 
 
-init : Texture -> Texture -> Texture -> Texture -> Maze
-init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture =
+init : Texture -> Texture -> Texture -> Texture -> Texture -> Maze
+init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture outdoorWallTexture =
     { mazeFloor = mazeFloor
     , mazeFloorTexture = mazeFloorTexture
     , mazeWalls = mazeWalls
@@ -55,6 +57,8 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture =
     , mazeCeilingTexture = mazeCeilingTexture
     , roomFloor = roomFloor
     , roomFloorTexture = roomFloorTexture
+    , outdoorWalls = outdoorWalls
+    , outdoorWallTexture = outdoorWallTexture
     , ambientLightning = True
     , ambientStrength = 0.05
     , ambientColor = vec3 1 1 1
@@ -129,6 +133,20 @@ render proj view walkerPos walkerColor maze =
             , lightColor = walkerColor
             , texture = maze.roomFloorTexture
             }
+          -- Render the outdoor walls. No lightning!
+        , WebGL.render Square.vertexShader
+            Square.fragmentShader
+            maze.outdoorWalls
+            { mvp = mvp
+            , model = model
+            , ambientLightning = False
+            , ambientStrength = maze.ambientStrength
+            , ambientColor = maze.ambientColor
+            , diffuseLightning = False
+            , lightPosition = walkerPos
+            , lightColor = walkerColor
+            , texture = maze.outdoorWallTexture
+            }
         ]
 
 
@@ -173,29 +191,30 @@ setDiffuseLightning val maze =
 
    M = maze area
    R = room area
+   W = Outdoor wall
 
          -10  -9  -8  -7  -6  -5  -4  -3  -2  -1   0   1   2   3   4   5   6   7   8   9  10
-      -10  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-      - 9  0   0   0   0   0   0   0   0   0   0   M   M   M   M   R   R   R   R   R   R   0
-      - 8  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
-      - 7  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
-      - 6  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
-      - 5  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
-      - 4  0   0   0   0   0   0   0   0   0   0   M   0   0   0   R   R   R   R   R   R   0
-      - 3  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-      - 2  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-      - 1  0   0   0   0   0   0   0   0   M   M   M   M   M   0   0   0   0   M   0   0   0
+      -10  0   0   0   0   0   0   0   W   0   0   0   0   0   0   0   0   0   0   0   0   0
+      - 9  0   0   0   0   0   0   0   W   0   0   M   M   M   M   R   R   R   R   R   R   0
+      - 8  0   0   0   0   0   0   0   W   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 7  0   0   0   0   0   0   0   W   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 6  0   0   0   0   0   0   0   W   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 5  0   0   0   0   0   0   0   W   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 4  0   0   0   0   0   0   0   W   0   0   M   0   0   0   R   R   R   R   R   R   0
+      - 3  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+      - 2  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+      - 1  0   0   0   0   0   0   0   W   M   M   M   M   M   0   0   0   0   M   0   0   0
       +-0  0   0   0   0   0   0   0   0   M   0  (M)  0   M   M   M   M   M   M   0   0   0
-        1  0   0   0   0   0   0   0   0   M   M   M   M   M   0   0   0   0   M   0   0   0
-        2  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        3  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        4  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        5  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        6  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        7  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        8  0   0   0   0   0   0   0   0   0   0   M   0   0   0   0   0   0   M   0   0   0
-        9  0   0   0   0   0   0   0   0   0   0   M   M   M   M   M   M   M   M   0   0   0
-       10  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+        1  0   0   0   0   0   0   0   W   M   M   M   M   M   0   0   0   0   M   0   0   0
+        2  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        3  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        4  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        5  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        6  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        7  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        8  0   0   0   0   0   0   0   W   0   0   M   0   0   0   0   0   0   M   0   0   0
+        9  0   0   0   0   0   0   0   W   0   0   M   M   M   M   M   M   M   M   0   0   0
+       10  0   0   0   0   0   0   0   W   0   0   0   0   0   0   0   0   0   0   0   0   0
 
 -}
 
@@ -233,6 +252,26 @@ mc =
 rf : Int
 rf =
     64
+
+
+olw : Int
+olw =
+    512
+
+
+osw : Int
+osw =
+    1024
+
+
+onw : Int
+onw =
+    2048
+
+
+orw : Int
+orw =
+    4096
 
 
 filterClass :
@@ -344,6 +383,27 @@ maze =
     , ( 1, 0, -9, or sw <| or nw <| or mf mc )
     , ( 2, 0, -9, or sw <| or nw <| or mf mc )
     , ( 3, 0, -9, or sw <| or nw <| or mf mc )
+      -- Outdoor walls.
+    , ( -3, 0, -10, olw )
+    , ( -3, 0, -9, olw )
+    , ( -3, 0, -8, olw )
+    , ( -3, 0, -7, olw )
+      --, ( -3, 0, -6, olw )
+      --, ( -3, 0, -5, olw )
+      --, ( -3, 0, -4, olw )
+      --, ( -3, 0, -3, olw )
+      --, ( -3, 0, -2, olw )
+    , ( -3, 0, -1, or osw olw )
+    , ( -3, 0, 1, or onw olw )
+      --, ( -3, 0, 2, olw )
+      --, ( -3, 0, 3, olw )
+      --, ( -3, 0, 4, olw )
+      --, ( -3, 0, 5, olw )
+      --, ( -3, 0, 6, olw )
+      --, ( -3, 0, 7, olw )
+      --, ( -3, 0, 8, olw )
+      --, ( -3, 0, 9, olw )
+      --, ( -3, 0, 10, olw )
     ]
 
 
@@ -400,3 +460,29 @@ roomFloor =
         List.concat <|
             List.map (uncurry3 floorAt) <|
                 filterClass rf maze
+
+
+outdoorWalls : Drawable Vertex
+outdoorWalls =
+    let
+        leftWalls =
+            List.concat <|
+                List.map (uncurry3 leftWallAt) <|
+                    filterClass olw maze
+
+        rightWalls =
+            List.concat <|
+                List.map (uncurry3 rightWallAt) <|
+                    filterClass orw maze
+
+        northWalls =
+            List.concat <|
+                List.map (uncurry3 northWallAt) <|
+                    filterClass onw maze
+
+        southWalls =
+            List.concat <|
+                List.map (uncurry3 southWallAt) <|
+                    filterClass osw maze
+    in
+        Triangle <| leftWalls ++ rightWalls ++ northWalls ++ southWalls

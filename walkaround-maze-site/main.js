@@ -12862,6 +12862,10 @@ var _kosmoskatten$webgl_playground$Maze$filterClass = F2(
 				},
 				xs));
 	});
+var _kosmoskatten$webgl_playground$Maze$orw = 4096;
+var _kosmoskatten$webgl_playground$Maze$onw = 2048;
+var _kosmoskatten$webgl_playground$Maze$osw = 1024;
+var _kosmoskatten$webgl_playground$Maze$olw = 512;
 var _kosmoskatten$webgl_playground$Maze$rf = 64;
 var _kosmoskatten$webgl_playground$Maze$mc = 32;
 var _kosmoskatten$webgl_playground$Maze$sw = 16;
@@ -13142,7 +13146,31 @@ var _kosmoskatten$webgl_playground$Maze$maze = {
 																																																																																										_1: {
 																																																																																											ctor: '::',
 																																																																																											_0: {ctor: '_Tuple4', _0: 3, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$sw | (_kosmoskatten$webgl_playground$Maze$nw | (_kosmoskatten$webgl_playground$Maze$mf | _kosmoskatten$webgl_playground$Maze$mc))},
-																																																																																											_1: {ctor: '[]'}
+																																																																																											_1: {
+																																																																																												ctor: '::',
+																																																																																												_0: {ctor: '_Tuple4', _0: -3, _1: 0, _2: -10, _3: _kosmoskatten$webgl_playground$Maze$olw},
+																																																																																												_1: {
+																																																																																													ctor: '::',
+																																																																																													_0: {ctor: '_Tuple4', _0: -3, _1: 0, _2: -9, _3: _kosmoskatten$webgl_playground$Maze$olw},
+																																																																																													_1: {
+																																																																																														ctor: '::',
+																																																																																														_0: {ctor: '_Tuple4', _0: -3, _1: 0, _2: -8, _3: _kosmoskatten$webgl_playground$Maze$olw},
+																																																																																														_1: {
+																																																																																															ctor: '::',
+																																																																																															_0: {ctor: '_Tuple4', _0: -3, _1: 0, _2: -7, _3: _kosmoskatten$webgl_playground$Maze$olw},
+																																																																																															_1: {
+																																																																																																ctor: '::',
+																																																																																																_0: {ctor: '_Tuple4', _0: -3, _1: 0, _2: -1, _3: _kosmoskatten$webgl_playground$Maze$osw | _kosmoskatten$webgl_playground$Maze$olw},
+																																																																																																_1: {
+																																																																																																	ctor: '::',
+																																																																																																	_0: {ctor: '_Tuple4', _0: -3, _1: 0, _2: 1, _3: _kosmoskatten$webgl_playground$Maze$onw | _kosmoskatten$webgl_playground$Maze$olw},
+																																																																																																	_1: {ctor: '[]'}
+																																																																																																}
+																																																																																															}
+																																																																																														}
+																																																																																													}
+																																																																																												}
+																																																																																											}
 																																																																																										}
 																																																																																									}
 																																																																																								}
@@ -13276,6 +13304,36 @@ var _kosmoskatten$webgl_playground$Maze$roomFloor = _elm_community$webgl$WebGL$T
 			_elm_lang$core$List$map,
 			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$floorAt),
 			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$rf, _kosmoskatten$webgl_playground$Maze$maze))));
+var _kosmoskatten$webgl_playground$Maze$outdoorWalls = function () {
+	var southWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$southWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$osw, _kosmoskatten$webgl_playground$Maze$maze)));
+	var northWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$northWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$onw, _kosmoskatten$webgl_playground$Maze$maze)));
+	var rightWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$rightWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$orw, _kosmoskatten$webgl_playground$Maze$maze)));
+	var leftWalls = _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_kosmoskatten$webgl_playground$Maze$uncurry3(_kosmoskatten$webgl_playground$Square$leftWallAt),
+			A2(_kosmoskatten$webgl_playground$Maze$filterClass, _kosmoskatten$webgl_playground$Maze$olw, _kosmoskatten$webgl_playground$Maze$maze)));
+	return _elm_community$webgl$WebGL$Triangle(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			leftWalls,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				rightWalls,
+				A2(_elm_lang$core$Basics_ops['++'], northWalls, southWalls))));
+}();
 var _kosmoskatten$webgl_playground$Maze$mazeFloor = _elm_community$webgl$WebGL$Triangle(
 	_elm_lang$core$List$concat(
 		A2(
@@ -13339,14 +13397,23 @@ var _kosmoskatten$webgl_playground$Maze$render = F5(
 							_kosmoskatten$webgl_playground$Square$fragmentShader,
 							maze.roomFloor,
 							{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.roomFloorTexture}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A4(
+								_elm_community$webgl$WebGL$render,
+								_kosmoskatten$webgl_playground$Square$vertexShader,
+								_kosmoskatten$webgl_playground$Square$fragmentShader,
+								maze.outdoorWalls,
+								{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.outdoorWallTexture}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
 		};
 	});
-var _kosmoskatten$webgl_playground$Maze$init = F4(
-	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture) {
+var _kosmoskatten$webgl_playground$Maze$init = F5(
+	function (mazeFloorTexture, mazeWallTexture, mazeCeilingTexture, roomFloorTexture, outdoorWallTexture) {
 		return {
 			mazeFloor: _kosmoskatten$webgl_playground$Maze$mazeFloor,
 			mazeFloorTexture: mazeFloorTexture,
@@ -13356,6 +13423,8 @@ var _kosmoskatten$webgl_playground$Maze$init = F4(
 			mazeCeilingTexture: mazeCeilingTexture,
 			roomFloor: _kosmoskatten$webgl_playground$Maze$roomFloor,
 			roomFloorTexture: roomFloorTexture,
+			outdoorWalls: _kosmoskatten$webgl_playground$Maze$outdoorWalls,
+			outdoorWallTexture: outdoorWallTexture,
 			ambientLightning: true,
 			ambientStrength: 5.0e-2,
 			ambientColor: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 1, 1),
@@ -13374,7 +13443,11 @@ var _kosmoskatten$webgl_playground$Maze$Maze = function (a) {
 									return function (j) {
 										return function (k) {
 											return function (l) {
-												return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, roomFloor: g, roomFloorTexture: h, ambientLightning: i, ambientStrength: j, ambientColor: k, diffuseLightning: l};
+												return function (m) {
+													return function (n) {
+														return {mazeFloor: a, mazeFloorTexture: b, mazeWalls: c, mazeWallTexture: d, mazeCeiling: e, mazeCeilingTexture: f, roomFloor: g, roomFloorTexture: h, outdoorWalls: i, outdoorWallTexture: j, ambientLightning: k, ambientStrength: l, ambientColor: m, diffuseLightning: n};
+													};
+												};
 											};
 										};
 									};
@@ -13490,14 +13563,14 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'TexturesLoaded':
-				if (((((_p0._0.ctor === '::') && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1.ctor === '[]')) {
+				if ((((((_p0._0.ctor === '::') && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1.ctor === '::')) && (_p0._0._1._1._1._1._1.ctor === '[]')) {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
 								maze: _elm_lang$core$Maybe$Just(
-									A4(_kosmoskatten$webgl_playground$Maze$init, _p0._0._0, _p0._0._1._0, _p0._0._1._1._0, _p0._0._1._1._1._0))
+									A5(_kosmoskatten$webgl_playground$Maze$init, _p0._0._0, _p0._0._1._0, _p0._0._1._1._0, _p0._0._1._1._1._0, _p0._0._1._1._1._1._0))
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -13738,7 +13811,11 @@ var _kosmoskatten$webgl_playground$Main$init = {
 					_1: {
 						ctor: '::',
 						_0: 'textures/room-floor.jpg',
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: 'textures/outdoor-wall.jpg',
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
