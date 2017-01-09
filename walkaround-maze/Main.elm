@@ -165,6 +165,7 @@ update msg model =
         Animate t ->
             ( { model
                 | walker = Walker.animate t model.walker
+                , lightCube = LightCube.animate t model.lightCube
                 , fps = updateFps t model.fps
               }
             , Cmd.none

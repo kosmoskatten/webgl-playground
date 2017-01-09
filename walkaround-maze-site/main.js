@@ -12330,7 +12330,7 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
-var _kosmoskatten$webgl_playground$LightCube$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 color;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(color, 0.3);\n}\n'};
+var _kosmoskatten$webgl_playground$LightCube$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 color;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(color, 0.05);\n}\n'};
 var _kosmoskatten$webgl_playground$LightCube$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 mvp;\n\nvoid main (void)\n{\n    gl_Position = mvp * vec4(position, 1);\n}\n'};
 var _kosmoskatten$webgl_playground$LightCube$triangles = {
 	ctor: '::',
@@ -12441,9 +12441,29 @@ var _kosmoskatten$webgl_playground$LightCube$triangles = {
 		}
 	}
 };
+var _kosmoskatten$webgl_playground$LightCube$model = function (lightCube) {
+	var rotation = A2(
+		_elm_community$linear_algebra$Math_Matrix4$makeRotate,
+		lightCube.angle,
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
+	var newPoint = A2(
+		_elm_community$linear_algebra$Math_Matrix4$transform,
+		rotation,
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -0.4));
+	var translation = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(
+		A2(_elm_community$linear_algebra$Math_Vector3$add, lightCube.rotateAround, newPoint));
+	return A2(
+		_elm_community$linear_algebra$Math_Matrix4$mul,
+		translation,
+		A2(_elm_community$linear_algebra$Math_Matrix4$mul, rotation, lightCube.scale));
+};
 var _kosmoskatten$webgl_playground$LightCube$entity = F3(
 	function (proj, view, lightCube) {
-		var mvp = A2(_elm_community$linear_algebra$Math_Matrix4$mul, proj, view);
+		var modelMat = _kosmoskatten$webgl_playground$LightCube$model(lightCube);
+		var mvp = A2(
+			_elm_community$linear_algebra$Math_Matrix4$mul,
+			proj,
+			A2(_elm_community$linear_algebra$Math_Matrix4$mul, view, modelMat));
 		return {
 			ctor: '::',
 			_0: A5(
@@ -12464,9 +12484,17 @@ var _kosmoskatten$webgl_playground$LightCube$entity = F3(
 			_1: {ctor: '[]'}
 		};
 	});
-var _kosmoskatten$webgl_playground$LightCube$LightCube = F2(
-	function (a, b) {
-		return {mesh: a, color: b};
+var _kosmoskatten$webgl_playground$LightCube$animate = F2(
+	function (t, lightCube) {
+		return _elm_lang$core$Native_Utils.update(
+			lightCube,
+			{
+				angle: lightCube.angle + (_elm_lang$core$Time$inSeconds(t) * _elm_lang$core$Basics$pi)
+			});
+	});
+var _kosmoskatten$webgl_playground$LightCube$LightCube = F5(
+	function (a, b, c, d, e) {
+		return {mesh: a, color: b, scale: c, rotateAround: d, angle: e};
 	});
 var _kosmoskatten$webgl_playground$LightCube$Vertex = function (a) {
 	return {position: a};
@@ -12485,7 +12513,14 @@ var _kosmoskatten$webgl_playground$LightCube$lightCube = _elm_community$webgl$We
 		},
 		_kosmoskatten$webgl_playground$LightCube$triangles));
 var _kosmoskatten$webgl_playground$LightCube$init = function (color) {
-	return {mesh: _kosmoskatten$webgl_playground$LightCube$lightCube, color: color};
+	return {
+		mesh: _kosmoskatten$webgl_playground$LightCube$lightCube,
+		color: color,
+		scale: _elm_community$linear_algebra$Math_Matrix4$makeScale(
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 5.0e-2, 5.0e-2, 5.0e-2)),
+		rotateAround: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1.5, 0),
+		angle: 0
+	};
 };
 
 var _kosmoskatten$webgl_playground$Walker$candleLight = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 255 / 255, 147 / 255, 41 / 255);
@@ -14410,6 +14445,7 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 						model,
 						{
 							walker: A2(_kosmoskatten$webgl_playground$Walker$animate, _p1, model.walker),
+							lightCube: A2(_kosmoskatten$webgl_playground$LightCube$animate, _p1, model.lightCube),
 							fps: A2(_kosmoskatten$webgl_playground$Main$updateFps, _p1, model.fps)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
