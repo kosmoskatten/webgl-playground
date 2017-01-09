@@ -53,7 +53,7 @@ init =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , walker = Walker.init (vec3 -7 1.3 -1) -110
       , maze = Nothing
-      , lightCube = LightCube.init (vec3 1 1 0)
+      , lightCube = LightCube.init (vec3 0 1 0.5)
       , fps = 0
       , errStr = Nothing
       }

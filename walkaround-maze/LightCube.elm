@@ -2,7 +2,9 @@ module LightCube exposing (LightCube, init, entity)
 
 import Math.Matrix4 exposing (Mat4, mul)
 import Math.Vector3 exposing (Vec3, vec3)
-import WebGL exposing (Mesh, Entity, Shader, entity, triangles)
+import WebGL exposing (Mesh, Entity, Shader)
+import WebGL.Settings.Blend as Blend
+import WebGL.Settings.DepthTest as DepthTest
 
 
 type alias LightCube =
@@ -29,7 +31,8 @@ entity proj view lightCube =
         mvp =
             mul proj view
     in
-        [ WebGL.entity vertexShader
+        [ WebGL.entityWith [ DepthTest.default, Blend.add Blend.srcAlpha Blend.dstAlpha ]
+            vertexShader
             fragmentShader
             lightCube.mesh
             { mvp = mvp, color = lightCube.color }
@@ -88,6 +91,6 @@ uniform vec3 color;
 
 void main(void)
 {
-    gl_FragColor = vec4(color, 0.1);
+    gl_FragColor = vec4(color, 0.3);
 }
 |]
