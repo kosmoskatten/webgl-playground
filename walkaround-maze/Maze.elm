@@ -2,7 +2,7 @@ module Maze
     exposing
         ( Maze
         , init
-        , render
+        , entity
         , ambientLightning
         , setAmbientLightning
         , diffuseLightning
@@ -12,7 +12,7 @@ module Maze
 import Bitwise exposing (and, or)
 import Math.Matrix4 exposing (Mat4, mul, identity)
 import Math.Vector3 exposing (Vec3, vec3)
-import WebGL exposing (Drawable(..), Renderable, Texture)
+import WebGL exposing (Mesh, Entity, Texture)
 import Square
     exposing
         ( Vertex
@@ -26,19 +26,19 @@ import Square
 
 
 type alias Maze =
-    { mazeFloor : Drawable Vertex
+    { mazeFloor : Mesh Vertex
     , mazeFloorTexture : Texture
-    , mazeWalls : Drawable Vertex
+    , mazeWalls : Mesh Vertex
     , mazeWallTexture : Texture
-    , mazeCeiling : Drawable Vertex
+    , mazeCeiling : Mesh Vertex
     , mazeCeilingTexture : Texture
-    , roomFloor : Drawable Vertex
+    , roomFloor : Mesh Vertex
     , roomFloorTexture : Texture
-    , roomCeiling : Drawable Vertex
+    , roomCeiling : Mesh Vertex
     , roomCeilingTexture : Texture
-    , outdoorWalls : Drawable Vertex
+    , outdoorWalls : Mesh Vertex
     , outdoorWallTexture : Texture
-    , outdoorGrass : Drawable Vertex
+    , outdoorGrass : Mesh Vertex
     , outdoorGrassTexture : Texture
     , ambientLightning : Bool
     , ambientStrength : Float
@@ -74,8 +74,8 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture roomCe
     }
 
 
-render : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Maze -> List Renderable
-render proj view walkerPos walkerColor maze =
+entity : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Maze -> List Entity
+entity proj view walkerPos walkerColor maze =
     -- Nothing in the maze will be scaled, rotated nor moved. That's until
     -- there will be support for normal matrices in Matrix4.
     let
@@ -86,7 +86,7 @@ render proj view walkerPos walkerColor maze =
             mul proj <| mul view model
     in
         [ -- Render the maze floor.
-          WebGL.render Square.vertexShader
+          WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.mazeFloor
             { mvp = mvp
@@ -100,7 +100,7 @@ render proj view walkerPos walkerColor maze =
             , texture = maze.mazeFloorTexture
             }
           -- Render the maze ceilings.
-        , WebGL.render Square.vertexShader
+        , WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.mazeCeiling
             { mvp = mvp
@@ -114,7 +114,7 @@ render proj view walkerPos walkerColor maze =
             , texture = maze.mazeCeilingTexture
             }
           -- Render the maze/room walls.
-        , WebGL.render Square.vertexShader
+        , WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.mazeWalls
             { mvp = mvp
@@ -128,7 +128,7 @@ render proj view walkerPos walkerColor maze =
             , texture = maze.mazeWallTexture
             }
           -- Render the room floor.
-        , WebGL.render Square.vertexShader
+        , WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.roomFloor
             { mvp = mvp
@@ -142,7 +142,7 @@ render proj view walkerPos walkerColor maze =
             , texture = maze.roomFloorTexture
             }
           -- Render the room ceiling.
-        , WebGL.render Square.vertexShader
+        , WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.roomCeiling
             { mvp = mvp
@@ -156,7 +156,7 @@ render proj view walkerPos walkerColor maze =
             , texture = maze.roomCeilingTexture
             }
           -- Render the outdoor walls. No lightning!
-        , WebGL.render Square.vertexShader
+        , WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.outdoorWalls
             { mvp = mvp
@@ -170,7 +170,7 @@ render proj view walkerPos walkerColor maze =
             , texture = maze.outdoorWallTexture
             }
           -- Render the outdoor grass. No lightning!
-        , WebGL.render Square.vertexShader
+        , WebGL.entity Square.vertexShader
             Square.fragmentShader
             maze.outdoorGrass
             { mvp = mvp
@@ -504,15 +504,15 @@ uncurry3 g ( a, b, c ) =
     g a b c
 
 
-mazeFloor : Drawable Vertex
+mazeFloor : Mesh Vertex
 mazeFloor =
-    Triangle <|
+    WebGL.triangles <|
         List.concat <|
             List.map (uncurry3 floorAt) <|
                 filterClass mf maze
 
 
-mazeWalls : Drawable Vertex
+mazeWalls : Mesh Vertex
 mazeWalls =
     let
         leftWalls =
@@ -535,34 +535,34 @@ mazeWalls =
                 List.map (uncurry3 southWallAt) <|
                     filterClass sw maze
     in
-        Triangle <| leftWalls ++ rightWalls ++ northWalls ++ southWalls
+        WebGL.triangles <| leftWalls ++ rightWalls ++ northWalls ++ southWalls
 
 
-mazeCeiling : Drawable Vertex
+mazeCeiling : Mesh Vertex
 mazeCeiling =
-    Triangle <|
+    WebGL.triangles <|
         List.concat <|
             List.map (uncurry3 ceilingAt) <|
                 filterClass mc maze
 
 
-roomFloor : Drawable Vertex
+roomFloor : Mesh Vertex
 roomFloor =
-    Triangle <|
+    WebGL.triangles <|
         List.concat <|
             List.map (uncurry3 floorAt) <|
                 filterClass rf maze
 
 
-roomCeiling : Drawable Vertex
+roomCeiling : Mesh Vertex
 roomCeiling =
-    Triangle <|
+    WebGL.triangles <|
         List.concat <|
             List.map (uncurry3 ceilingAt) <|
                 filterClass rc maze
 
 
-outdoorWalls : Drawable Vertex
+outdoorWalls : Mesh Vertex
 outdoorWalls =
     let
         leftWalls =
@@ -585,12 +585,12 @@ outdoorWalls =
                 List.map (uncurry3 southWallAt) <|
                     filterClass osw maze
     in
-        Triangle <| leftWalls ++ rightWalls ++ northWalls ++ southWalls
+        WebGL.triangles <| leftWalls ++ rightWalls ++ northWalls ++ southWalls
 
 
-outdoorGrass : Drawable Vertex
+outdoorGrass : Mesh Vertex
 outdoorGrass =
-    Triangle <|
+    WebGL.triangles <|
         List.concat <|
             [ List.concat <| List.map (\x -> floorAt (toFloat x) 0 -10) <| List.range -20 -4
             , List.concat <| List.map (\x -> floorAt (toFloat x) 0 -9) <| List.range -20 -4

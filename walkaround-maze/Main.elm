@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import AnimationFrame exposing (diffs)
 import Walker exposing (Walker)
+import LightCube exposing (LightCube)
 import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
 import Math.Vector3 exposing (vec3, getX, getZ)
@@ -11,13 +12,15 @@ import Html.Attributes as Attr
 import Html.Events as Evts
 import Task exposing (attempt, sequence)
 import Time exposing (Time, inSeconds)
-import WebGL exposing (Texture)
+import WebGL as WebGL
+import WebGL.Texture as Texture
 
 
 type alias Model =
     { projection : Mat4
     , walker : Walker
     , maze : Maybe Maze
+    , lightCube : LightCube
     , fps : Float
     , errStr : Maybe String
     }
@@ -29,7 +32,7 @@ type Msg
     | Error String
     | KeyDown KeyCode
     | KeyUp KeyCode
-    | TexturesLoaded (List Texture)
+    | TexturesLoaded (List Texture.Texture)
     | ToggleAmbientLightning
     | ToggleDiffuseLightning
 
@@ -50,6 +53,7 @@ init =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , walker = Walker.init (vec3 -7 1.3 -1) -110
       , maze = Nothing
+      , lightCube = LightCube.init (vec3 1 1 0)
       , fps = 0
       , errStr = Nothing
       }
@@ -120,11 +124,16 @@ view3DScene model =
         [ WebGL.toHtml [ Attr.width width, Attr.height height ] <|
             case model.maze of
                 Just theMaze ->
-                    Maze.render model.projection
+                    (Maze.entity model.projection
                         (Walker.matrix model.walker)
                         (Walker.position model.walker)
                         (Walker.lightColor model.walker)
                         theMaze
+                    )
+                        ++ (LightCube.entity model.projection
+                                (Walker.matrix model.walker)
+                                model.lightCube
+                           )
 
                 Nothing ->
                     []
@@ -250,7 +259,7 @@ loadTextures urls =
                     Error "Loading of texture(s) failed"
         )
     <|
-        Task.sequence (List.map WebGL.loadTexture urls)
+        Task.sequence (List.map Texture.load urls)
 
 
 updateFps : Time -> Float -> Float
