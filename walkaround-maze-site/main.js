@@ -12441,29 +12441,29 @@ var _kosmoskatten$webgl_playground$LightCube$triangles = {
 		}
 	}
 };
-var _kosmoskatten$webgl_playground$LightCube$model = function (lightCube) {
-	var rotation = A2(
-		_elm_community$linear_algebra$Math_Matrix4$makeRotate,
-		lightCube.angle,
-		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
-	var newPoint = A2(
-		_elm_community$linear_algebra$Math_Matrix4$transform,
-		rotation,
-		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -0.4));
-	var translation = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(
-		A2(_elm_community$linear_algebra$Math_Vector3$add, lightCube.rotateAround, newPoint));
-	return A2(
-		_elm_community$linear_algebra$Math_Matrix4$mul,
-		translation,
-		A2(_elm_community$linear_algebra$Math_Matrix4$mul, rotation, lightCube.scale));
-};
+var _kosmoskatten$webgl_playground$LightCube$model = F3(
+	function (angle, rotateAround, scale) {
+		var rotation = A2(
+			_elm_community$linear_algebra$Math_Matrix4$makeRotate,
+			angle,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
+		var newPoint = A2(
+			_elm_community$linear_algebra$Math_Matrix4$transform,
+			rotation,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -0.4));
+		var translation = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(
+			A2(_elm_community$linear_algebra$Math_Vector3$add, rotateAround, newPoint));
+		return A2(
+			_elm_community$linear_algebra$Math_Matrix4$mul,
+			translation,
+			A2(_elm_community$linear_algebra$Math_Matrix4$mul, rotation, scale));
+	});
 var _kosmoskatten$webgl_playground$LightCube$entity = F3(
 	function (proj, view, lightCube) {
-		var modelMat = _kosmoskatten$webgl_playground$LightCube$model(lightCube);
 		var mvp = A2(
 			_elm_community$linear_algebra$Math_Matrix4$mul,
 			proj,
-			A2(_elm_community$linear_algebra$Math_Matrix4$mul, view, modelMat));
+			A2(_elm_community$linear_algebra$Math_Matrix4$mul, view, lightCube.model));
 		return {
 			ctor: '::',
 			_0: A5(
@@ -12486,15 +12486,17 @@ var _kosmoskatten$webgl_playground$LightCube$entity = F3(
 	});
 var _kosmoskatten$webgl_playground$LightCube$animate = F2(
 	function (t, lightCube) {
+		var newAngle = lightCube.angle + (_elm_lang$core$Time$inSeconds(t) * _elm_lang$core$Basics$pi);
 		return _elm_lang$core$Native_Utils.update(
 			lightCube,
 			{
-				angle: lightCube.angle + (_elm_lang$core$Time$inSeconds(t) * _elm_lang$core$Basics$pi)
+				angle: newAngle,
+				model: A3(_kosmoskatten$webgl_playground$LightCube$model, newAngle, lightCube.rotateAround, lightCube.scale)
 			});
 	});
-var _kosmoskatten$webgl_playground$LightCube$LightCube = F5(
-	function (a, b, c, d, e) {
-		return {mesh: a, color: b, scale: c, rotateAround: d, angle: e};
+var _kosmoskatten$webgl_playground$LightCube$LightCube = F6(
+	function (a, b, c, d, e, f) {
+		return {mesh: a, color: b, scale: c, rotateAround: d, angle: e, model: f};
 	});
 var _kosmoskatten$webgl_playground$LightCube$Vertex = function (a) {
 	return {position: a};
@@ -12512,16 +12514,19 @@ var _kosmoskatten$webgl_playground$LightCube$lightCube = _elm_community$webgl$We
 			};
 		},
 		_kosmoskatten$webgl_playground$LightCube$triangles));
-var _kosmoskatten$webgl_playground$LightCube$init = function (color) {
-	return {
-		mesh: _kosmoskatten$webgl_playground$LightCube$lightCube,
-		color: color,
-		scale: _elm_community$linear_algebra$Math_Matrix4$makeScale(
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 5.0e-2, 5.0e-2, 5.0e-2)),
-		rotateAround: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1.5, 0),
-		angle: 0
-	};
-};
+var _kosmoskatten$webgl_playground$LightCube$init = F2(
+	function (rotateAround, color) {
+		var scale = _elm_community$linear_algebra$Math_Matrix4$makeScale(
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 5.0e-2, 5.0e-2, 5.0e-2));
+		return {
+			mesh: _kosmoskatten$webgl_playground$LightCube$lightCube,
+			color: color,
+			scale: scale,
+			rotateAround: rotateAround,
+			angle: 0,
+			model: A3(_kosmoskatten$webgl_playground$LightCube$model, 0, rotateAround, scale)
+		};
+	});
 
 var _kosmoskatten$webgl_playground$Walker$candleLight = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 255 / 255, 147 / 255, 41 / 255);
 var _kosmoskatten$webgl_playground$Walker$up = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0);
@@ -12701,7 +12706,9 @@ var _kosmoskatten$webgl_playground$Walker$init = F2(
 			angle: angle,
 			headAdjustment: _kosmoskatten$webgl_playground$Walker$LookStraight,
 			lightColor: _kosmoskatten$webgl_playground$Walker$candleLight,
-			lightCube: _kosmoskatten$webgl_playground$LightCube$init(
+			lightCube: A2(
+				_kosmoskatten$webgl_playground$LightCube$init,
+				A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0),
 				A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0.5)),
 			leftArrowDown: false,
 			rightArrowDown: false,

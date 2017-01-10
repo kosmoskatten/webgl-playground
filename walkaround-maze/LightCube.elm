@@ -14,6 +14,7 @@ type alias LightCube =
     , scale : Mat4
     , rotateAround : Vec3
     , angle : Float
+    , model : Mat4
     }
 
 
@@ -22,29 +23,38 @@ type alias Vertex =
     }
 
 
-init : Vec3 -> LightCube
-init color =
-    { mesh = lightCube
-    , color = color
-    , scale = makeScale <| vec3 0.05 0.05 0.05
-    , rotateAround = vec3 0 1.5 0
-    , angle = 0
-    }
+init : Vec3 -> Vec3 -> LightCube
+init rotateAround color =
+    let
+        scale =
+            makeScale <| vec3 0.05 0.05 0.05
+    in
+        { mesh = lightCube
+        , color = color
+        , scale = scale
+        , rotateAround = rotateAround
+        , angle = 0
+        , model = model 0 rotateAround scale
+        }
 
 
 animate : Time -> LightCube -> LightCube
 animate t lightCube =
-    { lightCube | angle = lightCube.angle + inSeconds t * pi }
+    let
+        newAngle =
+            lightCube.angle + inSeconds t * pi
+    in
+        { lightCube
+            | angle = newAngle
+            , model = model newAngle lightCube.rotateAround lightCube.scale
+        }
 
 
 entity : Mat4 -> Mat4 -> LightCube -> List Entity
 entity proj view lightCube =
     let
-        modelMat =
-            model lightCube
-
         mvp =
-            mul proj <| mul view modelMat
+            mul proj <| mul view lightCube.model
     in
         [ WebGL.entityWith [ DepthTest.default, Blend.add Blend.srcAlpha Blend.dstAlpha ]
             vertexShader
@@ -54,19 +64,19 @@ entity proj view lightCube =
         ]
 
 
-model : LightCube -> Mat4
-model lightCube =
+model : Float -> Vec3 -> Mat4 -> Mat4
+model angle rotateAround scale =
     let
         rotation =
-            makeRotate lightCube.angle <| vec3 0 1 0
+            makeRotate angle <| vec3 0 1 0
 
         newPoint =
             transform rotation <| vec3 0 0 -0.4
 
         translation =
-            makeTranslate (Math.Vector3.add lightCube.rotateAround newPoint)
+            makeTranslate (Math.Vector3.add rotateAround newPoint)
     in
-        mul translation <| mul rotation lightCube.scale
+        mul translation <| mul rotation scale
 
 
 lightCube : Mesh Vertex
