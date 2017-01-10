@@ -6,6 +6,7 @@ module Walker
         , position
         , lightColor
         , animate
+        , entity
         , keyDown
         , keyUp
         )
@@ -13,9 +14,11 @@ module Walker
 {- The walker is representing a person, moving around in the maze. -}
 
 import Keyboard exposing (KeyCode)
+import LightCube exposing (LightCube)
 import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
 import Math.Matrix4 exposing (Mat4, makeLookAt, makeRotate, transform)
 import Time exposing (Time, inSeconds)
+import WebGL exposing (Entity)
 
 
 {- The representing state of the camera. -}
@@ -34,6 +37,7 @@ type alias Walker =
     , lightColor :
         Vec3
         -- The color the walker is carrying.
+    , lightCube : LightCube
     , leftArrowDown :
         Bool
         -- Is the left arrow key pressed?
@@ -65,6 +69,7 @@ init position angle =
     , angle = angle
     , headAdjustment = LookStraight
     , lightColor = candleLight
+    , lightCube = LightCube.init (vec3 0 1 0.5)
     , leftArrowDown = False
     , rightArrowDown = False
     , upArrowDown = False
@@ -113,11 +118,19 @@ animate time walker =
     let
         t =
             inSeconds time
+
+        moved =
+            animateBackward t <|
+                animateForward t <|
+                    animateRightRotate t <|
+                        animateLeftRotate t walker
     in
-        animateBackward t <|
-            animateForward t <|
-                animateRightRotate t <|
-                    animateLeftRotate t walker
+        { moved | lightCube = LightCube.animate time moved.lightCube }
+
+
+entity : Mat4 -> Walker -> List Entity
+entity proj walker =
+    LightCube.entity proj (matrix walker) walker.lightCube
 
 
 animateLeftRotate : Float -> Walker -> Walker

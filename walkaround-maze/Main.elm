@@ -2,7 +2,6 @@ module Main exposing (main)
 
 import AnimationFrame exposing (diffs)
 import Walker exposing (Walker)
-import LightCube exposing (LightCube)
 import Keyboard exposing (KeyCode, downs, ups)
 import Math.Matrix4 exposing (Mat4, makePerspective)
 import Math.Vector3 exposing (vec3, getX, getZ)
@@ -20,7 +19,6 @@ type alias Model =
     { projection : Mat4
     , walker : Walker
     , maze : Maybe Maze
-    , lightCube : LightCube
     , fps : Float
     , errStr : Maybe String
     }
@@ -53,7 +51,6 @@ init =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
       , walker = Walker.init (vec3 -7 1.3 -1) -110
       , maze = Nothing
-      , lightCube = LightCube.init (vec3 0 1 0.5)
       , fps = 0
       , errStr = Nothing
       }
@@ -130,10 +127,7 @@ view3DScene model =
                         (Walker.lightColor model.walker)
                         theMaze
                     )
-                        ++ (LightCube.entity model.projection
-                                (Walker.matrix model.walker)
-                                model.lightCube
-                           )
+                        ++ (Walker.entity model.projection model.walker)
 
                 Nothing ->
                     []
@@ -165,7 +159,6 @@ update msg model =
         Animate t ->
             ( { model
                 | walker = Walker.animate t model.walker
-                , lightCube = LightCube.animate t model.lightCube
                 , fps = updateFps t model.fps
               }
             , Cmd.none
