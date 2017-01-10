@@ -118,12 +118,19 @@ viewErrorMessage model =
 view3DScene : Model -> Html Msg
 view3DScene model =
     div [ Attr.class "w3-container w3-black" ]
-        [ WebGL.toHtml [ Attr.width width, Attr.height height ] <|
+        [ WebGL.toHtmlWith
+            [ WebGL.depth 1
+            , WebGL.antialias
+            , WebGL.alpha True
+            , WebGL.clearColor (42 / 255) (82 / 255) (190 / 255) 1
+            ]
+            [ Attr.width width, Attr.height height ]
+          <|
             case model.maze of
                 Just theMaze ->
                     (Maze.entity model.projection
                         (Walker.matrix model.walker)
-                        (Walker.position model.walker)
+                        (Walker.lightPosition model.walker)
                         (Walker.lightColor model.walker)
                         theMaze
                     )

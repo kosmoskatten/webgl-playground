@@ -12458,6 +12458,15 @@ var _kosmoskatten$webgl_playground$LightCube$model = F3(
 			translation,
 			A2(_elm_community$linear_algebra$Math_Matrix4$mul, rotation, scale));
 	});
+var _kosmoskatten$webgl_playground$LightCube$lightPosition = function (lightCube) {
+	return A2(
+		_elm_community$linear_algebra$Math_Matrix4$transform,
+		lightCube.model,
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0));
+};
+var _kosmoskatten$webgl_playground$LightCube$lightColor = function (lightCube) {
+	return lightCube.color;
+};
 var _kosmoskatten$webgl_playground$LightCube$entity = F3(
 	function (proj, view, lightCube) {
 		var mvp = A2(
@@ -12484,14 +12493,15 @@ var _kosmoskatten$webgl_playground$LightCube$entity = F3(
 			_1: {ctor: '[]'}
 		};
 	});
-var _kosmoskatten$webgl_playground$LightCube$animate = F2(
-	function (t, lightCube) {
-		var newAngle = lightCube.angle + (_elm_lang$core$Time$inSeconds(t) * _elm_lang$core$Basics$pi);
+var _kosmoskatten$webgl_playground$LightCube$animate = F3(
+	function (t, rotateAround, lightCube) {
+		var newAngle = lightCube.angle + (_elm_lang$core$Time$inSeconds(t) * (_elm_lang$core$Basics$pi / 2));
 		return _elm_lang$core$Native_Utils.update(
 			lightCube,
 			{
 				angle: newAngle,
-				model: A3(_kosmoskatten$webgl_playground$LightCube$model, newAngle, lightCube.rotateAround, lightCube.scale)
+				rotateAround: rotateAround,
+				model: A3(_kosmoskatten$webgl_playground$LightCube$model, newAngle, rotateAround, lightCube.scale)
 			});
 	});
 var _kosmoskatten$webgl_playground$LightCube$LightCube = F6(
@@ -12661,16 +12671,29 @@ var _kosmoskatten$webgl_playground$Walker$animate = F2(
 					_kosmoskatten$webgl_playground$Walker$animateRightRotate,
 					t,
 					A2(_kosmoskatten$webgl_playground$Walker$animateLeftRotate, t, walker))));
+		var newPos = moved.position;
 		return _elm_lang$core$Native_Utils.update(
 			moved,
 			{
-				lightCube: A2(_kosmoskatten$webgl_playground$LightCube$animate, time, moved.lightCube)
+				lightCube: A3(
+					_kosmoskatten$webgl_playground$LightCube$animate,
+					time,
+					A3(
+						_elm_community$linear_algebra$Math_Vector3$vec3,
+						_elm_community$linear_algebra$Math_Vector3$getX(newPos),
+						0.3 + _elm_community$linear_algebra$Math_Vector3$getY(newPos),
+						_elm_community$linear_algebra$Math_Vector3$getZ(newPos)),
+					moved.lightCube),
+				position: newPos
 			});
 	});
 var _kosmoskatten$webgl_playground$Walker$lightColor = function (walker) {
 	return walker.lightColor;
 };
-var _kosmoskatten$webgl_playground$Walker$position = function (walker) {
+var _kosmoskatten$webgl_playground$Walker$lightPosition = function (walker) {
+	return _kosmoskatten$webgl_playground$LightCube$lightPosition(walker.lightCube);
+};
+var _kosmoskatten$webgl_playground$Walker$viewPosition = function (walker) {
 	return walker.position;
 };
 var _kosmoskatten$webgl_playground$Walker$matrix = function (walker) {
@@ -12708,8 +12731,8 @@ var _kosmoskatten$webgl_playground$Walker$init = F2(
 			lightColor: _kosmoskatten$webgl_playground$Walker$candleLight,
 			lightCube: A2(
 				_kosmoskatten$webgl_playground$LightCube$init,
-				A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0),
-				A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0.5)),
+				A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1.6, 0),
+				_kosmoskatten$webgl_playground$Walker$candleLight),
 			leftArrowDown: false,
 			rightArrowDown: false,
 			upArrowDown: false,
@@ -14597,8 +14620,25 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_community$webgl$WebGL$toHtml,
+			_0: A3(
+				_elm_community$webgl$WebGL$toHtmlWith,
+				{
+					ctor: '::',
+					_0: _elm_community$webgl$WebGL$depth(1),
+					_1: {
+						ctor: '::',
+						_0: _elm_community$webgl$WebGL$antialias,
+						_1: {
+							ctor: '::',
+							_0: _elm_community$webgl$WebGL$alpha(true),
+							_1: {
+								ctor: '::',
+								_0: A4(_elm_community$webgl$WebGL$clearColor, 42 / 255, 82 / 255, 190 / 255, 1),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$width(_kosmoskatten$webgl_playground$Main$width),
@@ -14617,7 +14657,7 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 								_kosmoskatten$webgl_playground$Maze$entity,
 								model.projection,
 								_kosmoskatten$webgl_playground$Walker$matrix(model.walker),
-								_kosmoskatten$webgl_playground$Walker$position(model.walker),
+								_kosmoskatten$webgl_playground$Walker$lightPosition(model.walker),
 								_kosmoskatten$webgl_playground$Walker$lightColor(model.walker),
 								_p6._0),
 							A2(_kosmoskatten$webgl_playground$Walker$entity, model.projection, model.walker));

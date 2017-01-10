@@ -3,7 +3,8 @@ module Walker
         ( Walker
         , init
         , matrix
-        , position
+        , viewPosition
+        , lightPosition
         , lightColor
         , animate
         , entity
@@ -69,7 +70,7 @@ init position angle =
     , angle = angle
     , headAdjustment = LookStraight
     , lightColor = candleLight
-    , lightCube = LightCube.init (vec3 0 1 0) (vec3 0 1 0.5)
+    , lightCube = LightCube.init (vec3 0 1.6 0) candleLight
     , leftArrowDown = False
     , rightArrowDown = False
     , upArrowDown = False
@@ -95,9 +96,18 @@ matrix walker =
 {- Get the current position for the walker/camera. -}
 
 
-position : Walker -> Vec3
-position walker =
+viewPosition : Walker -> Vec3
+viewPosition walker =
     walker.position
+
+
+
+{- Get the current position for the walker's light. -}
+
+
+lightPosition : Walker -> Vec3
+lightPosition walker =
+    LightCube.lightPosition walker.lightCube
 
 
 
@@ -124,8 +134,14 @@ animate time walker =
                 animateForward t <|
                     animateRightRotate t <|
                         animateLeftRotate t walker
+
+        newPos =
+            moved.position
     in
-        { moved | lightCube = LightCube.animate time moved.lightCube }
+        { moved
+            | lightCube = LightCube.animate time (vec3 (getX newPos) (0.3 + getY newPos) (getZ newPos)) moved.lightCube
+            , position = newPos
+        }
 
 
 entity : Mat4 -> Walker -> List Entity

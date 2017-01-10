@@ -1,4 +1,4 @@
-module LightCube exposing (LightCube, init, animate, entity)
+module LightCube exposing (LightCube, init, animate, entity, lightColor, lightPosition)
 
 import Math.Matrix4 exposing (Mat4, mul, makeScale, makeTranslate, makeRotate, transform)
 import Math.Vector3 exposing (Vec3, vec3)
@@ -38,15 +38,16 @@ init rotateAround color =
         }
 
 
-animate : Time -> LightCube -> LightCube
-animate t lightCube =
+animate : Time -> Vec3 -> LightCube -> LightCube
+animate t rotateAround lightCube =
     let
         newAngle =
-            lightCube.angle + inSeconds t * pi
+            lightCube.angle + inSeconds t * (pi / 2)
     in
         { lightCube
             | angle = newAngle
-            , model = model newAngle lightCube.rotateAround lightCube.scale
+            , rotateAround = rotateAround
+            , model = model newAngle rotateAround lightCube.scale
         }
 
 
@@ -62,6 +63,16 @@ entity proj view lightCube =
             lightCube.mesh
             { mvp = mvp, color = lightCube.color }
         ]
+
+
+lightColor : LightCube -> Vec3
+lightColor lightCube =
+    lightCube.color
+
+
+lightPosition : LightCube -> Vec3
+lightPosition lightCube =
+    transform lightCube.model <| vec3 0 0 0
 
 
 model : Float -> Vec3 -> Mat4 -> Mat4
