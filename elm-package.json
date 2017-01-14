@@ -5,7 +5,8 @@
     "license": "BSD3",
     "source-directories": [
         "basic-lightning",
-        "walkaround-maze"
+        "walkaround-maze",
+        "directed-light"
     ],
     "exposed-modules": [],
     "native-modules": false,
