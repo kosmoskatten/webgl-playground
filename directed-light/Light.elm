@@ -1,6 +1,6 @@
 module Light exposing (Light, init, entity)
 
-import Math.Matrix4 exposing (Mat4, mul, makeScale, makeTranslate)
+import Math.Matrix4 exposing (Mat4, mul, makeScale, makeTranslate, identity)
 import Math.Vector3 exposing (Vec3, vec3)
 import WebGL exposing (Mesh, Entity, Shader)
 
@@ -44,7 +44,7 @@ modelMatrix light =
             makeScale <| vec3 0.2 0.2 0.2
 
         trans =
-            makeTranslate light.direction
+            makeTranslate light.position
     in
         mul trans scale
 

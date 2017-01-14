@@ -3,6 +3,7 @@ module Main exposing (main)
 import Html exposing (Html, div, text)
 import Html.Attributes as Attr
 import Light exposing (Light)
+import LightedWall exposing (LightedWall)
 import Math.Matrix4 exposing (Mat4, makePerspective, makeLookAt)
 import Math.Vector3 exposing (vec3)
 import WebGL as WebGL
@@ -12,6 +13,7 @@ type alias Model =
     { projection : Mat4
     , camera : Mat4
     , light : Light
+    , lightedWall : LightedWall
     }
 
 
@@ -33,8 +35,9 @@ init : ( Model, Cmd Msg )
 init =
     ( { projection =
             makePerspective 45 (toFloat width / toFloat height) 0.01 100
-      , camera = makeLookAt (vec3 1 1 -5) (vec3 0 0 0) (vec3 0 1 0)
+      , camera = makeLookAt (vec3 1 1 5) (vec3 0 0 0) (vec3 0 1 0)
       , light = Light.init
+      , lightedWall = LightedWall.init
       }
     , Cmd.none
     )
@@ -50,6 +53,7 @@ view model =
         ]
         [ Attr.width width, Attr.height height ]
         [ Light.entity model.projection model.camera model.light
+        , LightedWall.entity model.projection model.camera model.lightedWall
         ]
 
 
