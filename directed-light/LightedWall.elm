@@ -3,7 +3,6 @@ module LightedWall exposing (LightedWall, init, entity)
 import Light exposing (Light)
 import Math.Matrix4 exposing (Mat4, mul, makeScale, makeTranslate)
 import Math.Vector3 exposing (Vec3, vec3)
-import Math.Vector4 exposing (Vec4)
 import WebGL exposing (Mesh, Entity, Shader)
 
 
@@ -51,7 +50,7 @@ modelMatrix : LightedWall -> Mat4
 modelMatrix lightedWall =
     let
         scale =
-            makeScale <| vec3 4 4 4
+            makeScale <| vec3 4 4 1
 
         trans =
             makeTranslate lightedWall.position
@@ -88,7 +87,7 @@ vertexShader :
             , color : Vec3
         }
         { unif | mvp : Mat4, model : Mat4 }
-        { vPosition : Vec4
+        { vPosition : Vec3
         , vColor : Vec3
         }
 vertexShader =
@@ -99,13 +98,13 @@ attribute vec3 color;
 uniform mat4 mvp;
 uniform mat4 model;
 
-varying vec4 vPosition;
+varying vec3 vPosition;
 varying vec3 vColor;
 
 void main(void)
 {
     gl_Position = mvp * vec4(position, 1.0);
-    vPosition = model * vec4(position, 1.0);
+    vPosition = vec3(model * vec4(position, 1.0));
     vColor = color;
 }
 |]
@@ -118,7 +117,7 @@ fragmentShader :
             , lightDirection : Vec3
             , lightColor : Vec3
         }
-        { vPosition : Vec4
+        { vPosition : Vec3
         , vColor : Vec3
         }
 fragmentShader =
@@ -129,11 +128,21 @@ uniform vec3 lightPosition;
 uniform vec3 lightDirection;
 uniform vec3 lightColor;
 
-varying vec4 vPosition;
+varying vec3 vPosition;
 varying vec3 vColor;
 
 void main(void)
 {
-    gl_FragColor = vec4(vColor, 1.0);
+    vec3 lightPositionVec = normalize(vPosition - lightPosition);
+    float diff = acos(dot(lightPositionVec, lightDirection));
+
+    if (diff >= 0.0 && diff < 0.393)
+    {
+        gl_FragColor = vec4(vColor + lightColor, 1.0);
+    }
+    else
+    {
+        gl_FragColor = vec4(vColor, 1.0);
+    }
 }
 |]
