@@ -74,8 +74,8 @@ init mazeFloorTexture mazeWallTexture mazeCeilingTexture roomFloorTexture roomCe
     }
 
 
-entity : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Maze -> List Entity
-entity proj view walkerPos walkerColor maze =
+entity : Mat4 -> Mat4 -> Vec3 -> Vec3 -> Vec3 -> Maze -> List Entity
+entity proj view lightPosition lightColor lightDirection maze =
     -- Nothing in the maze will be scaled, rotated nor moved. That's until
     -- there will be support for normal matrices in Matrix4.
     let
@@ -95,8 +95,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = maze.diffuseLightning
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.mazeFloorTexture
             }
           -- Render the maze ceilings.
@@ -109,8 +110,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = maze.diffuseLightning
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.mazeCeilingTexture
             }
           -- Render the maze/room walls.
@@ -123,8 +125,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = maze.diffuseLightning
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.mazeWallTexture
             }
           -- Render the room floor.
@@ -137,8 +140,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = maze.diffuseLightning
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.roomFloorTexture
             }
           -- Render the room ceiling.
@@ -151,8 +155,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = maze.diffuseLightning
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.roomCeilingTexture
             }
           -- Render the outdoor walls. No lightning!
@@ -165,8 +170,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = False
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.outdoorWallTexture
             }
           -- Render the outdoor grass. No lightning!
@@ -179,8 +185,9 @@ entity proj view walkerPos walkerColor maze =
             , ambientStrength = maze.ambientStrength
             , ambientColor = maze.ambientColor
             , diffuseLightning = False
-            , lightPosition = walkerPos
-            , lightColor = walkerColor
+            , lightPosition = lightPosition
+            , lightColor = lightColor
+            , lightDirection = lightDirection
             , texture = maze.outdoorGrassTexture
             }
         ]

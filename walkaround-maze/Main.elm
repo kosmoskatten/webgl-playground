@@ -132,9 +132,9 @@ view3DScene model =
                         (Walker.matrix model.walker)
                         (Walker.lightPosition model.walker)
                         (Walker.lightColor model.walker)
+                        (Walker.lightDirection model.walker)
                         theMaze
                     )
-                        ++ (Walker.entity model.projection model.walker)
 
                 Nothing ->
                     []

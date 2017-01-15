@@ -6,8 +6,8 @@ module Walker
         , viewPosition
         , lightPosition
         , lightColor
+        , lightDirection
         , animate
-        , entity
         , keyDown
         , keyUp
         )
@@ -15,11 +15,9 @@ module Walker
 {- The walker is representing a person, moving around in the maze. -}
 
 import Keyboard exposing (KeyCode)
-import LightCube exposing (LightCube)
-import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ)
+import Math.Vector3 exposing (Vec3, vec3, add, getX, getY, getZ, normalize)
 import Math.Matrix4 exposing (Mat4, makeLookAt, makeRotate, transform)
 import Time exposing (Time, inSeconds)
-import WebGL exposing (Entity)
 
 
 {- The representing state of the camera. -}
@@ -37,8 +35,10 @@ type alias Walker =
         -- Tilt adjustment.
     , lightColor :
         Vec3
-        -- The color the walker is carrying.
-    , lightCube : LightCube
+        -- The color of the light beam from the head light.
+    , lightDirection :
+        Vec3
+        -- The (normalized) direction vector of the beam.
     , leftArrowDown :
         Bool
         -- Is the left arrow key pressed?
@@ -70,7 +70,7 @@ init position angle =
     , angle = angle
     , headAdjustment = LookStraight
     , lightColor = candleLight
-    , lightCube = LightCube.init (vec3 0 1.6 0) candleLight
+    , lightDirection = beamDirection angle
     , leftArrowDown = False
     , rightArrowDown = False
     , upArrowDown = False
@@ -107,7 +107,7 @@ viewPosition walker =
 
 lightPosition : Walker -> Vec3
 lightPosition walker =
-    LightCube.lightPosition walker.lightCube
+    walker.position
 
 
 
@@ -117,6 +117,11 @@ lightPosition walker =
 lightColor : Walker -> Vec3
 lightColor walker =
     walker.lightColor
+
+
+lightDirection : Walker -> Vec3
+lightDirection walker =
+    walker.lightDirection
 
 
 
@@ -129,24 +134,15 @@ animate time walker =
         t =
             inSeconds time
 
-        moved =
+        newWalker =
             animateBackward t <|
                 animateForward t <|
                     animateRightRotate t <|
                         animateLeftRotate t walker
-
-        newPos =
-            moved.position
     in
-        { moved
-            | lightCube = LightCube.animate time (vec3 (getX newPos) (0.3 + getY newPos) (getZ newPos)) moved.lightCube
-            , position = newPos
+        { newWalker
+            | lightDirection = beamDirection newWalker.angle
         }
-
-
-entity : Mat4 -> Walker -> List Entity
-entity proj walker =
-    LightCube.entity proj (matrix walker) walker.lightCube
 
 
 animateLeftRotate : Float -> Walker -> Walker
@@ -388,3 +384,12 @@ up =
 candleLight : Vec3
 candleLight =
     vec3 (255 / 255) (147 / 255) (41 / 255)
+
+
+beamDirection : Float -> Vec3
+beamDirection angle =
+    let
+        rot =
+            makeRotate (degrees angle) <| vec3 0 1 0
+    in
+        normalize <| transform rot <| vec3 0 0 -1
