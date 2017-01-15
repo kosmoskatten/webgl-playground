@@ -1,7 +1,16 @@
 module Light exposing (Light, init, entity)
 
-import Math.Matrix4 exposing (Mat4, mul, makeScale, makeTranslate, identity)
-import Math.Vector3 exposing (Vec3, vec3)
+import Math.Matrix4
+    exposing
+        ( Mat4
+        , mul
+        , makeRotate
+        , makeScale
+        , makeTranslate
+        , identity
+        , transform
+        )
+import Math.Vector3 exposing (Vec3, vec3, normalize)
 import WebGL exposing (Mesh, Entity, Shader)
 
 
@@ -22,8 +31,9 @@ type alias Vertex =
 init : Light
 init =
     { mesh = light
-    , position = vec3 0 0 1
-    , direction = vec3 0 0 -1
+    , position = vec3 2 0 0
+    , direction =
+        normalize <| transform (makeRotate (degrees 60) <| vec3 0 1 0) (vec3 0 0 -1)
     , color = yellow
     }
 
