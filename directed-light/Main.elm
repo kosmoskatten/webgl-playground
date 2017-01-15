@@ -53,7 +53,11 @@ view model =
         ]
         [ Attr.width width, Attr.height height ]
         [ Light.entity model.projection model.camera model.light
-        , LightedWall.entity model.projection model.camera model.lightedWall
+        , LightedWall.entity
+            model.projection
+            model.camera
+            model.light
+            model.lightedWall
         ]
 
 
