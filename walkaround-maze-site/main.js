@@ -10776,6 +10776,93 @@ var _elm_community$webgl$WebGL$toHtml = _elm_community$webgl$WebGL$toHtmlWith(
 		}
 	});
 
+var _elm_community$webgl$WebGL_Settings_Blend$custom = function (_p0) {
+	var _p1 = _p0;
+	var expand = F2(
+		function (_p3, _p2) {
+			var _p4 = _p3;
+			var _p5 = _p2;
+			return _elm_community$webgl$WebGL_Settings_Internal$Blend(_p4._0)(_p4._1)(_p4._2)(_p5._0)(_p5._1)(_p5._2)(_p1.r)(_p1.g)(_p1.b)(_p1.a);
+		});
+	return A2(expand, _p1.color, _p1.alpha);
+};
+var _elm_community$webgl$WebGL_Settings_Blend$Factor = function (a) {
+	return {ctor: 'Factor', _0: a};
+};
+var _elm_community$webgl$WebGL_Settings_Blend$zero = _elm_community$webgl$WebGL_Settings_Blend$Factor(0);
+var _elm_community$webgl$WebGL_Settings_Blend$one = _elm_community$webgl$WebGL_Settings_Blend$Factor(1);
+var _elm_community$webgl$WebGL_Settings_Blend$srcColor = _elm_community$webgl$WebGL_Settings_Blend$Factor(768);
+var _elm_community$webgl$WebGL_Settings_Blend$oneMinusSrcColor = _elm_community$webgl$WebGL_Settings_Blend$Factor(769);
+var _elm_community$webgl$WebGL_Settings_Blend$dstColor = _elm_community$webgl$WebGL_Settings_Blend$Factor(774);
+var _elm_community$webgl$WebGL_Settings_Blend$oneMinusDstColor = _elm_community$webgl$WebGL_Settings_Blend$Factor(775);
+var _elm_community$webgl$WebGL_Settings_Blend$srcAlpha = _elm_community$webgl$WebGL_Settings_Blend$Factor(770);
+var _elm_community$webgl$WebGL_Settings_Blend$oneMinusSrcAlpha = _elm_community$webgl$WebGL_Settings_Blend$Factor(771);
+var _elm_community$webgl$WebGL_Settings_Blend$dstAlpha = _elm_community$webgl$WebGL_Settings_Blend$Factor(772);
+var _elm_community$webgl$WebGL_Settings_Blend$oneMinusDstAlpha = _elm_community$webgl$WebGL_Settings_Blend$Factor(773);
+var _elm_community$webgl$WebGL_Settings_Blend$srcAlphaSaturate = _elm_community$webgl$WebGL_Settings_Blend$Factor(776);
+var _elm_community$webgl$WebGL_Settings_Blend$constantColor = _elm_community$webgl$WebGL_Settings_Blend$Factor(32769);
+var _elm_community$webgl$WebGL_Settings_Blend$oneMinusConstantColor = _elm_community$webgl$WebGL_Settings_Blend$Factor(32770);
+var _elm_community$webgl$WebGL_Settings_Blend$constantAlpha = _elm_community$webgl$WebGL_Settings_Blend$Factor(32771);
+var _elm_community$webgl$WebGL_Settings_Blend$oneMinusConstantAlpha = _elm_community$webgl$WebGL_Settings_Blend$Factor(32772);
+var _elm_community$webgl$WebGL_Settings_Blend$Blender = F3(
+	function (a, b, c) {
+		return {ctor: 'Blender', _0: a, _1: b, _2: c};
+	});
+var _elm_community$webgl$WebGL_Settings_Blend$customAdd = F2(
+	function (_p7, _p6) {
+		var _p8 = _p7;
+		var _p9 = _p6;
+		return A3(_elm_community$webgl$WebGL_Settings_Blend$Blender, 32774, _p8._0, _p9._0);
+	});
+var _elm_community$webgl$WebGL_Settings_Blend$add = F2(
+	function (factor1, factor2) {
+		return _elm_community$webgl$WebGL_Settings_Blend$custom(
+			{
+				r: 0,
+				g: 0,
+				b: 0,
+				a: 0,
+				color: A2(_elm_community$webgl$WebGL_Settings_Blend$customAdd, factor1, factor2),
+				alpha: A2(_elm_community$webgl$WebGL_Settings_Blend$customAdd, factor1, factor2)
+			});
+	});
+var _elm_community$webgl$WebGL_Settings_Blend$customSubtract = F2(
+	function (_p11, _p10) {
+		var _p12 = _p11;
+		var _p13 = _p10;
+		return A3(_elm_community$webgl$WebGL_Settings_Blend$Blender, 32778, _p12._0, _p13._0);
+	});
+var _elm_community$webgl$WebGL_Settings_Blend$subtract = F2(
+	function (factor1, factor2) {
+		return _elm_community$webgl$WebGL_Settings_Blend$custom(
+			{
+				r: 0,
+				g: 0,
+				b: 0,
+				a: 0,
+				color: A2(_elm_community$webgl$WebGL_Settings_Blend$customSubtract, factor1, factor2),
+				alpha: A2(_elm_community$webgl$WebGL_Settings_Blend$customSubtract, factor1, factor2)
+			});
+	});
+var _elm_community$webgl$WebGL_Settings_Blend$customReverseSubtract = F2(
+	function (_p15, _p14) {
+		var _p16 = _p15;
+		var _p17 = _p14;
+		return A3(_elm_community$webgl$WebGL_Settings_Blend$Blender, 32779, _p16._0, _p17._0);
+	});
+var _elm_community$webgl$WebGL_Settings_Blend$reverseSubtract = F2(
+	function (factor1, factor2) {
+		return _elm_community$webgl$WebGL_Settings_Blend$custom(
+			{
+				r: 0,
+				g: 0,
+				b: 0,
+				a: 0,
+				color: A2(_elm_community$webgl$WebGL_Settings_Blend$customReverseSubtract, factor1, factor2),
+				alpha: A2(_elm_community$webgl$WebGL_Settings_Blend$customReverseSubtract, factor1, factor2)
+			});
+	});
+
 var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
 var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
 var _elm_lang$core$Task$spawnCmd = F2(
@@ -12243,17 +12330,214 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
-var _kosmoskatten$webgl_playground$Walker$beamDirection = function (angle) {
-	var rot = A2(
-		_elm_community$linear_algebra$Math_Matrix4$makeRotate,
-		_elm_lang$core$Basics$degrees(angle),
-		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
-	return _elm_community$linear_algebra$Math_Vector3$normalize(
-		A2(
-			_elm_community$linear_algebra$Math_Matrix4$transform,
-			rot,
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1)));
+var _kosmoskatten$webgl_playground$LightCube$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform vec3 color;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(color, 0.05);\n}\n'};
+var _kosmoskatten$webgl_playground$LightCube$vertexShader = {'src': '\nattribute vec3 position;\n\nuniform mat4 mvp;\n\nvoid main (void)\n{\n    gl_Position = mvp * vec4(position, 1);\n}\n'};
+var _kosmoskatten$webgl_playground$LightCube$triangles = {
+	ctor: '::',
+	_0: {
+		ctor: '_Tuple3',
+		_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, -0.5),
+		_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, -0.5),
+		_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, -0.5)
+	},
+	_1: {
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple3',
+			_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, -0.5),
+			_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, -0.5),
+			_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, -0.5)
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple3',
+				_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, 0.5),
+				_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, 0.5),
+				_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple3',
+					_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5),
+					_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, 0.5),
+					_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, 0.5)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple3',
+						_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, 0.5),
+						_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, -0.5),
+						_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, -0.5)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple3',
+							_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, -0.5),
+							_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, 0.5),
+							_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, 0.5)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple3',
+								_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5),
+								_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, -0.5),
+								_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, -0.5)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple3',
+									_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, -0.5),
+									_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, 0.5),
+									_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple3',
+										_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, -0.5),
+										_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, -0.5),
+										_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, 0.5)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple3',
+											_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, -0.5, 0.5),
+											_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, 0.5),
+											_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, -0.5, -0.5)
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple3',
+												_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, -0.5),
+												_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, -0.5),
+												_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple3',
+													_0: A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0.5, 0.5, 0.5),
+													_1: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, 0.5),
+													_2: A3(_elm_community$linear_algebra$Math_Vector3$vec3, -0.5, 0.5, -0.5)
+												},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 };
+var _kosmoskatten$webgl_playground$LightCube$model = F3(
+	function (angle, rotateAround, scale) {
+		var rotation = A2(
+			_elm_community$linear_algebra$Math_Matrix4$makeRotate,
+			angle,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
+		var newPoint = A2(
+			_elm_community$linear_algebra$Math_Matrix4$transform,
+			rotation,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -0.4));
+		var translation = _elm_community$linear_algebra$Math_Matrix4$makeTranslate(
+			A2(_elm_community$linear_algebra$Math_Vector3$add, rotateAround, newPoint));
+		return A2(
+			_elm_community$linear_algebra$Math_Matrix4$mul,
+			translation,
+			A2(_elm_community$linear_algebra$Math_Matrix4$mul, rotation, scale));
+	});
+var _kosmoskatten$webgl_playground$LightCube$lightPosition = function (lightCube) {
+	return A2(
+		_elm_community$linear_algebra$Math_Matrix4$transform,
+		lightCube.model,
+		A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0));
+};
+var _kosmoskatten$webgl_playground$LightCube$lightColor = function (lightCube) {
+	return lightCube.color;
+};
+var _kosmoskatten$webgl_playground$LightCube$entity = F3(
+	function (proj, view, lightCube) {
+		var mvp = A2(
+			_elm_community$linear_algebra$Math_Matrix4$mul,
+			proj,
+			A2(_elm_community$linear_algebra$Math_Matrix4$mul, view, lightCube.model));
+		return {
+			ctor: '::',
+			_0: A5(
+				_elm_community$webgl$WebGL$entityWith,
+				{
+					ctor: '::',
+					_0: _elm_community$webgl$WebGL_Settings_DepthTest$default,
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_community$webgl$WebGL_Settings_Blend$add, _elm_community$webgl$WebGL_Settings_Blend$srcAlpha, _elm_community$webgl$WebGL_Settings_Blend$dstAlpha),
+						_1: {ctor: '[]'}
+					}
+				},
+				_kosmoskatten$webgl_playground$LightCube$vertexShader,
+				_kosmoskatten$webgl_playground$LightCube$fragmentShader,
+				lightCube.mesh,
+				{mvp: mvp, color: lightCube.color}),
+			_1: {ctor: '[]'}
+		};
+	});
+var _kosmoskatten$webgl_playground$LightCube$animate = F3(
+	function (t, rotateAround, lightCube) {
+		var newAngle = lightCube.angle + (_elm_lang$core$Time$inSeconds(t) * (_elm_lang$core$Basics$pi / 2));
+		return _elm_lang$core$Native_Utils.update(
+			lightCube,
+			{
+				angle: newAngle,
+				rotateAround: rotateAround,
+				model: A3(_kosmoskatten$webgl_playground$LightCube$model, newAngle, rotateAround, lightCube.scale)
+			});
+	});
+var _kosmoskatten$webgl_playground$LightCube$LightCube = F6(
+	function (a, b, c, d, e, f) {
+		return {mesh: a, color: b, scale: c, rotateAround: d, angle: e, model: f};
+	});
+var _kosmoskatten$webgl_playground$LightCube$Vertex = function (a) {
+	return {position: a};
+};
+var _kosmoskatten$webgl_playground$LightCube$lightCube = _elm_community$webgl$WebGL$triangles(
+	A2(
+		_elm_lang$core$List$map,
+		function (_p0) {
+			var _p1 = _p0;
+			return {
+				ctor: '_Tuple3',
+				_0: _kosmoskatten$webgl_playground$LightCube$Vertex(_p1._0),
+				_1: _kosmoskatten$webgl_playground$LightCube$Vertex(_p1._1),
+				_2: _kosmoskatten$webgl_playground$LightCube$Vertex(_p1._2)
+			};
+		},
+		_kosmoskatten$webgl_playground$LightCube$triangles));
+var _kosmoskatten$webgl_playground$LightCube$init = F2(
+	function (rotateAround, color) {
+		var scale = _elm_community$linear_algebra$Math_Matrix4$makeScale(
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 5.0e-2, 5.0e-2, 5.0e-2));
+		return {
+			mesh: _kosmoskatten$webgl_playground$LightCube$lightCube,
+			color: color,
+			scale: scale,
+			rotateAround: rotateAround,
+			angle: 0,
+			model: A3(_kosmoskatten$webgl_playground$LightCube$model, 0, rotateAround, scale)
+		};
+	});
+
 var _kosmoskatten$webgl_playground$Walker$candleLight = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 255 / 255, 147 / 255, 41 / 255);
 var _kosmoskatten$webgl_playground$Walker$up = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0);
 var _kosmoskatten$webgl_playground$Walker$headAdjustment = F2(
@@ -12377,7 +12661,7 @@ var _kosmoskatten$webgl_playground$Walker$animateLeftRotate = F2(
 var _kosmoskatten$webgl_playground$Walker$animate = F2(
 	function (time, walker) {
 		var t = _elm_lang$core$Time$inSeconds(time);
-		var newWalker = A2(
+		var moved = A2(
 			_kosmoskatten$webgl_playground$Walker$animateBackward,
 			t,
 			A2(
@@ -12387,20 +12671,27 @@ var _kosmoskatten$webgl_playground$Walker$animate = F2(
 					_kosmoskatten$webgl_playground$Walker$animateRightRotate,
 					t,
 					A2(_kosmoskatten$webgl_playground$Walker$animateLeftRotate, t, walker))));
+		var newPos = moved.position;
 		return _elm_lang$core$Native_Utils.update(
-			newWalker,
+			moved,
 			{
-				lightDirection: _kosmoskatten$webgl_playground$Walker$beamDirection(newWalker.angle)
+				lightCube: A3(
+					_kosmoskatten$webgl_playground$LightCube$animate,
+					time,
+					A3(
+						_elm_community$linear_algebra$Math_Vector3$vec3,
+						_elm_community$linear_algebra$Math_Vector3$getX(newPos),
+						0.3 + _elm_community$linear_algebra$Math_Vector3$getY(newPos),
+						_elm_community$linear_algebra$Math_Vector3$getZ(newPos)),
+					moved.lightCube),
+				position: newPos
 			});
 	});
-var _kosmoskatten$webgl_playground$Walker$lightDirection = function (walker) {
-	return walker.lightDirection;
-};
 var _kosmoskatten$webgl_playground$Walker$lightColor = function (walker) {
 	return walker.lightColor;
 };
 var _kosmoskatten$webgl_playground$Walker$lightPosition = function (walker) {
-	return walker.position;
+	return _kosmoskatten$webgl_playground$LightCube$lightPosition(walker.lightCube);
 };
 var _kosmoskatten$webgl_playground$Walker$viewPosition = function (walker) {
 	return walker.position;
@@ -12412,9 +12703,17 @@ var _kosmoskatten$webgl_playground$Walker$matrix = function (walker) {
 		A3(_kosmoskatten$webgl_playground$Walker$aheadOf, walker.angle, _kosmoskatten$webgl_playground$Walker$viewStride, walker.position));
 	return A3(_elm_community$linear_algebra$Math_Matrix4$makeLookAt, walker.position, focus, _kosmoskatten$webgl_playground$Walker$up);
 };
+var _kosmoskatten$webgl_playground$Walker$entity = F2(
+	function (proj, walker) {
+		return A3(
+			_kosmoskatten$webgl_playground$LightCube$entity,
+			proj,
+			_kosmoskatten$webgl_playground$Walker$matrix(walker),
+			walker.lightCube);
+	});
 var _kosmoskatten$webgl_playground$Walker$Walker = F9(
 	function (a, b, c, d, e, f, g, h, i) {
-		return {position: a, angle: b, headAdjustment: c, lightColor: d, lightDirection: e, leftArrowDown: f, rightArrowDown: g, upArrowDown: h, downArrowDown: i};
+		return {position: a, angle: b, headAdjustment: c, lightColor: d, lightCube: e, leftArrowDown: f, rightArrowDown: g, upArrowDown: h, downArrowDown: i};
 	});
 var _kosmoskatten$webgl_playground$Walker$LookDown = {ctor: 'LookDown'};
 var _kosmoskatten$webgl_playground$Walker$pageDownDown = function (walker) {
@@ -12430,7 +12729,10 @@ var _kosmoskatten$webgl_playground$Walker$init = F2(
 			angle: angle,
 			headAdjustment: _kosmoskatten$webgl_playground$Walker$LookStraight,
 			lightColor: _kosmoskatten$webgl_playground$Walker$candleLight,
-			lightDirection: _kosmoskatten$webgl_playground$Walker$beamDirection(angle),
+			lightCube: A2(
+				_kosmoskatten$webgl_playground$LightCube$init,
+				A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1.6, 0),
+				_kosmoskatten$webgl_playground$Walker$candleLight),
 			leftArrowDown: false,
 			rightArrowDown: false,
 			upArrowDown: false,
@@ -12471,7 +12773,7 @@ var _kosmoskatten$webgl_playground$Walker$keyDown = F2(
 		}
 	});
 
-var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform bool ambientLightning;\nuniform float ambientStrength;\nuniform vec3 ambientColor;\n\nuniform bool diffuseLightning;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\nuniform vec3 lightDirection;\n\nuniform sampler2D texture;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvec3 maybeAddAmbientLight(vec3 inp)\n{\n    if (ambientLightning)\n    {\n        vec3 ambientCoeff = ambientColor * ambientStrength;\n        return inp + ambientCoeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvec3 maybeAddDiffuseLight(vec3 inp)\n{\n    if (diffuseLightning)\n    {\n        vec3 lightDirectionT = normalize(lightPosition - vModelPosition);\n        float coeff = max(dot(vNormal, lightDirectionT), 0.0);\n        return inp + lightColor * coeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvec3 maybeAddDirectedLight(vec3 inp)\n{\n    if (diffuseLightning)\n    {\n        vec3 lightPositionVector = normalize(vModelPosition - lightPosition);\n        float angle = acos(dot(lightPositionVector, lightDirection));\n        if (angle >= 0.0 && angle < 0.1)\n        {\n            return inp + lightColor;\n        }\n        else\n        {\n            return inp;\n        }\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvoid main(void)\n{\n    if (ambientLightning || diffuseLightning)\n    {\n        // At least some lightning is activated.\n        vec3 lightningCoeffs =\n            maybeAddDirectedLight(\n                maybeAddAmbientLight(vec3(0.0, 0.0, 0.0))\n            );\n\n        vec4 textureColor = texture2D(texture, vTexCoord);\n        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);\n    }\n    else\n    {\n        // No lightning at all.\n        gl_FragColor = texture2D(texture, vTexCoord);\n    }\n}\n\n'};
+var _kosmoskatten$webgl_playground$Square$fragmentShader = {'src': '\nprecision mediump float;\n\nuniform bool ambientLightning;\nuniform float ambientStrength;\nuniform vec3 ambientColor;\n\nuniform bool diffuseLightning;\nuniform vec3 lightPosition;\nuniform vec3 lightColor;\n\nuniform sampler2D texture;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvec3 maybeAddAmbientLight(vec3 inp)\n{\n    if (ambientLightning)\n    {\n        vec3 ambientCoeff = ambientColor * ambientStrength;\n        return inp + ambientCoeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvec3 maybeAddDiffuseLight(vec3 inp)\n{\n    if (diffuseLightning)\n    {\n        vec3 lightDirection = normalize(lightPosition - vModelPosition);\n        float coeff = max(dot(vNormal, lightDirection), 0.0);\n        return inp + lightColor * coeff;\n    }\n    else\n    {\n        return inp;\n    }\n}\n\nvoid main(void)\n{\n    if (ambientLightning || diffuseLightning)\n    {\n        // At least some lightning is activated.\n        vec3 lightningCoeffs =\n            maybeAddDiffuseLight(\n                maybeAddAmbientLight(vec3(0.0, 0.0, 0.0))\n            );\n\n        vec4 textureColor = texture2D(texture, vTexCoord);\n        gl_FragColor = vec4(textureColor.rgb * lightningCoeffs, textureColor.a);\n    }\n    else\n    {\n        // No lightning at all.\n        gl_FragColor = texture2D(texture, vTexCoord);\n    }\n}\n\n'};
 var _kosmoskatten$webgl_playground$Square$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 texCoord;\n\nuniform mat4 mvp;\nuniform mat4 model;\n\nvarying vec3 vModelPosition;\nvarying vec3 vNormal;\nvarying vec2 vTexCoord;\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n\n    // Bring the position to model space (lightning is made in model space).\n    vModelPosition = vec3(model * vec4(position, 1.0));\n\n    // No real normal matrix yet. Just the model matrix, but the whole maze\n    // is in local, which also is model, coordinates as nothing is scaled or\n    // translated. Just use the normals as is.\n    vNormal = normal;\n\n    vTexCoord = texCoord;\n}\n'};
 var _kosmoskatten$webgl_playground$Square$backward = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 1);
 var _kosmoskatten$webgl_playground$Square$forward = A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, -1);
@@ -14005,8 +14307,8 @@ var _kosmoskatten$webgl_playground$Maze$setAmbientLightning = F2(
 var _kosmoskatten$webgl_playground$Maze$ambientLightning = function (maze) {
 	return maze.ambientLightning;
 };
-var _kosmoskatten$webgl_playground$Maze$entity = F6(
-	function (proj, view, lightPosition, lightColor, lightDirection, maze) {
+var _kosmoskatten$webgl_playground$Maze$entity = F5(
+	function (proj, view, walkerPos, walkerColor, maze) {
 		var model = _elm_community$linear_algebra$Math_Matrix4$identity;
 		var mvp = A2(
 			_elm_community$linear_algebra$Math_Matrix4$mul,
@@ -14019,7 +14321,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 				_kosmoskatten$webgl_playground$Square$vertexShader,
 				_kosmoskatten$webgl_playground$Square$fragmentShader,
 				maze.mazeFloor,
-				{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.mazeFloorTexture}),
+				{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeFloorTexture}),
 			_1: {
 				ctor: '::',
 				_0: A4(
@@ -14027,7 +14329,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 					_kosmoskatten$webgl_playground$Square$vertexShader,
 					_kosmoskatten$webgl_playground$Square$fragmentShader,
 					maze.mazeCeiling,
-					{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.mazeCeilingTexture}),
+					{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeCeilingTexture}),
 				_1: {
 					ctor: '::',
 					_0: A4(
@@ -14035,7 +14337,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 						_kosmoskatten$webgl_playground$Square$vertexShader,
 						_kosmoskatten$webgl_playground$Square$fragmentShader,
 						maze.mazeWalls,
-						{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.mazeWallTexture}),
+						{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.mazeWallTexture}),
 					_1: {
 						ctor: '::',
 						_0: A4(
@@ -14043,7 +14345,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 							_kosmoskatten$webgl_playground$Square$vertexShader,
 							_kosmoskatten$webgl_playground$Square$fragmentShader,
 							maze.roomFloor,
-							{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.roomFloorTexture}),
+							{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.roomFloorTexture}),
 						_1: {
 							ctor: '::',
 							_0: A4(
@@ -14051,7 +14353,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 								_kosmoskatten$webgl_playground$Square$vertexShader,
 								_kosmoskatten$webgl_playground$Square$fragmentShader,
 								maze.roomCeiling,
-								{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.roomCeilingTexture}),
+								{mvp: mvp, model: model, ambientLightning: maze.ambientLightning, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: maze.diffuseLightning, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.roomCeilingTexture}),
 							_1: {
 								ctor: '::',
 								_0: A4(
@@ -14059,7 +14361,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 									_kosmoskatten$webgl_playground$Square$vertexShader,
 									_kosmoskatten$webgl_playground$Square$fragmentShader,
 									maze.outdoorWalls,
-									{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.outdoorWallTexture}),
+									{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.outdoorWallTexture}),
 								_1: {
 									ctor: '::',
 									_0: A4(
@@ -14067,7 +14369,7 @@ var _kosmoskatten$webgl_playground$Maze$entity = F6(
 										_kosmoskatten$webgl_playground$Square$vertexShader,
 										_kosmoskatten$webgl_playground$Square$fragmentShader,
 										maze.outdoorGrass,
-										{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: lightPosition, lightColor: lightColor, lightDirection: lightDirection, texture: maze.outdoorGrassTexture}),
+										{mvp: mvp, model: model, ambientLightning: false, ambientStrength: maze.ambientStrength, ambientColor: maze.ambientColor, diffuseLightning: false, lightPosition: walkerPos, lightColor: walkerColor, texture: maze.outdoorGrassTexture}),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -14349,14 +14651,16 @@ var _kosmoskatten$webgl_playground$Main$view3DScene = function (model) {
 				function () {
 					var _p6 = model.maze;
 					if (_p6.ctor === 'Just') {
-						return A6(
-							_kosmoskatten$webgl_playground$Maze$entity,
-							model.projection,
-							_kosmoskatten$webgl_playground$Walker$matrix(model.walker),
-							_kosmoskatten$webgl_playground$Walker$lightPosition(model.walker),
-							_kosmoskatten$webgl_playground$Walker$lightColor(model.walker),
-							_kosmoskatten$webgl_playground$Walker$lightDirection(model.walker),
-							_p6._0);
+						return A2(
+							_elm_lang$core$Basics_ops['++'],
+							A5(
+								_kosmoskatten$webgl_playground$Maze$entity,
+								model.projection,
+								_kosmoskatten$webgl_playground$Walker$matrix(model.walker),
+								_kosmoskatten$webgl_playground$Walker$lightPosition(model.walker),
+								_kosmoskatten$webgl_playground$Walker$lightColor(model.walker),
+								_p6._0),
+							A2(_kosmoskatten$webgl_playground$Walker$entity, model.projection, model.walker));
 					} else {
 						return {ctor: '[]'};
 					}

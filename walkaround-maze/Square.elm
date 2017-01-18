@@ -249,7 +249,6 @@ fragmentShader :
             , diffuseLightning : Bool
             , lightPosition : Vec3
             , lightColor : Vec3
-            , lightDirection : Vec3
             , texture : Texture
         }
         { vModelPosition : Vec3
@@ -267,7 +266,6 @@ uniform vec3 ambientColor;
 uniform bool diffuseLightning;
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
-uniform vec3 lightDirection;
 
 uniform sampler2D texture;
 
@@ -292,30 +290,9 @@ vec3 maybeAddDiffuseLight(vec3 inp)
 {
     if (diffuseLightning)
     {
-        vec3 lightDirectionT = normalize(lightPosition - vModelPosition);
-        float coeff = max(dot(vNormal, lightDirectionT), 0.0);
+        vec3 lightDirection = normalize(lightPosition - vModelPosition);
+        float coeff = max(dot(vNormal, lightDirection), 0.0);
         return inp + lightColor * coeff;
-    }
-    else
-    {
-        return inp;
-    }
-}
-
-vec3 maybeAddDirectedLight(vec3 inp)
-{
-    if (diffuseLightning)
-    {
-        vec3 lightPositionVector = normalize(vModelPosition - lightPosition);
-        float angle = acos(dot(lightPositionVector, lightDirection));
-        if (angle >= 0.0 && angle < 0.1)
-        {
-            return inp + lightColor;
-        }
-        else
-        {
-            return inp;
-        }
     }
     else
     {
@@ -329,7 +306,7 @@ void main(void)
     {
         // At least some lightning is activated.
         vec3 lightningCoeffs =
-            maybeAddDirectedLight(
+            maybeAddDiffuseLight(
                 maybeAddAmbientLight(vec3(0.0, 0.0, 0.0))
             );
 
