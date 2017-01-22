@@ -3,17 +3,26 @@ module Main exposing (main)
 import Html exposing (Html, div, text)
 import Html.Attributes as Attr
 import Math.Vector3 exposing (Vec3, vec3)
+import Math.Matrix4 exposing (Mat4, mul, makePerspective, makeLookAt)
 import WebGL exposing (..)
 import WebGL.Settings.DepthTest as DepthTest
 import WebGL.Settings.Blend as Blend
 
 
 type alias Model =
-    Int
+    { eyePosition : Vec3
+    , view : Mat4
+    , proj : Mat4
+    }
 
 
 type Msg
     = NoOp
+
+
+type alias Point =
+    { position : Vec3
+    }
 
 
 main : Program Never Model Msg
@@ -28,29 +37,43 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( 1, Cmd.none )
+    ( { eyePosition = vec3 0 0 5
+      , view = makeLookAt (vec3 0 0 5) (vec3 0 0 0) (vec3 0 1 0)
+      , proj = makePerspective 45 (toFloat width / toFloat height) 0.001 100
+      }
+    , Cmd.none
+    )
 
 
 view : Model -> Html Msg
 view model =
-    WebGL.toHtmlWith
-        [ WebGL.depth 1
-        , WebGL.antialias
-        , WebGL.alpha True
-        , WebGL.clearColor (51 / 255) (102 / 255) (204 / 255) 1
-        ]
-        [ Attr.width width, Attr.height height ]
-        [ WebGL.entityWith [ DepthTest.default, Blend.add Blend.srcAlpha Blend.dstAlpha ]
-            vertexShader
-            fragmentShader
-            (WebGL.points
-                [ { position = vec3 0.07 0 0.07 }
-                , { position = vec3 -0.07 0 -0.07 }
-                , { position = vec3 0 -0.07 0 }
+    let
+        mvp =
+            mul model.proj model.view
+    in
+        WebGL.toHtmlWith
+            [ WebGL.depth 1
+            , WebGL.antialias
+            , WebGL.alpha True
+            , WebGL.clearColor 0 0 (102 / 255) 1
+            ]
+            [ Attr.width width, Attr.height height ]
+        <|
+            List.map (viewParticle mvp model.eyePosition)
+                [ Point <| vec3 0 0 0
+                , Point <| vec3 1 0 -10
                 ]
-            )
-            {}
-        ]
+
+
+viewParticle : Mat4 -> Vec3 -> Point -> Entity
+viewParticle mvp eyePosition point =
+    WebGL.entityWith [ DepthTest.always { write = True, near = 0, far = 0 }, Blend.add Blend.srcAlpha Blend.dstAlpha ]
+        vertexShader
+        fragmentShader
+        (WebGL.points [ point ])
+        { eyePosition = eyePosition
+        , mvp = mvp
+        }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -68,20 +91,37 @@ height =
     600
 
 
-vertexShader : Shader { attr | position : Vec3 } {} {}
+vertexShader :
+    Shader { attr | position : Vec3 }
+        { unif
+            | eyePosition : Vec3
+            , mvp : Mat4
+        }
+        {}
 vertexShader =
     [glsl|
 attribute vec3 position;
 
+uniform vec3 eyePosition;
+uniform mat4 mvp;
+
+const float vista = 100.0;
+const float maxSize = 100.0;
+
+float calcPointSize(void)
+{
+    return max((1.0 - distance(eyePosition, position) / vista) * maxSize, 0.0);
+}
+
 void main(void)
 {
-    gl_Position = vec4(position, 1.0);
-    gl_PointSize = 100.0;
+    gl_Position = mvp * vec4(position, 1.0);
+    gl_PointSize = calcPointSize();
 }
 |]
 
 
-fragmentShader : Shader attr {} {}
+fragmentShader : Shader attr unif {}
 fragmentShader =
     [glsl|
 precision mediump float;
@@ -97,8 +137,6 @@ void main(void)
     if (f < 0.25)
     {
         gl_FragColor = mix(color1, color2, smoothstep(0.1, 0.25, f));
-        //gl_FragColor = mix(color1, color2, f);
-        //gl_FragColor = color2;
     }
     else
     {
