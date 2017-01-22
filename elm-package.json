@@ -6,7 +6,8 @@
     "source-directories": [
         "basic-lightning",
         "walkaround-maze",
-        "directed-light"
+        "directed-light",
+        "simple-point-sprites"
     ],
     "exposed-modules": [],
     "native-modules": false,
