@@ -5,7 +5,7 @@ import Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (width, height)
 import Http as Http exposing (..)
 import Math.Matrix4 exposing (Mat4, mul, makePerspective, makeLookAt, makeRotate, makeTranslate)
-import Math.Vector3 exposing (Vec3, vec3)
+import Math.Vector3 exposing (Vec3, vec3, normalize)
 import Objson exposing (Triangle, Vertex, decode)
 import Shaders exposing (vertexShader, fragmentShader)
 import Time exposing (Time, inSeconds)
@@ -16,6 +16,7 @@ type alias Model =
     { projection : Mat4
     , view : Mat4
     , rotation : Float
+    , sunRayDirection : Vec3
     , mesh : Result String (Mesh Vertex)
     }
 
@@ -42,8 +43,9 @@ main =
 init : ( Model, Cmd Msg )
 init =
     ( { projection = makePerspective 45 (toFloat width / toFloat height) 0.1 100
-      , view = makeLookAt (vec3 0 1 5) (vec3 0 0 0) (vec3 0 1 0)
+      , view = makeLookAt (vec3 -2 2 7) (vec3 0 0 0) (vec3 0 1 0)
       , rotation = 0
+      , sunRayDirection = normalize <| vec3 0 -1 0
       , mesh = Err "Loading ..."
       }
     , Http.send ModelLoaded <| Http.get "models/model.json" decode
@@ -81,22 +83,28 @@ view model =
 
 renderModel : Mesh Vertex -> Model -> Html Msg
 renderModel mesh model =
-    GL.toHtmlWith
-        [ GL.depth 1
-        , GL.antialias
-        , GL.alpha True
-        , GL.clearColor 0 0 (102 / 255) 1
-        ]
-        [ Attr.width width
-        , Attr.height height
-        ]
-        [ GL.entity vertexShader
-            fragmentShader
-            mesh
-            { mvp =
-                mul model.projection <| mul model.view (makeRotate model.rotation <| vec3 0 1 0)
-            }
-        ]
+    let
+        m =
+            makeRotate model.rotation <| vec3 0 1 0
+    in
+        GL.toHtmlWith
+            [ GL.depth 1
+            , GL.antialias
+            , GL.alpha True
+            , GL.clearColor 0 0 (102 / 255) 1
+            ]
+            [ Attr.width width
+            , Attr.height height
+            ]
+            [ GL.entity vertexShader
+                fragmentShader
+                mesh
+                { mvp =
+                    mul model.projection <| mul model.view m
+                , model = m
+                , sunRayDirection = model.sunRayDirection
+                }
+            ]
 
 
 width : Int

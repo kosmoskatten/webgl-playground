@@ -12081,8 +12081,8 @@ var _kosmoskatten$webgl_playground$Objson$decodeTriangle = A4(
 	A2(_elm_lang$core$Json_Decode$field, 'vertex2', _kosmoskatten$webgl_playground$Objson$decodeVertex),
 	A2(_elm_lang$core$Json_Decode$field, 'vertex3', _kosmoskatten$webgl_playground$Objson$decodeVertex));
 var _kosmoskatten$webgl_playground$Objson$decode = _elm_lang$core$Json_Decode$list(_kosmoskatten$webgl_playground$Objson$decodeTriangle);
-var _kosmoskatten$webgl_playground$Shaders$fragmentShader = {'src': '\nprecision mediump float;\n\nvarying vec4 vAmbientColor;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0) + vAmbientColor;\n}\n'};
-var _kosmoskatten$webgl_playground$Shaders$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\n\nuniform mat4 mvp;\n\nvarying vec4 vAmbientColor;\n\nvec4 ambientColor()\n{\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * 0.1;\n}\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vAmbientColor = ambientColor();\n}\n'};
+var _kosmoskatten$webgl_playground$Shaders$fragmentShader = {'src': '\nprecision mediump float;\n\nvarying vec4 vAmbientColor;\nvarying vec4 vDiffuseColor;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0) + vAmbientColor + vDiffuseColor;\n}\n'};
+var _kosmoskatten$webgl_playground$Shaders$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\n\nuniform mat4 mvp;\nuniform mat4 model;\nuniform vec3 sunRayDirection;\n\nvarying vec4 vAmbientColor;\nvarying vec4 vDiffuseColor;\n\nvec4 ambientColor()\n{\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * 0.1;\n}\n\nvec4 diffuseColor()\n{\n  vec3 rotatedNormal = normalize(vec3(model) * normal);\n  float diff = max(dot(sunRayDirection, -rotatedNormal), 0.0);\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * diff;\n}\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vAmbientColor = ambientColor();\n    vDiffuseColor = diffuseColor();\n}\n'};
 var _kosmoskatten$webgl_playground$Main$toGeometry = function (t) {
 	return {ctor: '_Tuple3', _0: t.vertex1, _1: t.vertex2, _2: t.vertex3};
 };
@@ -12090,6 +12090,10 @@ var _kosmoskatten$webgl_playground$Main$height = 600;
 var _kosmoskatten$webgl_playground$Main$width = 800;
 var _kosmoskatten$webgl_playground$Main$renderModel = F2(
 	function (mesh, model) {
+		var m = A2(
+			_elm_community$linear_algebra$Math_Matrix4$makeRotate,
+			model.rotation,
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0));
 		return A3(
 			_elm_community$webgl$WebGL$toHtmlWith,
 			{
@@ -12129,13 +12133,9 @@ var _kosmoskatten$webgl_playground$Main$renderModel = F2(
 						mvp: A2(
 							_elm_community$linear_algebra$Math_Matrix4$mul,
 							model.projection,
-							A2(
-								_elm_community$linear_algebra$Math_Matrix4$mul,
-								model.view,
-								A2(
-									_elm_community$linear_algebra$Math_Matrix4$makeRotate,
-									model.rotation,
-									A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0))))
+							A2(_elm_community$linear_algebra$Math_Matrix4$mul, model.view, m)),
+						model: m,
+						sunRayDirection: model.sunRayDirection
 					}),
 				_1: {ctor: '[]'}
 			});
@@ -12197,9 +12197,9 @@ var _kosmoskatten$webgl_playground$Main$update = F2(
 			}
 		}
 	});
-var _kosmoskatten$webgl_playground$Main$Model = F4(
-	function (a, b, c, d) {
-		return {projection: a, view: b, rotation: c, mesh: d};
+var _kosmoskatten$webgl_playground$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {projection: a, view: b, rotation: c, sunRayDirection: d, mesh: e};
 	});
 var _kosmoskatten$webgl_playground$Main$ModelLoaded = function (a) {
 	return {ctor: 'ModelLoaded', _0: a};
@@ -12215,10 +12215,12 @@ var _kosmoskatten$webgl_playground$Main$init = {
 			100),
 		view: A3(
 			_elm_community$linear_algebra$Math_Matrix4$makeLookAt,
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 5),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -2, 2, 7),
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0),
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0)),
 		rotation: 0,
+		sunRayDirection: _elm_community$linear_algebra$Math_Vector3$normalize(
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, -1, 0)),
 		mesh: _elm_lang$core$Result$Err('Loading ...')
 	},
 	_1: A2(
