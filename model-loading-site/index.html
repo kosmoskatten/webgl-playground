@@ -12082,7 +12082,7 @@ var _kosmoskatten$webgl_playground$Objson$decodeTriangle = A4(
 	A2(_elm_lang$core$Json_Decode$field, 'vertex3', _kosmoskatten$webgl_playground$Objson$decodeVertex));
 var _kosmoskatten$webgl_playground$Objson$decode = _elm_lang$core$Json_Decode$list(_kosmoskatten$webgl_playground$Objson$decodeTriangle);
 var _kosmoskatten$webgl_playground$Shaders$fragmentShader = {'src': '\nprecision mediump float;\n\nvarying vec4 vAmbientColor;\nvarying vec4 vDiffuseColor;\n\nvoid main(void)\n{\n    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0) + vAmbientColor + vDiffuseColor;\n}\n'};
-var _kosmoskatten$webgl_playground$Shaders$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\n\nuniform mat4 mvp;\nuniform mat4 model;\nuniform vec3 sunRayDirection;\n\nvarying vec4 vAmbientColor;\nvarying vec4 vDiffuseColor;\n\nvec4 ambientColor()\n{\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * 0.1;\n}\n\nvec4 diffuseColor()\n{\n  vec3 rotatedNormal = normalize(vec3(model) * normal);\n  float diff = max(dot(sunRayDirection, -rotatedNormal), 0.0);\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * diff;\n}\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vAmbientColor = ambientColor();\n    vDiffuseColor = diffuseColor();\n}\n'};
+var _kosmoskatten$webgl_playground$Shaders$vertexShader = {'src': '\nattribute vec3 position;\nattribute vec3 normal;\n\nuniform mat4 mvp;\nuniform mat4 model;\nuniform vec3 sunRayDirection;\n\nvarying vec4 vAmbientColor;\nvarying vec4 vDiffuseColor;\n\nvec4 ambientColor()\n{\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * 0.1;\n}\n\nvec4 diffuseColor()\n{\n  vec3 rotatedNormal = normalize(vec3(model) * normal);\n  float diff = max(dot(sunRayDirection, rotatedNormal), 0.0);\n  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * diff;\n}\n\nvoid main(void)\n{\n    gl_Position = mvp * vec4(position, 1.0);\n    vAmbientColor = ambientColor();\n    vDiffuseColor = diffuseColor();\n}\n'};
 var _kosmoskatten$webgl_playground$Main$toGeometry = function (t) {
 	return {ctor: '_Tuple3', _0: t.vertex1, _1: t.vertex2, _2: t.vertex3};
 };
@@ -12215,12 +12215,12 @@ var _kosmoskatten$webgl_playground$Main$init = {
 			100),
 		view: A3(
 			_elm_community$linear_algebra$Math_Matrix4$makeLookAt,
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -2, 2, 7),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, -3, 2, 5),
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 0, 0),
 			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, 1, 0)),
 		rotation: 0,
 		sunRayDirection: _elm_community$linear_algebra$Math_Vector3$normalize(
-			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 0, -1, 0)),
+			A3(_elm_community$linear_algebra$Math_Vector3$vec3, 1, 0, 0)),
 		mesh: _elm_lang$core$Result$Err('Loading ...')
 	},
 	_1: A2(

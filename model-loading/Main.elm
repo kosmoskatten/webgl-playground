@@ -43,9 +43,9 @@ main =
 init : ( Model, Cmd Msg )
 init =
     ( { projection = makePerspective 45 (toFloat width / toFloat height) 0.1 100
-      , view = makeLookAt (vec3 -2 2 7) (vec3 0 0 0) (vec3 0 1 0)
+      , view = makeLookAt (vec3 -3 2 5) (vec3 0 0 0) (vec3 0 1 0)
       , rotation = 0
-      , sunRayDirection = normalize <| vec3 0 -1 0
+      , sunRayDirection = normalize <| vec3 1 0 0
       , mesh = Err "Loading ..."
       }
     , Http.send ModelLoaded <| Http.get "models/model.json" decode
