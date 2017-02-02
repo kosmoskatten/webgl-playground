@@ -31,7 +31,8 @@ varying vec3 vNormal;
 
 vec4 ambientColor()
 {
-  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * 0.1;
+  vec3 color = vec3(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0);
+  return vec4(color * 0.1, 1.0);
 }
 
 void main(void)
@@ -55,8 +56,16 @@ varying vec3 vNormal;
 
 vec4 diffuseColor()
 {
-  float diff = max(dot(-sunRayDirection, normalize(vNormal)), 0.0);
-  return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * diff * 0.5;
+  vec3 color = vec3(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0);
+  float diff = dot(-sunRayDirection, normalize(vNormal));
+  if (diff > 0.0)
+  {
+    return vec4(color * diff * 0.5, 1.0);
+  }
+  else
+  {
+    return vec4(0.0);
+  }
 }
 
 void main(void)
