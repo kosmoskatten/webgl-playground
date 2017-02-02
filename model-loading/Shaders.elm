@@ -15,8 +15,7 @@ vertexShader :
             | mvp : Mat4
             , model : Mat4
         }
-        { vAmbientColor : Vec4
-        , vPosition : Vec4
+        { vPosition : Vec4
         , vNormal : Vec3
         }
 vertexShader =
@@ -27,20 +26,12 @@ attribute vec3 normal;
 uniform mat4 mvp;
 uniform mat4 model;
 
-varying vec4 vAmbientColor;
 varying vec4 vPosition;
 varying vec3 vNormal;
-
-vec4 ambientColor()
-{
-  vec3 color = vec3(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0);
-  return vec4(color * 0.1, 1.0);
-}
 
 void main(void)
 {
     gl_Position = mvp * vec4(position, 1.0);
-    vAmbientColor = ambientColor();
     vPosition = model * vec4(position, 1.0);
     vNormal = vec3(model * vec4(normal, 0.0));
 }
@@ -50,8 +41,7 @@ void main(void)
 fragmentShader :
     Shader {}
         { unif | sunRayDirection : Vec3, eye : Vec3 }
-        { vAmbientColor : Vec4
-        , vPosition : Vec4
+        { vPosition : Vec4
         , vNormal : Vec3
         }
 fragmentShader =
@@ -61,11 +51,12 @@ precision mediump float;
 uniform vec3 sunRayDirection;
 uniform vec3 eye;
 
-varying vec4 vAmbientColor;
 varying vec4 vPosition;
 varying vec3 vNormal;
 
-vec4 diffuseColor()
+const vec3 color = vec3(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0);
+
+/*vec4 diffuseColor()
 {
   vec3 color = vec3(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0);
   float diff = dot(-sunRayDirection, normalize(vNormal));
@@ -97,9 +88,33 @@ vec4 speculatorColor()
     return vec4(0.0);
   }
 }
+*/
 
 void main(void)
 {
-    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0) + vAmbientColor + diffuseColor() + speculatorColor();
+  vec4 ambientColor = vec4(color * 0.3, 1.0);
+  vec4 diffuseColor = vec4(0.0);
+  vec4 specularColor = vec4(0.0);
+
+  vec3 normal = normalize(vNormal);
+
+  // Calculate diffuse light.
+  float diff = dot(-sunRayDirection, normal);
+  if (diff > 0.0)
+  {
+    diffuseColor = vec4(color * diff * 0.5, 1.0);
+  }
+
+  // Calculate specular light.
+  vec3 viewingVector = normalize(eye - vPosition.xyz);
+  vec3 reflectVector = normalize(reflect(-sunRayDirection, normal));
+  float spec = pow(dot(viewingVector, reflectVector), 32.0);
+  if (spec > 0.0)
+  {
+    specularColor = vec4(color * spec * 0.8, 1.0);
+  }
+
+  gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0) +
+    ambientColor + diffuseColor + specularColor;
 }
 |]
