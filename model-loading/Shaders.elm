@@ -37,8 +37,8 @@ vec4 ambientColor()
 
 vec4 diffuseColor()
 {
-  vec3 rotatedNormal = normalize(vec3(model) * normal);
-  float diff = max(dot(sunRayDirection, rotatedNormal), 0.0);
+  vec3 rotatedNormal = normalize(vec3(model * vec4(normal, 0.0)));
+  float diff = max(dot(-sunRayDirection, rotatedNormal), 0.0);
   return vec4(255.0 / 255.0, 241.0 / 255.0, 224.0 / 255.0, 1.0) * diff;
 }
 
