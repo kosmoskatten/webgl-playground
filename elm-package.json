@@ -8,7 +8,8 @@
         "walkaround-maze",
         "directed-light",
         "simple-point-sprites",
-        "model-loading"
+        "model-loading",
+        "gtrain"
     ],
     "exposed-modules": [],
     "native-modules": false,
