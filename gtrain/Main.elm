@@ -24,6 +24,8 @@ type alias Model =
     , view : Mat4
     , terrain : Terrain
     , mesh : Maybe (Mesh Vertex)
+    , lightPosition : Vec3
+    , lightColor : Vec3
     }
 
 
@@ -45,16 +47,18 @@ init : ( Model, Cmd Msg )
 init =
     let
         terrain =
-            make 25
+            make 100
     in
         ( { proj =
                 makePerspective 45 (toFloat width / toFloat height) 0.01 1000
           , view = makeLookAt (vec3 0 10 25) (vec3 0 0 0) (vec3 0 1 0)
           , terrain =
                 terrain
-          , mesh =
-                Maybe.map GL.lines <| toWireframe terrain
-                --, mesh = Just <| GL.indexedTriangles terrain.vertices terrain.indices
+                --, mesh =
+                --Maybe.map GL.lines <| toWireframe terrain
+          , mesh = Just <| GL.indexedTriangles terrain.vertices terrain.indices
+          , lightPosition = vec3 -20 20 0
+          , lightColor = vec3 (241 / 255) (241 / 255) (241 / 255)
           }
         , Cmd.none
         )
@@ -90,7 +94,13 @@ viewMesh mesh model =
             [ Attr.width width
             , Attr.height height
             ]
-            [ GL.entity vertexShader fragmentShader mesh { mvp = mvp }
+            [ GL.entity vertexShader
+                fragmentShader
+                mesh
+                { mvp = mvp
+                , lightPosition = model.lightPosition
+                , lightColor = model.lightColor
+                }
             ]
 
 
