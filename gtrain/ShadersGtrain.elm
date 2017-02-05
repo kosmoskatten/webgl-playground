@@ -5,10 +5,11 @@ import Math.Vector3 exposing (Vec3)
 import WebGL exposing (Shader)
 
 
-vertexShader : Shader { position : Vec3 } { mvp : Mat4 } {}
+vertexShader : Shader { position : Vec3, normal : Vec3 } { mvp : Mat4 } {}
 vertexShader =
     [glsl|
 attribute vec3 position;
+attribute vec3 normal;
 
 uniform mat4 mvp;
 

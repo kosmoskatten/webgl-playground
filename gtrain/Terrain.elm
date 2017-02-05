@@ -1,11 +1,12 @@
 module Terrain exposing (Vertex, Terrain, make, toWireframe)
 
 import Array as Array exposing (..)
-import Math.Vector3 as V3 exposing (Vec3, vec3)
+import Math.Vector3 as V3 exposing (Vec3, vec3, add, cross, sub, normalize)
 
 
 type alias Vertex =
     { position : Vec3
+    , normal : Vec3
     }
 
 
@@ -18,11 +19,21 @@ type alias Terrain =
 make : Int -> Terrain
 make dimensions =
     let
+        -- Generate x, z coordinates grid.
         coords =
             genCoord dimensions
+
+        -- Generate vertices with 0 value normals.
+        vertices =
+            List.map (\p -> Vertex p (vec3 0 0 0)) <|
+                genHeightMap heightGen coords
+
+        -- Generate indices.
+        indices =
+            makeTriangleIndices dimensions
     in
-        { vertices = List.map Vertex <| genHeightMap heightGen coords
-        , indices = makeTriangleIndices dimensions
+        { vertices = calculateNormals vertices indices
+        , indices = indices
         }
 
 
@@ -104,7 +115,7 @@ genHeightMap =
 
 heightGen : ( Float, Float ) -> Vec3
 heightGen ( x, z ) =
-    vec3 x (sin x + cos z) z
+    vec3 x (sin x * cos z) z
 
 
 makeTriangleIndices : Int -> List ( Int, Int, Int )
@@ -124,7 +135,7 @@ triangulateSquare dimensions ( col, row ) =
             (row + 1) * (dimensions + 1) + col
     in
         [ ( index, nextRowIndex, index + 1 )
-        , ( index + 1, nextRowIndex, nextRowIndex + 1 )
+        , ( nextRowIndex + 1, index + 1, nextRowIndex )
         ]
 
 
@@ -144,6 +155,63 @@ genSquareGrid dimensions =
                         zip cols row
                 )
                 cols
+
+
+calculateNormals : List Vertex -> List ( Int, Int, Int ) -> List Vertex
+calculateNormals vertices indices =
+    Array.toList <|
+        normalizeVertices <|
+            calculateSurfaceNormals (Array.fromList vertices) indices
+
+
+normalizeVertices : Array Vertex -> Array Vertex
+normalizeVertices =
+    Array.map (\v -> { v | normal = V3.normalize v.normal })
+
+
+calculateSurfaceNormals : Array Vertex -> List ( Int, Int, Int ) -> Array Vertex
+calculateSurfaceNormals vertices indices =
+    List.foldl
+        (\( i1, i2, i3 ) acc ->
+            case calculateSurfaceNormal vertices ( i1, i2, i3 ) of
+                Just normal ->
+                    updateNormal i1 normal <|
+                        updateNormal i2 normal <|
+                            updateNormal i3 normal acc
+
+                Nothing ->
+                    acc
+        )
+        vertices
+        indices
+
+
+calculateSurfaceNormal : Array Vertex -> ( Int, Int, Int ) -> Maybe Vec3
+calculateSurfaceNormal vertices ( i1, i2, i3 ) =
+    Maybe.map3
+        (\v1 v2 v3 ->
+            let
+                left =
+                    V3.sub v2.position v1.position
+
+                right =
+                    V3.sub v3.position v1.position
+            in
+                V3.normalize <| V3.cross left right
+        )
+        (Array.get i1 vertices)
+        (Array.get i2 vertices)
+        (Array.get i3 vertices)
+
+
+updateNormal : Int -> Vec3 -> Array Vertex -> Array Vertex
+updateNormal index normal vertices =
+    case Array.get index vertices of
+        Just v ->
+            Array.set index { v | normal = V3.add v.normal normal } vertices
+
+        Nothing ->
+            vertices
 
 
 zip : List a -> List b -> List ( a, b )
