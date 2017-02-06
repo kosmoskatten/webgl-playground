@@ -1,11 +1,21 @@
 module Main exposing (main)
 
+import AnimationFrame exposing (diffs)
 import Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (width, height)
-import Math.Matrix4 exposing (Mat4, mul, makePerspective, makeLookAt)
+import Math.Matrix4
+    exposing
+        ( Mat4
+        , mul
+        , makePerspective
+        , makeLookAt
+        , makeRotate
+        , transform
+        )
 import Math.Vector3 exposing (Vec3, vec3)
 import ShadersGtrain exposing (vertexShader, fragmentShader)
 import Terrain exposing (..)
+import Time exposing (Time, inSeconds)
 import WebGL as GL
     exposing
         ( Mesh
@@ -30,7 +40,7 @@ type alias Model =
 
 
 type Msg
-    = NoOp
+    = Animate Time
 
 
 main : Program Never Model Msg
@@ -39,7 +49,7 @@ main =
         { init = init
         , update = update
         , view = view
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = \_ -> diffs Animate
         }
 
 
@@ -47,17 +57,19 @@ init : ( Model, Cmd Msg )
 init =
     let
         terrain =
-            make 100
+            make 30
     in
         ( { proj =
                 makePerspective 45 (toFloat width / toFloat height) 0.01 1000
-          , view = makeLookAt (vec3 0 10 25) (vec3 0 0 0) (vec3 0 1 0)
+          , view = makeLookAt (vec3 0 10 30) (vec3 0 0 0) (vec3 0 1 0)
           , terrain =
                 terrain
                 --, mesh =
                 --Maybe.map GL.lines <| toWireframe terrain
           , mesh = Just <| GL.indexedTriangles terrain.vertices terrain.indices
-          , lightPosition = vec3 -20 20 0
+          , lightPosition =
+                vec3 0 100 0
+                -- Start at noon.
           , lightColor = vec3 (241 / 255) (241 / 255) (241 / 255)
           }
         , Cmd.none
@@ -66,7 +78,16 @@ init =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        Animate t ->
+            let
+                s =
+                    inSeconds t
+
+                rot =
+                    makeRotate (s * (pi / 10)) <| vec3 0 0 1
+            in
+                ( { model | lightPosition = transform rot model.lightPosition }, Cmd.none )
 
 
 view : Model -> Html Msg

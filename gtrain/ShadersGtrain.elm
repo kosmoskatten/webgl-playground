@@ -56,7 +56,7 @@ varying vec3 vPosition;
 varying vec3 vNormal;
 
 const float ambientStrength = 0.1;
-const float diffuseFactor = 0.5;
+const float diffuseFactor = 0.2;
 
 void main(void)
 {
